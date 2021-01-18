@@ -2,7 +2,7 @@
 
 #ifdef VIO_PLATFORM_WINDOWS
 
-Violet::Application* Violet::createApplication();
+//Violet::Application* Violet::createApplication();
 
 int main(int argc , char** argv){
 	Violet::Log::init();
