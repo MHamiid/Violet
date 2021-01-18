@@ -8,7 +8,7 @@ int main(int argc , char** argv){
 	Violet::Log::init();
 	
 
-	VIO_CORE_DEBUG("DEBUG");
+	/*VIO_CORE_DEBUG("DEBUG");
 	VIO_CORE_TRACE("TRACE");
 	VIO_CORE_INFO("INFO");
 	VIO_CORE_WARN("WARN");
@@ -20,7 +20,7 @@ int main(int argc , char** argv){
 	VIO_INFO("INFO");
 	VIO_WARN("WARN");
 	VIO_ERROR("ERROR");
-	VIO_CRITICAL("CRITICAL");
+	VIO_CRITICAL("CRITICAL");*/
 
 	Violet::Application* app = Violet::createApplication();
 	app->run();

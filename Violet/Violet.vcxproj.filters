@@ -4,6 +4,9 @@
     <Filter Include="Violet">
       <UniqueIdentifier>{B86E25D8-A410-50AE-8DCB-6302790CD7FE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Violet\Events">
+      <UniqueIdentifier>{9C5BC480-081C-40B7-D156-89343DD68493}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Violet.h" />
@@ -16,9 +19,15 @@
     <ClInclude Include="src\Violet\EntryPoint.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Events\Event.h">
+      <Filter>Violet\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Log.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Events\KeyEvent.h" />
+    <ClInclude Include="src\Violet\Events\MouseEvent.h" />
+    <ClInclude Include="src\Violet\Events\ApplicationEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Violet\Application.cpp">
