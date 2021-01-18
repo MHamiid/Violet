@@ -15,8 +15,10 @@
     <ClInclude Include="src\Violet\Application.h" />
     <ClInclude Include="src\Violet\Core.h" />
     <ClInclude Include="src\Violet\EntryPoint.h" />
+    <ClInclude Include="src\Violet\Log.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Violet\Log.cpp" />
     <ClCompile Include="src\Violet\Application.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -68,6 +70,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Violet\vendor\spdlog\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -82,6 +85,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)Violet\vendor\spdlog\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
