@@ -20,6 +20,9 @@ project "Violet"
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
 
+	pchheader "VIOPCH.h"
+	pchsource "%{prj.name}/src/Violet/VIOPCH.cpp"
+
 	files{
 	
 		"%{prj.name}/src/**.h",
@@ -27,7 +30,7 @@ project "Violet"
 	}
 
 	includedirs{
-		
+		 
 		"%{prj.name}/vendor/spdlog/include",
 		"%{prj.name}/src"
 	}

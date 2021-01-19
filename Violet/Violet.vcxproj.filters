@@ -19,21 +19,33 @@
     <ClInclude Include="src\Violet\EntryPoint.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Events\ApplicationEvent.h">
+      <Filter>Violet\Events</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Events\Event.h">
+      <Filter>Violet\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Events\KeyEvent.h">
+      <Filter>Violet\Events</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Events\MouseEvent.h">
       <Filter>Violet\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Log.h">
       <Filter>Violet</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Events\KeyEvent.h" />
-    <ClInclude Include="src\Violet\Events\MouseEvent.h" />
-    <ClInclude Include="src\Violet\Events\ApplicationEvent.h" />
+    <ClInclude Include="src\Violet\VIOPCH.h">
+      <Filter>Violet</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Violet\Application.cpp">
       <Filter>Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Log.cpp">
+      <Filter>Violet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\VIOPCH.cpp">
       <Filter>Violet</Filter>
     </ClCompile>
   </ItemGroup>

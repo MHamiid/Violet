@@ -1,8 +1,6 @@
 #pragma once
-
 #include "Violet/Core.h"
 #include "Violet/Log.h"
-#include <functional>
 #define BIT(x) (1<<x)
 namespace Violet{
 
