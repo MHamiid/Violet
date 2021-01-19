@@ -1,3 +1,6 @@
 [submodule "Violet/vendor/spdlog"]
 	path = Violet/vendor/spdlog
 	url = https://github.com/gabime/spdlog
+[submodule "Violet/vendor/GLFW"]
+	path = Violet/vendor/GLFW
+	url = https://github.com/glfw/glfw

@@ -1,5 +1,4 @@
 #include "VIOPCH.h"
-#include "Log.h"
 #include "spdlog/sinks/stdout_color_sinks.h"
 namespace Violet {
 	//Defining static members.

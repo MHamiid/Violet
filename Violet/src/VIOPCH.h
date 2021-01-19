@@ -19,3 +19,7 @@
 #ifdef VIO_PLATFORM_WINDOWS
 	#include <Windows.h>
 #endif // VIO_PLATFORM_WINDOWS 
+
+
+//Violet Defined includes
+#include "Violet/Log.h"

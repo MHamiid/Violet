@@ -6,7 +6,7 @@
 
 int main(int argc , char** argv){
 	Violet::Log::init();
-	
+	VIO_CORE_INFO("Initialized Log!");
 
 	/*VIO_CORE_DEBUG("DEBUG");
 	VIO_CORE_TRACE("TRACE");
