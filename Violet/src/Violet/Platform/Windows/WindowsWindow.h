@@ -7,7 +7,7 @@ namespace Violet {
 	class VIOLET_API WindowsWindow : public Window {
 
 	public:
-		WindowsWindow(std::string title, unsigned int width, unsigned int height);
+		WindowsWindow(const WindowProperties& properties);
 		virtual ~WindowsWindow();
 
 		static bool isGLFWInit();
@@ -15,9 +15,10 @@ namespace Violet {
 	public:
 		//Overriding Pure Virtual funcitons
 		virtual void onUpdate() override;
-		inline unsigned int getWidth() const override { return m_width; }	
-		virtual unsigned int getHeight() const override { return m_height; }
-
+		virtual inline unsigned int getWidth() const override { return m_properties.m_width; }	
+		virtual inline unsigned int getHeight() const override { return m_properties.m_height; }
+		
+	
 		virtual void setVSync(bool enabled) override;
 		virtual bool isVSyncEnabled() const override;
 		

@@ -3,8 +3,8 @@
 //For client usage
 #include <string>
 #include <memory>
-#include "Violet/Application.h"
 #include "Violet/Log.h"
+#include "Violet/Application.h"
 
 
 //#### Entry Point ####

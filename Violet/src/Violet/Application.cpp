@@ -8,7 +8,8 @@ namespace Violet {
 	}
 	Application::Application()
 	{
-		m_window = std::unique_ptr<Window>(Window::Create("Violet Engine",1280,720));
+		
+		m_window = std::unique_ptr<Window>(Window::Create(WindowProperties("Violet Engine", 1280, 720)));
 		
 	}
 	Application::~Application()
@@ -39,7 +40,7 @@ namespace Violet {
 	//	dis.dispatch<MouseButtonPressedEvent>(eventHandling);
 	//	VIO_TRACE("Is Event Handled: {}", e.getEventHandleStatus());
 		while (m_applicationRunning) {
-			m_window->onUpdate();		
+			m_window->onUpdate();	
 		}
 	}
 
