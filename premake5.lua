@@ -41,7 +41,7 @@ project "GLFW"
 		pic "On"
 
 		systemversion "latest"
-		staticruntime "On"
+		staticruntime "Off"
 
 		files
 		{
@@ -64,7 +64,7 @@ project "GLFW"
 
 	filter "system:windows"
 		systemversion "latest"
-		staticruntime "On"
+		staticruntime "Off"
 
 		files
 		{
@@ -124,7 +124,7 @@ project "Violet"
 
 	filter "system:windows"
 		cppdialect "c++17"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines{
@@ -180,7 +180,7 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "c++17"
-		staticruntime "On"
+		staticruntime "Off"
 		systemversion "latest"
 
 		defines{
