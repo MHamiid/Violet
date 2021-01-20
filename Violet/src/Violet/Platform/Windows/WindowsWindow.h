@@ -10,8 +10,6 @@ namespace Violet {
 		WindowsWindow(const WindowProperties& properties);
 		virtual ~WindowsWindow();
 
-		static bool isGLFWInit();
-
 	public:
 		//Overriding Pure Virtual funcitons
 		virtual void onUpdate() override;
@@ -28,7 +26,7 @@ namespace Violet {
 		virtual void shutDown() override;
 	private:
 		GLFWwindow* m_window;
-		static bool s_GLFWInitialized;
+		
 	};
 
 

@@ -23,10 +23,10 @@ namespace Violet {
 
 	class VIOLET_API MouseScrolledEvent : public Event {
 	public:
-		MouseScrolledEvent(float x, float y) : m_mouseX(x), m_mouseY(y) {}
+		MouseScrolledEvent(float xOffset, float yOffset) : m_offsetX(xOffset), m_offsetY(yOffset) {}
 
-		inline float getX() const { return m_mouseX; }
-		inline float getY() const { return m_mouseY; }
+		inline float getX() const { return m_offsetX; }
+		inline float getY() const { return m_offsetY; }
 
 		static EventType GetClassType() { return EventType::MouseScrolled; }
 		//pure virtual functions implementation.
@@ -36,7 +36,7 @@ namespace Violet {
 
 
 	private:
-		float m_mouseX, m_mouseY;
+		float m_offsetX, m_offsetY;
 	};
 
 

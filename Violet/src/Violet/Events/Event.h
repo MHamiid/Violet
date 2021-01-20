@@ -50,15 +50,14 @@ namespace Violet{
 		EventDispatcher(Event& event) :m_event(event) {}
 		
 		template<typename T>
-		bool dispatch(std::function<bool (T&)> eventFunc) {
+		bool dispatch(std::function<bool (T&)> FUNCEvent) {
 
 			//If the event and function type matches.
 			if (m_event.getEventType() == T::GetClassType()) {
 	
-				m_event.sendEventHandleStatus(eventFunc(*(T*)&m_event)); //Call the appropriate function, Casting Event type to passed template type, Set m_handled.
+				m_event.sendEventHandleStatus(FUNCEvent(*(T*)&m_event)); //Call the appropriate function, Casting Event type to passed template type, Set m_handled.
 				return true;
 			}
-			VIO_CORE_WARN("Dispatch: Event types didn't match");
 			return false;
 		}
 	

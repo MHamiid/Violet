@@ -1,9 +1,10 @@
 #pragma once
 #include "Core.h"
+#include "Events/Event.h"
 namespace Violet {
-	struct WindowProperties {
-		WindowProperties(const std::string& title ,unsigned int width , unsigned int height , bool VSync = true)
-			: m_title(title), m_width(width), m_height(height),m_VSync(VSync) { 
+	struct  WindowProperties {
+		WindowProperties(const std::string& title ,unsigned int width , unsigned int height , bool VSync = true , const std::function<void(Event&)>& FUNCEventCallback = NULL)
+			: m_title(title), m_width(width), m_height(height),m_VSync(VSync) , m_FUNCEventCallback(FUNCEventCallback){
 
 		}
 
@@ -11,6 +12,7 @@ namespace Violet {
 		unsigned int m_width;
 		unsigned int m_height;
 		bool m_VSync;
+		std::function<void(Event&)> m_FUNCEventCallback;
 	};
 
 	//Interface for desktop window

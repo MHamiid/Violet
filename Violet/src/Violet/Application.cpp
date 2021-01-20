@@ -1,20 +1,31 @@
 #include "VIOPCH.h"
 #include "Application.h"
-#include "Events/MouseEvent.h"
 namespace Violet {
-	bool eventHandling(MouseButtonPressedEvent& ev) {
+	/*bool eventHandling(MouseButtonPressedEvent& ev) {
 		VIO_INFO("Event Handle Function Called");
 		return true;
-	}
+	}*/
+
 	Application::Application()
 	{
 		
-		m_window = std::unique_ptr<Window>(Window::Create(WindowProperties("Violet Engine", 1280, 720)));
+		m_window = std::unique_ptr<Window>(Window::Create(WindowProperties("Violet Engine", 1280, 720 , true , std::bind(&Application::onEvent, this, std::placeholders::_1))));
 		
 	}
 	Application::~Application()
 	{
 		
+	}
+	void Application::onEvent(Event& event) {
+
+		//VIO_DEBUG(event.getName());
+		EventDispatcher dispatcher(event);	
+		dispatcher.dispatch<WindowCloseEvent>(std::bind(&Application::onWindowClose, this, std::placeholders::_1)); //Dispatch all window close events to onWindowClose function
+	}
+	bool Application::onWindowClose(WindowCloseEvent& event)
+	{
+		m_applicationRunning = false;
+		return true; //Confirm that the evet has been handled 
 	}
 	void Application::run()
 	{
