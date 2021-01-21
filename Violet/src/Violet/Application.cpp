@@ -1,5 +1,6 @@
 #include "VIOPCH.h"
 #include "Application.h"
+#include "glad/glad.h"
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
 		VIO_INFO("Event Handle Function Called");
@@ -48,7 +49,8 @@ namespace Violet {
 		m_layerStack.pushOverlay(layer);
 	}
 	void Application::run()
-	{
+	{	
+
 		VIO_DEBUG(m_window->getWidth());
 		VIO_DEBUG(m_window->getHeight());
 		VIO_DEBUG(m_window->isVSyncEnabled());
@@ -71,6 +73,10 @@ namespace Violet {
 	//	dis.dispatch<MouseButtonPressedEvent>(eventHandling);
 	//	VIO_TRACE("Is Event Handled: {}", e.getEventHandleStatus());
 		while (m_applicationRunning) {
+
+			//Test OpenGl 
+			glClearColor(0.1, 0.1, 0.1, 1);
+			glClear(GL_COLOR_BUFFER_BIT);
 
 			//Iterate over all the layers
 			for (Layer* layer : m_layerStack) {

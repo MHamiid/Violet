@@ -23,8 +23,8 @@ public:
 	}
 
 	void onEvent(Violet::Event& event) override {
-		VIO_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());
-		event.setEventHandleStatus(true); //Means "First Layer" won't receive events 
+		//VIO_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());
+		//event.setEventHandleStatus(true); 
 	}
 
 };
@@ -34,7 +34,7 @@ class SandBox : public Violet::Application {
 public:
 	SandBox() {
 		pushLayer(new GameLayer("First Layer"));
-		pushLayer(new GameLayer("Second Layer"));
+		//pushLayer(new GameLayer("Second Layer"));
 	}
 
 };

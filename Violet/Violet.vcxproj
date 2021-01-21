@@ -79,8 +79,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>VIOPCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;VIO_DEBUG_MODE;VIO_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;GLFW_INCLUDE_NONE;VIO_DEBUG_MODE;VIO_ENABLE_ASSERTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -100,8 +100,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>VIOPCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;VIO_RELEASE_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;GLFW_INCLUDE_NONE;VIO_RELEASE_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -125,8 +125,8 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>VIOPCH.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;VIO_DISTRIBUTION_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>vendor\spdlog\include;src;vendor\GLFW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_BUILD_DLL;GLFW_INCLUDE_NONE;VIO_DISTRIBUTION_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>src;vendor\spdlog\include;vendor\GLFW\include;vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -146,8 +146,6 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Violet\Layer.h" />
-    <ClInclude Include="src\Violet\LayerStack.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Application.h" />
@@ -157,23 +155,28 @@
     <ClInclude Include="src\Violet\Events\Event.h" />
     <ClInclude Include="src\Violet\Events\KeyEvent.h" />
     <ClInclude Include="src\Violet\Events\MouseEvent.h" />
+    <ClInclude Include="src\Violet\Layer.h" />
+    <ClInclude Include="src\Violet\LayerStack.h" />
     <ClInclude Include="src\Violet\Log.h" />
     <ClInclude Include="src\Violet\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Violet\Window.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Violet\Layer.cpp" />
-    <ClCompile Include="src\Violet\LayerStack.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="src\Violet\Application.cpp" />
+    <ClCompile Include="src\Violet\Layer.cpp" />
+    <ClCompile Include="src\Violet\LayerStack.cpp" />
     <ClCompile Include="src\Violet\Log.cpp" />
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\GLFW\GLFW.vcxproj">
       <Project>{154B857C-0182-860D-AA6E-6C109684020F}</Project>
+    </ProjectReference>
+    <ProjectReference Include="vendor\Glad\Glad.vcxproj">
+      <Project>{BDD6857C-A90D-870D-52FA-6C103E10030F}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

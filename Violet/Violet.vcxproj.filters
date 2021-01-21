@@ -38,6 +38,12 @@
     <ClInclude Include="src\Violet\Events\MouseEvent.h">
       <Filter>Violet\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Layer.h">
+      <Filter>Violet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\LayerStack.h">
+      <Filter>Violet</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Log.h">
       <Filter>Violet</Filter>
     </ClInclude>
@@ -47,12 +53,16 @@
     <ClInclude Include="src\Violet\Window.h">
       <Filter>Violet</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Layer.h" />
-    <ClInclude Include="src\Violet\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />
     <ClCompile Include="src\Violet\Application.cpp">
+      <Filter>Violet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Layer.cpp">
+      <Filter>Violet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\LayerStack.cpp">
       <Filter>Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Log.cpp">
@@ -61,7 +71,5 @@
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp">
       <Filter>Violet\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Layer.cpp" />
-    <ClCompile Include="src\Violet\LayerStack.cpp" />
   </ItemGroup>
 </Project>
