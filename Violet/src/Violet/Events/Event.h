@@ -36,7 +36,7 @@ namespace Violet{
 
 			return getCategoryFlags()& (int)category;
 		}
-		inline void sendEventHandleStatus(bool handled) { m_handled = handled; }
+		inline void setEventHandleStatus(bool handled) { m_handled = handled; }
 		inline bool getEventHandleStatus() { return m_handled; }
 	protected:
 		bool m_handled = false;
@@ -55,7 +55,7 @@ namespace Violet{
 			//If the event and function type matches.
 			if (m_event.getEventType() == T::GetClassType()) {
 	
-				m_event.sendEventHandleStatus(FUNCEvent(*(T*)&m_event)); //Call the appropriate function, Casting Event type to passed template type, Set m_handled.
+				m_event.setEventHandleStatus(FUNCEvent(*(T*)&m_event)); //Call the appropriate function, Casting Event type to passed template type, Set m_handled.
 				return true;
 			}
 			return false;

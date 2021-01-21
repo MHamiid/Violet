@@ -47,6 +47,8 @@
     <ClInclude Include="src\Violet\Window.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Layer.h" />
+    <ClInclude Include="src\Violet\LayerStack.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />
@@ -59,5 +61,7 @@
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp">
       <Filter>Violet\Platform\Windows</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Layer.cpp" />
+    <ClCompile Include="src\Violet\LayerStack.cpp" />
   </ItemGroup>
 </Project>
