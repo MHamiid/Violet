@@ -34,7 +34,6 @@ class SandBox : public Violet::Application {
 public:
 	SandBox() {
 		pushLayer(new GameLayer("First Layer"));
-		pushOverlayer(new Violet::ImGuiLayer());
 		//pushLayer(new GameLayer("Second Layer"));
 	}
 

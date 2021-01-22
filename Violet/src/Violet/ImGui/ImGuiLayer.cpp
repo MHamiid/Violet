@@ -1,11 +1,11 @@
 #include "VIOPCH.h"
 #include "ImGuiLayer.h"
-
+#include "Violet/Application.h"
 //#include "glad/glad.h" //imgui_impl_opengl3.h already includes glad.h
 #include "backends/imgui_impl_opengl3.h"
 
 namespace Violet {
-	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer")
+	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer") , m_window(nullptr)
 	{
 	}
 	ImGuiLayer::~ImGuiLayer()
@@ -30,6 +30,10 @@ namespace Violet {
 		
 		// Setup Platform/Renderer backends
 		ImGui_ImplOpenGL3_Init("#version 410");
+
+		//Get window from the Application instance.
+		m_window = Application::getApplication().getWindow();
+
 	}
 	void ImGuiLayer::onDetach()
 	{
@@ -39,9 +43,8 @@ namespace Violet {
 	}
 	void ImGuiLayer::onUpdate()
 	{	
-	
 		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(1280, 720); //Hard coded for now for testing, TODO: get current window size from our Window.
+		io.DisplaySize = ImVec2(m_window->getWidth(), m_window->getHeight()); //Set window size as the ImGui display size
 
 		//// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();

@@ -6,11 +6,14 @@ namespace Violet {
 		VIO_INFO("Event Handle Function Called");
 		return true;
 	}*/
-
+	Application* Application::s_ApplicationInstance = nullptr;
 	Application::Application()
-	{
+	{	
+		VIO_CORE_ASSERT(!s_ApplicationInstance, "Application Already Created!!!");
+		s_ApplicationInstance = this; //Our single instance of application
 		
 		m_window = std::unique_ptr<Window>(Window::Create(WindowProperties("Violet Engine", 1280, 720 , true , std::bind(&Application::onEvent, this, std::placeholders::_1))));
+		
 		
 	}
 	Application::~Application()
@@ -44,16 +47,18 @@ namespace Violet {
 	{
 		m_layerStack.pushLayer(layer);
 	}
-	void Application::pushOverlayer(Layer* layer)
+	void Application::pushOverlay(Layer* layer)
 	{
 		m_layerStack.pushOverlay(layer);
 	}
 	void Application::run()
 	{	
-
+		m_ImGuiLayer = new ImGuiLayer();
+		m_layerStack.pushOverlay(m_ImGuiLayer);
 		VIO_DEBUG(m_window->getWidth());
 		VIO_DEBUG(m_window->getHeight());
 		VIO_DEBUG(m_window->isVSyncEnabled());
+
 		
 	//	MouseButtonPressedEvent e(30);
 	//	VIO_DEBUG(e.getName());
