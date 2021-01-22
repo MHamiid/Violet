@@ -39,12 +39,14 @@ project "Violet"
 		"%{prj.name}/src",					 --Include dir for Violet project src folder
 		"%{prj.name}/vendor/spdlog/include", --include dir for spdlog
 		"%{prj.name}/vendor/GLFW/include",	 --include dir for GLFW
-		"%{prj.name}/vendor/Glad/include"	 --include dir for Glad
+		"%{prj.name}/vendor/Glad/include",	 --include dir for Glad
+		"%{prj.name}/vendor/imgui"	 --include dir for Glad
 	}
 
 	links{
 		"GLFW",
-		"Glad"
+		"Glad",
+		"ImGui"
 	
 	}
 
@@ -202,6 +204,61 @@ project "GLFW"
 			"_GLFW_WIN32",
 			"_CRT_SECURE_NO_WARNINGS"
 		}
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+
+
+--Include Project for GLFW
+project "ImGui"
+	location "ImGui"
+	kind "StaticLib"
+	language "C++"
+
+	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
+	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")
+
+	ImGuiSrcDir = "Violet/vendor/imgui/"
+
+	files
+	{
+		ImGuiSrcDir .."imconfig.h",
+        ImGuiSrcDir .."imgui.h",
+        ImGuiSrcDir .."imgui.cpp",
+        ImGuiSrcDir .."imgui_draw.cpp",
+        ImGuiSrcDir .."imgui_internal.h",
+        ImGuiSrcDir .."imgui_widgets.cpp",
+        ImGuiSrcDir .."imstb_rectpack.h",
+        ImGuiSrcDir .."imstb_textedit.h",
+        ImGuiSrcDir .."imstb_truetype.h",
+        ImGuiSrcDir .."imgui_demo.cpp",
+		ImGuiSrcDir .."imgui_tables.cpp",
+		ImGuiSrcDir .."backends/imgui_impl_opengl3.h",
+		ImGuiSrcDir .."backends/imgui_impl_opengl3.cpp",
+	--	ImGuiSrcDir .."backends/imgui_impl_glfw.h",
+	--	ImGuiSrcDir .."backends/imgui_impl_glfw.cpp"
+
+	}
+	
+	includedirs{
+		
+		ImGuiSrcDir,
+	--	ImGuiSrcDir .."examples/libs/glfw/include",
+		"Violet/vendor/Glad/include"
+	
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+		cppdialect "C++17"
+		staticruntime "Off"
+
 
 	filter "configurations:Debug"
 		runtime "Debug"

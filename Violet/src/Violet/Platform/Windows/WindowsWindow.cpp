@@ -51,7 +51,7 @@ namespace Violet {
 
 	void WindowsWindow::init()
 	{
-		VIO_CORE_INFO("Creating Window {0} ({1} , {2})", m_properties.m_title, m_properties.m_width, m_properties.m_height);
+		VIO_CORE_INFO("Creating Window {0} ({1} , {2})!", m_properties.m_title, m_properties.m_width, m_properties.m_height);
 		//init ONLY ONCE PER PROGRAM GLFW if not initialized
 		if (!s_GLFWInitialized) {
 			int initialized = glfwInit(); //return 0 is failed

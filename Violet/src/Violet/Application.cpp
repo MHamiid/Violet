@@ -75,7 +75,7 @@ namespace Violet {
 		while (m_applicationRunning) {
 
 			//Test OpenGl 
-			glClearColor(0.1, 0.1, 0.1, 1);
+		//	glClearColor(0.1, 0.1, 0.1, 1);
 			glClear(GL_COLOR_BUFFER_BIT);
 
 			//Iterate over all the layers

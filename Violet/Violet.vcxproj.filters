@@ -7,6 +7,9 @@
     <Filter Include="Violet\Events">
       <UniqueIdentifier>{9C5BC480-081C-40B7-D156-89343DD68493}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Violet\ImGui">
+      <UniqueIdentifier>{E20DE4EC-CE70-7391-77F6-AB4763383F14}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Violet\Platform">
       <UniqueIdentifier>{0CBA67DF-7845-D5A3-8156-5898ED6031A4}</UniqueIdentifier>
     </Filter>
@@ -38,6 +41,9 @@
     <ClInclude Include="src\Violet\Events\MouseEvent.h">
       <Filter>Violet\Events</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h">
+      <Filter>Violet\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Layer.h">
       <Filter>Violet</Filter>
     </ClInclude>
@@ -58,6 +64,9 @@
     <ClCompile Include="src\VIOPCH.cpp" />
     <ClCompile Include="src\Violet\Application.cpp">
       <Filter>Violet</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\ImGui\ImGuiLayer.cpp">
+      <Filter>Violet\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Layer.cpp">
       <Filter>Violet</Filter>
