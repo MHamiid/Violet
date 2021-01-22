@@ -241,15 +241,16 @@ project "ImGui"
 		ImGuiSrcDir .."imgui_tables.cpp",
 		ImGuiSrcDir .."backends/imgui_impl_opengl3.h",
 		ImGuiSrcDir .."backends/imgui_impl_opengl3.cpp",
-	--	ImGuiSrcDir .."backends/imgui_impl_glfw.h",
-	--	ImGuiSrcDir .."backends/imgui_impl_glfw.cpp"
+		ImGuiSrcDir .."backends/imgui_impl_glfw.h",
+		ImGuiSrcDir .."backends/imgui_impl_glfw.cpp",
+		ImGuiSrcDir .."examples/libs/glfw/include/**"
 
 	}
 	
 	includedirs{
 		
 		ImGuiSrcDir,
-	--	ImGuiSrcDir .."examples/libs/glfw/include",
+		ImGuiSrcDir .."examples/libs/glfw/include",
 		"Violet/vendor/Glad/include"
 	
 	}

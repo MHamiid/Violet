@@ -4,10 +4,34 @@
     <Filter Include="backends">
       <UniqueIdentifier>{00057006-ECD1-CA11-15EB-B8B9011700A0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="examples">
+      <UniqueIdentifier>{84D830B1-70A5-8BBC-99BE-796485EAC04A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\libs">
+      <UniqueIdentifier>{5D4FF000-C90F-6C37-924A-B5B4FEC9B013}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\libs\glfw">
+      <UniqueIdentifier>{3C45F63A-2829-B790-9189-B1E37D8CA112}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\libs\glfw\include">
+      <UniqueIdentifier>{AFE822A3-9BF8-CE73-04B2-3392F0E0BD0C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="examples\libs\glfw\include\GLFW">
+      <UniqueIdentifier>{4E69E5B0-BA4C-F4F0-C34F-222D2FB2BA41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Violet\vendor\imgui\backends\imgui_impl_glfw.h">
+      <Filter>backends</Filter>
+    </ClInclude>
     <ClInclude Include="..\Violet\vendor\imgui\backends\imgui_impl_opengl3.h">
       <Filter>backends</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Violet\vendor\imgui\examples\libs\glfw\include\GLFW\glfw3.h">
+      <Filter>examples\libs\glfw\include\GLFW</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Violet\vendor\imgui\examples\libs\glfw\include\GLFW\glfw3native.h">
+      <Filter>examples\libs\glfw\include\GLFW</Filter>
     </ClInclude>
     <ClInclude Include="..\Violet\vendor\imgui\imconfig.h" />
     <ClInclude Include="..\Violet\vendor\imgui\imgui.h" />
@@ -17,6 +41,9 @@
     <ClInclude Include="..\Violet\vendor\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Violet\vendor\imgui\backends\imgui_impl_glfw.cpp">
+      <Filter>backends</Filter>
+    </ClCompile>
     <ClCompile Include="..\Violet\vendor\imgui\backends\imgui_impl_opengl3.cpp">
       <Filter>backends</Filter>
     </ClCompile>

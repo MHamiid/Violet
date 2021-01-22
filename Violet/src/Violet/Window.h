@@ -25,8 +25,9 @@ namespace Violet {
 
 		virtual void setVSync(bool enabled) = 0;
 		virtual bool isVSyncEnabled() const = 0;
+		virtual void* getNativeWindow() const = 0;
 
-
+	public:
 		static Window* Create(const WindowProperties& properties);	//Has to be implemented in child per platform
 	protected:
 		virtual void init() = 0;

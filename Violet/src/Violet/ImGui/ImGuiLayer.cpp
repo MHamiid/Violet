@@ -1,11 +1,13 @@
 #include "VIOPCH.h"
 #include "ImGuiLayer.h"
 #include "Violet/Application.h"
+
+#include "backends/imgui_impl_glfw.h"
 //#include "glad/glad.h" //imgui_impl_opengl3.h already includes glad.h
 #include "backends/imgui_impl_opengl3.h"
 
 namespace Violet {
-	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer") , m_window(nullptr)
+	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer") 
 	{
 	}
 	ImGuiLayer::~ImGuiLayer()
@@ -18,8 +20,6 @@ namespace Violet {
 		VIO_CORE_INFO("Initializing ImGUI: {0}!", IMGUI_CHECKVERSION());
 		ImGui::CreateContext();
     	ImGuiIO& io = ImGui::GetIO(); //(void)io;
-		io.BackendFlags |= ImGuiBackendFlags_HasMouseCursors;
-		io.BackendFlags |= ImGuiBackendFlags_HasSetMousePos;
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
 		//io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
@@ -32,44 +32,45 @@ namespace Violet {
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 		//Get window from the Application instance.
-		m_window = Application::getApplication().getWindow();
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::getApplication().getWindow().getNativeWindow());
 
+		ImGui_ImplGlfw_InitForOpenGL(window, true);
 	}
 	void ImGuiLayer::onDetach()
 	{
+		// Cleanup
 		ImGui_ImplOpenGL3_Shutdown();
+		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
-
 	}
-	void ImGuiLayer::onUpdate()
-	{	
-		ImGuiIO& io = ImGui::GetIO();
-		io.DisplaySize = ImVec2(m_window->getWidth(), m_window->getHeight()); //Set window size as the ImGui display size
-
-		//// Start the Dear ImGui frame
-		ImGui_ImplOpenGL3_NewFrame();
-		ImGui::NewFrame();
-
+	void ImGuiLayer::onImGuiRender()
+	{
 		//##Content##//
-		static unsigned int count = 0;
-		ImGui::Begin("ImGui Test!" );                         
-		ImGui::Text("Counting %.3f",(float)count++);
+		ImGui::Begin("ImGui Test!");
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
 		ImGui::End();
 
 		static bool showWindow = true;
 		ImGui::ShowDemoWindow(&showWindow);
-
-
-
-		//// Rendering
-		ImGui::Render();
-		//glClear(GL_COLOR_BUFFER_BIT);
-		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
 	}
+	
 	void ImGuiLayer::onEvent(Event& event)
 	{
 		//VIO_CORE_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());
 		//event.setEventHandleStatus(true); 
+	}
+	void ImGuiLayer::beginImGuiFrame()
+	{
+		// Start the Dear ImGui frame
+		ImGui_ImplOpenGL3_NewFrame();
+		ImGui_ImplGlfw_NewFrame();
+		ImGui::NewFrame();
+
+	}
+	void ImGuiLayer::endImGuiFrame()
+	{
+		// Rendering
+		ImGui::Render();
+		ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	}
 }

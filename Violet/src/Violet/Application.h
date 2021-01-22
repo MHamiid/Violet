@@ -15,7 +15,7 @@ namespace Violet {
 		bool onWindowClose(WindowCloseEvent& event);
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* layer);
-		Window* getWindow() { return m_window.get(); }
+		Window& getWindow() { return *m_window; }
 	public:
 		static Application& getApplication() { return *s_ApplicationInstance; }
 	private:

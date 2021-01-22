@@ -13,13 +13,12 @@ namespace Violet {
 	public:
 		//Overriding Pure Virtual funcitons
 		virtual void onUpdate() override;
-		virtual inline unsigned int getWidth() const override { return m_properties.m_width; }	
-		virtual inline unsigned int getHeight() const override { return m_properties.m_height; }
-		
-	
+		virtual unsigned int getWidth() const override { return m_properties.m_width; }	
+		virtual unsigned int getHeight() const override { return m_properties.m_height; }
 		virtual void setVSync(bool enabled) override;
 		virtual bool isVSyncEnabled() const override;
-		
+
+		virtual void* getNativeWindow() const override { return m_window; }
 	private:
 		//Overriding Pure Virtual funcitons
 		virtual void init() override;

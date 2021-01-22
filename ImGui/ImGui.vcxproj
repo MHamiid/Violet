@@ -75,7 +75,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\Violet\vendor\imgui;..\Violet\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Violet\vendor\imgui;..\Violet\vendor\imgui\examples\libs\glfw\include;..\Violet\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
@@ -90,7 +90,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\Violet\vendor\imgui;..\Violet\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Violet\vendor\imgui;..\Violet\vendor\imgui\examples\libs\glfw\include;..\Violet\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -109,7 +109,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>..\Violet\vendor\imgui;..\Violet\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Violet\vendor\imgui;..\Violet\vendor\imgui\examples\libs\glfw\include;..\Violet\vendor\Glad\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -119,7 +119,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\Violet\vendor\imgui\backends\imgui_impl_glfw.h" />
     <ClInclude Include="..\Violet\vendor\imgui\backends\imgui_impl_opengl3.h" />
+    <ClInclude Include="..\Violet\vendor\imgui\examples\libs\glfw\include\GLFW\glfw3.h" />
+    <ClInclude Include="..\Violet\vendor\imgui\examples\libs\glfw\include\GLFW\glfw3native.h" />
     <ClInclude Include="..\Violet\vendor\imgui\imconfig.h" />
     <ClInclude Include="..\Violet\vendor\imgui\imgui.h" />
     <ClInclude Include="..\Violet\vendor\imgui\imgui_internal.h" />
@@ -128,6 +131,7 @@
     <ClInclude Include="..\Violet\vendor\imgui\imstb_truetype.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Violet\vendor\imgui\backends\imgui_impl_glfw.cpp" />
     <ClCompile Include="..\Violet\vendor\imgui\backends\imgui_impl_opengl3.cpp" />
     <ClCompile Include="..\Violet\vendor\imgui\imgui.cpp" />
     <ClCompile Include="..\Violet\vendor\imgui\imgui_demo.cpp" />

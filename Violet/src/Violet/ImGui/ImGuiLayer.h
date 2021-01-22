@@ -7,12 +7,13 @@ namespace Violet {
 	public:
 		ImGuiLayer();
 		~ImGuiLayer();
-		void onAttach() override;
-		void onDetach() override;
-		void onUpdate() override;
-		void onEvent(Event& event) override;
-	private:
-		Window* m_window;
+		virtual void onAttach() override;
+		virtual void onDetach() override;
+		virtual void onImGuiRender() override;
+		virtual void onEvent(Event& event) override;
+	public:
+		void beginImGuiFrame();
+		void endImGuiFrame();
 	};
 
 
