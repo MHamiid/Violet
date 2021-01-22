@@ -7,8 +7,12 @@
 #include "backends/imgui_impl_opengl3.h"
 
 namespace Violet {
+	ImGuiLayer* ImGuiLayer::s_ImGuiLayer = nullptr;
 	ImGuiLayer::ImGuiLayer() : Layer("ImGui Layer") 
 	{
+		//ImGuiLayer should have only one instance
+		VIO_CORE_ASSERT(!s_ImGuiLayer, "ImGuiLayer Already Created!!!");
+		s_ImGuiLayer = this; //Our single instance of ImGuiLayer
 	}
 	ImGuiLayer::~ImGuiLayer()
 	{

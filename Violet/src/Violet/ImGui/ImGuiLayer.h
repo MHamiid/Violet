@@ -14,6 +14,8 @@ namespace Violet {
 	public:
 		void beginImGuiFrame();
 		void endImGuiFrame();
+	private:
+		static ImGuiLayer* s_ImGuiLayer;
 	};
 
 
