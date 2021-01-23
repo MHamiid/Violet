@@ -20,6 +20,7 @@ project "Violet"
 	location "Violet"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "Off"
 	
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -52,7 +53,6 @@ project "Violet"
 
 	filter "system:windows"
 		cppdialect "c++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines{
@@ -72,20 +72,23 @@ project "Violet"
 	filter "configurations:Debug"
 		defines "VIO_DEBUG_MODE"
 		symbols "On"
-		defines{ "VIO_ENABLE_ASSERTS"}
-
+		runtime "Debug"
+		
 	filter "configurations:Release"
 		defines "VIO_RELEASE_MODE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Distribution"
 		defines "VIO_DISTRIBUTION_MODE"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	staticruntime "Off"
 
 	targetdir("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -109,7 +112,6 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "c++17"
-		staticruntime "Off"
 		systemversion "latest"
 
 		defines{
@@ -120,14 +122,17 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "VIO_DEBUG_MODE"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "VIO_RELEASE_MODE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Distribution"
 		defines "VIO_DISTRIBUTION_MODE"
+		runtime "Release"
 		optimize "On"
 
 

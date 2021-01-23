@@ -13,6 +13,12 @@
 #endif
 
 
+//To be defined in debug mode
+#ifdef VIO_DEBUG_MODE
+	#define VIO_ENABLE_ASSERTS
+#endif  //DEBUG_DEBUG_MODE
+
+
 //Debug Assertion
 #ifdef VIO_ENABLE_ASSERTS
 
