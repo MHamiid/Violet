@@ -92,7 +92,7 @@
       <ImportLibrary>..\bin\Debug-windows-x86_64\Violet\Violet.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Violet\Violet.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Violet\Violet.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Violet\Violet.dll ..\bin\Debug-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Debug-windows-x86_64\Violet\Violet.dll\ (xcopy /Q /E /Y /I ..\bin\Debug-windows-x86_64\Violet\Violet.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-windows-x86_64\Violet\Violet.dll "..\bin\Debug-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,7 +117,7 @@
       <ImportLibrary>..\bin\Release-windows-x86_64\Violet\Violet.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-windows-x86_64\Violet\Violet.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Violet\Violet.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Violet\Violet.dll ..\bin\Release-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Release-windows-x86_64\Violet\Violet.dll\ (xcopy /Q /E /Y /I ..\bin\Release-windows-x86_64\Violet\Violet.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-windows-x86_64\Violet\Violet.dll "..\bin\Release-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribution|x64'">
@@ -142,7 +142,7 @@
       <ImportLibrary>..\bin\Distribution-windows-x86_64\Violet\Violet.lib</ImportLibrary>
     </Link>
     <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Distribution-windows-x86_64\Violet\Violet.dll\ (xcopy /Q /E /Y /I ..\bin\Distribution-windows-x86_64\Violet\Violet.dll ..\bin\Distribution-windows-x86_64\Sandbox &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Distribution-windows-x86_64\Violet\Violet.dll ..\bin\Distribution-windows-x86_64\Sandbox &gt; nul)</Command>
+      <Command>IF EXIST ..\bin\Distribution-windows-x86_64\Violet\Violet.dll\ (xcopy /Q /E /Y /I ..\bin\Distribution-windows-x86_64\Violet\Violet.dll "..\bin\Distribution-windows-x86_64\Sandbox\" &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Distribution-windows-x86_64\Violet\Violet.dll "..\bin\Distribution-windows-x86_64\Sandbox\" &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
