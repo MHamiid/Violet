@@ -13,9 +13,6 @@ workspace "Violet"
 outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 
---Include Glad premake file
-include "Violet/vendor/Glad"
-
 project "Violet"
 	location "Violet"
 	kind "SharedLib"
@@ -138,6 +135,12 @@ project "Sandbox"
 
 
 --Submodules
+
+
+group "Dependencies"
+
+--Include Glad premake file
+include "Violet/vendor/Glad"
 
 --Include Project for GLFW
 project "GLFW"
@@ -273,3 +276,6 @@ project "ImGui"
 	filter "configurations:Release"
 		runtime "Release"
 		optimize "on"
+
+
+group "" --Dependencies
