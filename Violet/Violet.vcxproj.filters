@@ -44,6 +44,12 @@
     <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h">
       <Filter>Violet\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Input.h">
+      <Filter>Violet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\KeyCodes.h">
+      <Filter>Violet</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Layer.h">
       <Filter>Violet</Filter>
     </ClInclude>
@@ -53,16 +59,18 @@
     <ClInclude Include="src\Violet\Log.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\MouseCodes.h">
+      <Filter>Violet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h">
+      <Filter>Violet\Platform\Windows</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Platform\Windows\WindowsWindow.h">
       <Filter>Violet\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Window.h">
       <Filter>Violet</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Input.h" />
-    <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h" />
-    <ClInclude Include="src\Violet\KeyCodes.h" />
-    <ClInclude Include="src\Violet\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />
@@ -81,9 +89,11 @@
     <ClCompile Include="src\Violet\Log.cpp">
       <Filter>Violet</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Platform\Windows\WindowsInput.cpp">
+      <Filter>Violet\Platform\Windows</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp">
       <Filter>Violet\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Platform\Windows\WindowsInput.cpp" />
   </ItemGroup>
 </Project>

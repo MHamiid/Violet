@@ -38,7 +38,8 @@ project "Violet"
 		"%{prj.name}/vendor/spdlog/include", --include dir for spdlog
 		"%{prj.name}/vendor/GLFW/include",	 --include dir for GLFW
 		"%{prj.name}/vendor/Glad/include",	 --include dir for Glad
-		"%{prj.name}/vendor/imgui"	 --include dir for Glad
+		"%{prj.name}/vendor/imgui",			 --include dir for ImGui
+		"%{prj.name}/vendor/glm",			 --include dir for glm
 	}
 
 	links{
