@@ -12,8 +12,8 @@ namespace Violet {
 		virtual void onImGuiRender() override;
 		virtual void onEvent(Event& event) override;
 	public:
-		void beginImGuiFrame();
-		void endImGuiFrame();
+		static void BeginImGuiFrame();
+		static void EndImGuiFrame();
 	private:
 		static ImGuiLayer* s_ImGuiLayer;
 	};

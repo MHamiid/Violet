@@ -73,13 +73,13 @@ namespace Violet {
 			}
 
 			//Rendering ImGui stuff
-			m_ImGuiLayer->beginImGuiFrame(); //Start ImGui frame
+			ImGuiLayer::BeginImGuiFrame(); //Start ImGui frame
 			//Iterate over layers onImGuiRender content
 			for (Layer* layer : m_layerStack) {
 				layer->onImGuiRender();
 			}
 
-			m_ImGuiLayer->endImGuiFrame();   //End ImGui frame
+			ImGuiLayer::EndImGuiFrame();   //End ImGui frame
 			m_window->onUpdate();	
 		}
 	}

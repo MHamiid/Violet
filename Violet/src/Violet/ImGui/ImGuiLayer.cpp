@@ -78,7 +78,7 @@ namespace Violet {
 		//VIO_CORE_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());
 		//event.setEventHandleStatus(true); 
 	}
-	void ImGuiLayer::beginImGuiFrame()
+	void ImGuiLayer::BeginImGuiFrame()
 	{
 		// Start the Dear ImGui frame
 		ImGui_ImplOpenGL3_NewFrame();
@@ -86,7 +86,7 @@ namespace Violet {
 		ImGui::NewFrame();
 
 	}
-	void ImGuiLayer::endImGuiFrame()
+	void ImGuiLayer::EndImGuiFrame()
 	{
 		// Rendering
 		ImGui::Render();
