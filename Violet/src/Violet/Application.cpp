@@ -1,8 +1,7 @@
 #include "VIOPCH.h"
 #include "Application.h"
 #include "glad/glad.h"
-#include "Input.h"
-#include <GLFW/glfw3.h>
+
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
 		VIO_INFO("Event Handle Function Called");
@@ -62,18 +61,6 @@ namespace Violet {
 		VIO_CORE_DEBUG(m_window->isVSyncEnabled());
 
 		while (m_applicationRunning) {
-
-			//Basic Tests for inputs
-			if (Input::IsKeyPressed(GLFW_KEY_A))
-				VIO_CORE_TRACE("Key A is Pressed");
-			if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_1)) {
-				auto [x, y] = Input::GetMousePosition();
-				VIO_CORE_TRACE("Mouse Button 1 is Pressed at position {0}, {1}" , x ,y);
-			}
-			if (Input::IsMouseButtonPressed(GLFW_MOUSE_BUTTON_2)) {
-				auto [x, y] = Input::GetMousePosition();
-				VIO_CORE_TRACE("Mouse Button 2 is Pressed at position {0}, {1}", x, y);
-			}
 
 			//Test OpenGl 
 			glClearColor(0.1, 0.1, 0.1, 1);

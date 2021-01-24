@@ -7,20 +7,20 @@ namespace Violet {
 
 	Input* WindowsInput::s_InputInstance = new WindowsInput();
 
-	bool WindowsInput::isKeyPressedIMPL(int keyCode)
+	bool WindowsInput::isKeyPressedIMPL(Key keyCode)
 	{
 		GLFWwindow*  glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
-		int state = glfwGetKey(glfwWindow, keyCode); //Get the last reported state of a key
+		int state = glfwGetKey(glfwWindow, (int)keyCode); //Get the last reported state of a key
 
 		return (state == GLFW_PRESS || state == GLFW_REPEAT);
 	}
 
-	bool WindowsInput::isMouseButtonPressedIMPL(int button)
+	bool WindowsInput::isMouseButtonPressedIMPL(Mouse button)
 	{
 		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
-		int state = glfwGetMouseButton(glfwWindow, button); //Get the last reported state of a mouse button
+		int state = glfwGetMouseButton(glfwWindow, (int)button); //Get the last reported state of a mouse button
 
 		return (state == GLFW_PRESS);
 	}

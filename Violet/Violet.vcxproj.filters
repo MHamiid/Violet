@@ -61,6 +61,8 @@
     </ClInclude>
     <ClInclude Include="src\Violet\Input.h" />
     <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h" />
+    <ClInclude Include="src\Violet\KeyCodes.h" />
+    <ClInclude Include="src\Violet\MouseCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />

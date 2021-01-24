@@ -147,6 +147,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Violet\Input.h" />
+    <ClInclude Include="src\Violet\KeyCodes.h" />
+    <ClInclude Include="src\Violet\MouseCodes.h" />
     <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
