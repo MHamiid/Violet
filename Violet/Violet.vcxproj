@@ -146,6 +146,8 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Violet\Input.h" />
+    <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Application.h" />
@@ -163,6 +165,7 @@
     <ClInclude Include="src\Violet\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Violet\Platform\Windows\WindowsInput.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

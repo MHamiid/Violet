@@ -51,7 +51,7 @@ namespace Violet {
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 		//Get window from the Application instance.
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::getApplication().getWindow().getNativeWindow());
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 	}

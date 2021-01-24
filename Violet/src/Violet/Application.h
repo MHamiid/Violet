@@ -17,7 +17,7 @@ namespace Violet {
 		void pushOverlay(Layer* layer);
 		Window& getWindow() { return *m_window; }
 	public:
-		static Application& getApplication() { return *s_ApplicationInstance; }
+		static Application& getApplicationInstance() { return *s_ApplicationInstance; }
 	private:
 		std::unique_ptr<Window> m_window;
 		bool m_applicationRunning = true;

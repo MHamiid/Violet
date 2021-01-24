@@ -19,7 +19,7 @@ namespace Violet {
 		virtual bool isVSyncEnabled() const override;
 
 		virtual void* getNativeWindow() const override { return m_window; }
-	private:
+	protected:
 		//Overriding Pure Virtual funcitons
 		virtual void init() override;
 		virtual void shutDown() override;
