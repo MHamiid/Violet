@@ -15,10 +15,10 @@ outputDir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 project "Violet"
 	location "Violet"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "c++17"
-	staticruntime "off"
+	staticruntime "on"
 	
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -56,16 +56,22 @@ project "Violet"
 		defines{
 
 			"VIO_PLATFORM_WINDOWS",
-			"VIO_BUILD_DLL",
 			"GLFW_INCLUDE_NONE" --Avoid including OpenGl headers when ever including GLFW to avoid error from Glad (Glad already includes OpenGl headers)
 		}
 
+	--[[
+		--When build is set to "SharedLib"
+		defines{
+
+			"VIO_SHARED_LIB",
+			"VIO_BUILD_DLL"
+		}
+		For copying dll file for SharedLib build
 		postbuildcommands{
 		
 			("{COPY} %{cfg.buildtarget.relpath} \"../bin/"   .. outputDir .. "/Sandbox/\"")
-
 		}
-
+	--]]
 
 	filter "configurations:Debug"
 		defines "VIO_DEBUG_MODE"
@@ -87,7 +93,7 @@ project "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "c++17"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -114,7 +120,8 @@ project "Sandbox"
 
 		defines{
 
-			"VIO_PLATFORM_WINDOWS"
+			"VIO_PLATFORM_WINDOWS",
+			--"VIO_SHARED_LIB" -When Violet build is set to "SharedLib"
 		}
 
 
@@ -148,7 +155,7 @@ project "GLFW"
 	location "GLFW"
 	kind "StaticLib"
 	language "C"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -228,7 +235,7 @@ project "ImGui"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
-	staticruntime "off"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")

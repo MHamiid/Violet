@@ -1,12 +1,15 @@
 #pragma once
 
 #ifdef VIO_PLATFORM_WINDOWS
-	#ifdef VIO_BUILD_DLL
-		#define VIOLET_API __declspec(dllexport)
+	#ifdef VIO_SHARED_LIB
+		#ifdef VIO_BUILD_DLL
+			#define VIOLET_API __declspec(dllexport)
+		#else
+			#define VIOLET_API __declspec(dllimport)
+		#endif // VIO_BUILD_DLL
 	#else
-		#define VIOLET_API __declspec(dllimport)
-	#endif // VIO_BUILD_DLL
-
+		#define VIOLET_API	
+	#endif
 #else
 	#error No Platform specified!
 
