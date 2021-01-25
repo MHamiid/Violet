@@ -131,6 +131,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Violet\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Application.h" />
@@ -152,6 +154,7 @@
     <ClInclude Include="src\Violet\Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

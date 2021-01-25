@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Violet/Window.h"
+#include "Violet/Renderer/GraphicsContext.h"
 #include <GLFW/glfw3.h>
 namespace Violet {
 
@@ -25,7 +26,7 @@ namespace Violet {
 		virtual void shutDown() override;
 	private:
 		GLFWwindow* m_window;
-		
+		GraphicsContext* m_context;
 	};
 
 

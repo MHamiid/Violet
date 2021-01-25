@@ -9,11 +9,11 @@
 		#endif // VIO_BUILD_DLL
 	#else
 		#define VIOLET_API	
-	#endif
+	#endif //VIO_SHARED_LIB
 #else
 	#error No Platform specified!
 
-#endif
+#endif //VIO_PLATFORM_WINDOWS
 
 
 //To be defined in debug mode

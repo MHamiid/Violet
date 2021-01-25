@@ -3,7 +3,7 @@
 #include "Violet/Events/ApplicationEvent.h"
 #include "Violet/Events/KeyEvent.h"
 #include "Violet/Events/MouseEvent.h"
-#include "glad/glad.h"
+#include "Violet/Platform/OpenGL/OpenGLContext.h"
 namespace Violet {
 	
 	static bool s_GLFWInitialized = false;
@@ -29,7 +29,7 @@ namespace Violet {
 	void WindowsWindow::onUpdate()
 	{
 		glfwPollEvents();
-		glfwSwapBuffers(m_window);
+		m_context->swapBuffers();
 	}
 
 	void WindowsWindow::setVSync(bool enabled)
@@ -61,11 +61,10 @@ namespace Violet {
 			s_GLFWInitialized = true;
 		}
 		m_window = glfwCreateWindow((int)m_properties.m_width, (int)m_properties.m_height, m_properties.m_title.c_str(), nullptr, nullptr);
-		glfwMakeContextCurrent(m_window);
 		
-		//Loading Glad
-		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
-		VIO_CORE_ASSERT(gladStatus, "Glad Initialization Failed!");
+		//Setting up Graphics context for the window
+		m_context = new OpenGLContext(m_window);
+		m_context->init();
 
 		glfwSetWindowUserPointer(m_window, &m_properties); //Data to pass to Event callbacks.
 		//setVSync(true);
