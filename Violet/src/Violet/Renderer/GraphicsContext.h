@@ -1,5 +1,4 @@
 #pragma once
-#include "Violet/Core.h"
 
 namespace Violet {
 	

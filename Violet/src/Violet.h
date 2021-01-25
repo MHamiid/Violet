@@ -3,6 +3,7 @@
 //For client usage
 #include <string>
 #include <memory>
+#include "Violet/Core.h"
 #include "Violet/Log.h"
 #include "Violet/Application.h"
 #include "Violet/ImGui/ImGuiLayer.h"

@@ -1,5 +1,4 @@
 #pragma once
-#include "Violet/Core.h"
 #define BIT(x) (1<<x)
 namespace Violet{
 

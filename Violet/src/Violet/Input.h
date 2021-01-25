@@ -1,6 +1,4 @@
 #pragma once
-
-#include "Violet/Core.h"
 #include "KeyCodes.h"
 #include "MouseCodes.h"
 namespace Violet {

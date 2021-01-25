@@ -1,5 +1,4 @@
 #pragma once
-#include "Core.h"
 #include "Window.h"
 #include "Violet/Events/ApplicationEvent.h"
 #include "LayerStack.h"

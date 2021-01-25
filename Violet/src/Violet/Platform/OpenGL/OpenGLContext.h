@@ -1,5 +1,4 @@
 #pragma once
-#include "Violet/Core.h"
 #include "Violet/Renderer/GraphicsContext.h"
 struct GLFWwindow;
 
