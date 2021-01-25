@@ -17,7 +17,8 @@ project "Violet"
 	location "Violet"
 	kind "SharedLib"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "c++17"
+	staticruntime "off"
 	
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -35,11 +36,11 @@ project "Violet"
 	includedirs{
 		 
 		"%{prj.name}/src",					 --Include dir for Violet project src folder
-		"%{prj.name}/vendor/spdlog/include", --include dir for spdlog
-		"%{prj.name}/vendor/GLFW/include",	 --include dir for GLFW
-		"%{prj.name}/vendor/Glad/include",	 --include dir for Glad
-		"%{prj.name}/vendor/imgui",			 --include dir for ImGui
-		"%{prj.name}/vendor/glm",			 --include dir for glm
+		"%{prj.name}/vendor/spdlog/include", --Include dir for spdlog
+		"%{prj.name}/vendor/GLFW/include",	 --Include dir for GLFW
+		"%{prj.name}/vendor/Glad/include",	 --Include dir for Glad
+		"%{prj.name}/vendor/imgui",			 --Include dir for ImGui
+		"%{prj.name}/vendor/glm"			 --Include dir for glm
 	}
 
 	links{
@@ -50,7 +51,6 @@ project "Violet"
 	}
 
 	filter "system:windows"
-		cppdialect "c++17"
 		systemversion "latest"
 
 		defines{
@@ -69,24 +69,25 @@ project "Violet"
 
 	filter "configurations:Debug"
 		defines "VIO_DEBUG_MODE"
-		symbols "On"
+		symbols "on"
 		runtime "Debug"
 		
 	filter "configurations:Release"
 		defines "VIO_RELEASE_MODE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Distribution"
 		defines "VIO_DISTRIBUTION_MODE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
-	staticruntime "Off"
+	cppdialect "c++17"
+	staticruntime "off"
 
 	targetdir("bin/" .. outputDir .. "/%{prj.name}")
 	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -109,7 +110,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "c++17"
 		systemversion "latest"
 
 		defines{
@@ -126,12 +126,12 @@ project "Sandbox"
 	filter "configurations:Release"
 		defines "VIO_RELEASE_MODE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 	filter "configurations:Distribution"
 		defines "VIO_DISTRIBUTION_MODE"
 		runtime "Release"
-		optimize "On"
+		optimize "on"
 
 
 
@@ -148,6 +148,7 @@ project "GLFW"
 	location "GLFW"
 	kind "StaticLib"
 	language "C"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -167,10 +168,8 @@ project "GLFW"
 		GLFWSrcDir .."src/window.c"
 	}
 	filter "system:linux"
-		pic "On"
-
+		pic "on"
 		systemversion "latest"
-		staticruntime "Off"
 
 		files
 		{
@@ -193,7 +192,6 @@ project "GLFW"
 
 	filter "system:windows"
 		systemversion "latest"
-		staticruntime "Off"
 
 		files
 		{
@@ -229,6 +227,8 @@ project "ImGui"
 	location "ImGui"
 	kind "StaticLib"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
 	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")
@@ -266,9 +266,6 @@ project "ImGui"
 
 	filter "system:windows"
 		systemversion "latest"
-		cppdialect "C++17"
-		staticruntime "Off"
-
 
 	filter "configurations:Debug"
 		runtime "Debug"
