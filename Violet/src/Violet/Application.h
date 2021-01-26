@@ -25,6 +25,7 @@ namespace Violet {
 
 	private:
 		static Application* s_ApplicationInstance;
+		unsigned int m_vertexArray, m_vertexBuffer, m_indexBuffer;
 	};
 
 
