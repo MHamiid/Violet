@@ -80,10 +80,6 @@ namespace Violet {
 	void Application::run()
 	{	
 
-		VIO_CORE_DEBUG(m_window->getWidth());
-		VIO_CORE_DEBUG(m_window->getHeight());
-		VIO_CORE_DEBUG(m_window->isVSyncEnabled());
-
 		while (m_applicationRunning) {
 
 			//Test OpenGl 

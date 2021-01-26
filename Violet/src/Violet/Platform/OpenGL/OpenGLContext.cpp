@@ -10,11 +10,18 @@ namespace Violet {
 	}
 	void OpenGLContext::init()
 	{	
+		VIO_CORE_INFO("Creating OpenGL Context!");
 		glfwMakeContextCurrent(m_windowHandle);
 
 		//Loading Glad
 		int gladStatus = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
 		VIO_CORE_ASSERT(gladStatus, "Glad Initialization Failed!");
+
+		//Log Graphics Card information
+		VIO_CORE_INFO("Graphics Card Info:");
+		VIO_CORE_INFO("		 Vendor: {0}",   glGetString(GL_VENDOR));
+		VIO_CORE_INFO("		 Renderer: {0}", glGetString(GL_RENDERER));
+		VIO_CORE_INFO("		 Version: {0}",  glGetString(GL_VERSION));
 
 	}
 	void OpenGLContext::swapBuffers()
