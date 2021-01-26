@@ -73,6 +73,8 @@
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h" />
+    <ClInclude Include="src\Violet\Renderer\Shader.h" />
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLShader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />
@@ -98,5 +100,6 @@
       <Filter>Violet\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp" />
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLShader.cpp" />
   </ItemGroup>
 </Project>

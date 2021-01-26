@@ -41,10 +41,34 @@ namespace Violet {
 
 		unsigned int indices[3] = { 0, 1, 2 };
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+		//Create shaders
+		std::string vertexSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) in vec4 a_position;			
+
+			void main(){
+				gl_Position = a_position;
+			}
+		)";
+
+		std::string fragmentSrc = R"(
+			#version 330 core
+			
+			layout(location = 0) out vec4 o_color;			
+
+			void main(){
+				o_color = vec4(1.0, 0.5, 0.2, 1.0);
+			}
+		)";
+
+		m_shader = new OpenGLShader(vertexSrc, fragmentSrc);
+		m_shader->bind();
 	}
 	Application::~Application()
 	{
-		
+		delete m_shader;
 	}
 	void Application::onEvent(Event& event) {
 
