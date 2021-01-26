@@ -32,12 +32,12 @@ namespace Violet{
 		virtual const char* getName() const = 0;
 		virtual int getCategoryFlags() const = 0;
 
-		inline bool isInCategory(EventCategory category) {
+		bool isInCategory(EventCategory category) {
 
 			return getCategoryFlags()& (int)category;
 		}
-		inline void setEventHandleStatus(bool handled) { m_handled = handled; }
-		inline bool getEventHandleStatus() { return m_handled; }
+		void setEventHandleStatus(bool handled) { m_handled = handled; }
+		bool getEventHandleStatus() { return m_handled; }
 	protected:
 		bool m_handled = false;
 

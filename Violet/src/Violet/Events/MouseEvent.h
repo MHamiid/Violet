@@ -7,8 +7,8 @@ namespace Violet {
 	public:
 		MouseMovedEvent(float x, float y) : m_mouseX(x) , m_mouseY(y){}
 		
-		inline float getX() const { return m_mouseX; }
-		inline float getY() const { return m_mouseY; }
+		float getX() const { return m_mouseX; }
+		float getY() const { return m_mouseY; }
 
 		static EventType GetClassType() { return EventType::MouseMoved; }
 		//pure virtual functions implementation.
@@ -25,8 +25,8 @@ namespace Violet {
 	public:
 		MouseScrolledEvent(float xOffset, float yOffset) : m_offsetX(xOffset), m_offsetY(yOffset) {}
 
-		inline float getX() const { return m_offsetX; }
-		inline float getY() const { return m_offsetY; }
+		float getX() const { return m_offsetX; }
+		float getY() const { return m_offsetY; }
 
 		static EventType GetClassType() { return EventType::MouseScrolled; }
 		//pure virtual functions implementation.
@@ -43,7 +43,7 @@ namespace Violet {
 	//Base class for mouse buttons events.
 	class VIOLET_API MouseButtonEvent :public Event {
 	public:
-		inline int getMouseButton() const { return m_button; }
+		int getMouseButton() const { return m_button; }
 
 		//pure virtual functions implementation.
 		virtual int getCategoryFlags() const override { return (int)EventCategory::Input | (int)EventCategory::Mouse | (int)EventCategory::MouseButton; } //Assigning event to three categories.

@@ -6,7 +6,7 @@ namespace Violet {
 	//Base class for key buttons events.
 	class VIOLET_API KeyEvent : public Event {
 	public:
-		inline int getKeyCode() const { return m_keyCode; }
+		int getKeyCode() const { return m_keyCode; }
 
 		//pure virtual functions implementation.
 		virtual int getCategoryFlags() const override { return (int)EventCategory::Input | (int)EventCategory::Keyboard; } //Assigning event to two categories.
@@ -22,7 +22,7 @@ namespace Violet {
 	public:
 		KeyPressedEvent(int keyCode , int repeatCount) :KeyEvent(keyCode), m_repeatCount(repeatCount) {}
 
-		inline int getRepeatCount() const { return m_repeatCount; }
+		int getRepeatCount() const { return m_repeatCount; }
 
 		static EventType GetClassType() { return EventType::KeyPressed ; }
 		//pure virtual functions implementation.
