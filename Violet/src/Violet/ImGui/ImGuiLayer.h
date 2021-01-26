@@ -6,7 +6,7 @@ namespace Violet {
 	class VIOLET_API ImGuiLayer : public Layer {
 	public:
 		ImGuiLayer();
-		~ImGuiLayer();
+		virtual ~ImGuiLayer();
 		virtual void onAttach() override;
 		virtual void onDetach() override;
 		virtual void onImGuiRender() override;

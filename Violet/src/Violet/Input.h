@@ -8,6 +8,7 @@ namespace Violet {
 	/// </summary>
 	class VIOLET_API Input {
 	public:
+		virtual ~Input() = default;
 		static bool IsKeyPressed(Key keyCode) { return s_InputInstance->isKeyPressedIMPL(keyCode); }
 
 		static bool IsMouseButtonPressed(Mouse button) { return s_InputInstance->isMouseButtonPressedIMPL(button); }
