@@ -7,8 +7,4 @@ namespace Violet {
 	{
 	}
 
-	Layer::~Layer()
-	{
-	}
-
 }

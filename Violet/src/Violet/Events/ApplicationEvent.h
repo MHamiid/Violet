@@ -28,7 +28,7 @@ namespace Violet {
 	class VIOLET_API WindowCloseEvent : public Event {
 
 	public:
-		WindowCloseEvent() {}
+		WindowCloseEvent() = default;
 
 		static EventType GetClassType() { return EventType::WindowClose; }
 		//pure virtual functions implementation.

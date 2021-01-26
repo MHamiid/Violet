@@ -17,7 +17,7 @@ namespace Violet {
 	//Interface for desktop window
 	class VIOLET_API Window {
 	public:
-		virtual ~Window() {}
+		virtual ~Window() = default;
 		virtual void onUpdate() = 0;
 		virtual unsigned int getWidth() const = 0;
 		virtual unsigned int getHeight() const = 0;

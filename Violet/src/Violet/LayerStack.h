@@ -6,7 +6,7 @@ namespace Violet {
 		//LayerStack takes ownership of the Layers in term of deallocation
 		//Push/Pop Overlay puts the specified layer after all the other layers
 	public:
-		LayerStack();
+		LayerStack() = default;
 		~LayerStack();
 
 		void pushLayer(Layer* layer);
@@ -21,7 +21,7 @@ namespace Violet {
 
 	private:
 		std::vector<Layer*> m_layers;
-		unsigned int m_layerInsertIndex;
+		unsigned int m_layerInsertIndex = 0;
 	};
 
 

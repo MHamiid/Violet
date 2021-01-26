@@ -5,8 +5,8 @@ namespace Violet {
 
 	class WindowsInput : public Input {
 	public:
-		WindowsInput() {}
-		~WindowsInput() {}
+		WindowsInput() = default;
+		virtual ~WindowsInput() = default;
 	protected:
 		virtual bool isKeyPressedIMPL(Key keyCode) override;
 

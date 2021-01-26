@@ -6,7 +6,7 @@ namespace Violet {
 	class VIOLET_API OpenGLShader : public Shader{
 	public:
 		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
-		~OpenGLShader();
+		virtual ~OpenGLShader();
 		virtual void bind() override;
 		virtual void unBind() override;
 	private:

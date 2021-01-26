@@ -16,9 +16,6 @@ namespace Violet {
 		VIO_CORE_ASSERT(!s_ImGuiLayer, "ImGuiLayer Already Created!!!");
 		s_ImGuiLayer = this; //Our single instance of ImGuiLayer
 	}
-	ImGuiLayer::~ImGuiLayer()
-	{
-	}
 	void ImGuiLayer::onAttach()
 	{
 	

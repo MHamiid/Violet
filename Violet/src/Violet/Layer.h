@@ -7,7 +7,7 @@ namespace Violet{
 class VIOLET_API Layer {
 public:
 	Layer(const std::string& debugName);
-	virtual ~Layer();
+	virtual ~Layer() = default;
 
 	virtual void onAttach() {}
 	virtual void onDetach() {}
