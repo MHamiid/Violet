@@ -22,17 +22,31 @@ namespace Violet {
 		glBindVertexArray(m_vertexArray);
 
 		
-		float vertices[3 * 3] = {
-		   -0.5f, -0.5f, 0.0f,
-			0.5f, -0.5f, 0.0f,
-			0.0f,  0.5f, 0.0f
+		float vertices[] = {
+		   -0.5f, -0.5f, 0.0f,    0.9f,  0.9f, 0.3f, 1.0f,
+			0.5f, -0.5f, 0.0f,	  0.9f,  0.9f, 0.3f, 1.0f,
+			0.0f,  0.5f, 0.0f,    0.9f,  0.3f, 0.3f, 1.0f
 
 		};
-
+		 
 		m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
-		glEnableVertexAttribArray(0);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), nullptr);
+		
+		VertexLayout layout = { {VertexAttributeDataType::Float3, "Position"},
+								{VertexAttributeDataType::Float4, "Color"} };
+		
+		m_vertexBuffer->setLayout(layout);
+		
+		//Temp
+		const std::vector<VertexAttribute>& attributes = m_vertexBuffer->getLayout().getLayoutAttributes();
+		for(int i = 0 ; i< attributes.size(); i++){
+			glEnableVertexAttribArray(i);
+			glVertexAttribPointer(i, attributes[i].getDataTypeCount(),
+				GL_FLOAT /*Temp, Should be automated*/, 
+				attributes[i].normalized ? GL_TRUE :GL_FALSE,
+				m_vertexBuffer->getLayout().getStride(),
+				(const void*)attributes[i].offset);
+		}
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
@@ -43,8 +57,11 @@ namespace Violet {
 			#version 330 core
 			
 			layout(location = 0) in vec4 a_position;			
-
+			layout(location = 1) in vec4 a_color;
+			out vec4 v_color;
+			
 			void main(){
+				v_color = a_color;
 				gl_Position = a_position;
 			}
 		)";
@@ -53,9 +70,10 @@ namespace Violet {
 			#version 330 core
 			
 			layout(location = 0) out vec4 o_color;			
-
+			in vec4 v_color;
+			
 			void main(){
-				o_color = vec4(1.0, 0.5, 0.2, 1.0);
+				o_color = v_color;
 			}
 		)";
 

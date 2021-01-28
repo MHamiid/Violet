@@ -8,8 +8,11 @@ namespace Violet {
 		virtual ~OpenGLVertexBuffer();
 		virtual void bind() const override;
 		virtual void unBind() const override;
+		virtual const VertexLayout& getLayout() const override { return m_vertexLayout; }
+		virtual void setLayout(const VertexLayout& layout) override { m_vertexLayout = layout; }
 	private:
 		uint32_t m_vertexBufferID;
+		VertexLayout m_vertexLayout;
 	};
 
 	class VIOLET_API OpenGLIndexBuffer : public IndexBuffer {
