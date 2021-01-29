@@ -78,6 +78,8 @@
     <ClInclude Include="src\Violet\Renderer\Buffer.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Violet\Renderer\Renderer.h" />
+    <ClInclude Include="src\Violet\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />
@@ -108,5 +110,7 @@
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Violet\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Violet\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Violet\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.cpp" />
   </ItemGroup>
 </Project>

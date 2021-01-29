@@ -5,6 +5,7 @@
 #include "Violet/ImGui/ImGuiLayer.h"
 #include "Renderer/Buffer.h" //Temp
 #include "Renderer/Shader.h" //Temp
+#include "Renderer/VertexArray.h" //Temp
 namespace Violet {
 	class VIOLET_API Application
 	{
@@ -27,10 +28,8 @@ namespace Violet {
 
 	private:
 		static Application* s_ApplicationInstance;
-		unsigned int m_vertexArray; //Temp
-		std::unique_ptr<VertexBuffer> m_vertexBuffer; //Temp
-		std::unique_ptr<IndexBuffer> m_indexBuffer; //Temp
 		std::unique_ptr<Shader> m_shader;	//Temp
+		std::unique_ptr<VertexArray> m_vertexArray; //Temp
 	};
 
 

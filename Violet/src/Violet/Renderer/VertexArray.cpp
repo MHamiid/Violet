@@ -1,10 +1,10 @@
 #include "VIOPCH.h"
-#include "Shader.h"
+#include "VertexArray.h"
 #include "Renderer.h"
-#include "Violet/Platform/OpenGL/OpenGLShader.h"
+#include "Violet/Platform/OpenGL/OpenGLVertexArray.h"
 namespace Violet {
-    Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc)
-    {
+	VertexArray* VertexArray::Create()
+	{
 		switch (Renderer::GetCurrentRendererApi())
 		{
 		case RendererAPI::NONE:
@@ -13,10 +13,10 @@ namespace Violet {
 
 		case RendererAPI::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return new OpenGLShader(vertexSrc, fragmentSrc);
+			return new OpenGLVertexArray();
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");
 		return nullptr;
-    }
+	}
 }

@@ -134,10 +134,12 @@
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLShader.h" />
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Violet\Renderer\Buffer.h" />
     <ClInclude Include="src\Violet\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Violet\Renderer\Renderer.h" />
     <ClInclude Include="src\Violet\Renderer\Shader.h" />
+    <ClInclude Include="src\Violet\Renderer\VertexArray.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Application.h" />
@@ -162,9 +164,11 @@
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLShader.cpp" />
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.cpp" />
     <ClCompile Include="src\Violet\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Violet\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Violet\Renderer\Shader.cpp" />
+    <ClCompile Include="src\Violet\Renderer\VertexArray.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

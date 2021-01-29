@@ -27,7 +27,7 @@ namespace Violet {
 		return 0;
 	}
 
-	struct VertexAttribute {
+	struct VIOLET_API VertexAttribute {
 		VertexAttribute() = default;
 		VertexAttribute(VertexAttributeDataType attributeDataType, const std::string& attributeName, bool attributeNormalized = false) : dataType(attributeDataType), name(attributeName),
 			size(GetVertexAttributeDataTypeSize(attributeDataType)), offset(0), normalized(attributeNormalized){}
@@ -39,8 +39,8 @@ namespace Violet {
 			case VertexAttributeDataType::Float2:   return 2;
 			case VertexAttributeDataType::Float3:   return 3;
 			case VertexAttributeDataType::Float4:   return 4;
-			case VertexAttributeDataType::Mat3:     return 3;
-			case VertexAttributeDataType::Mat4:     return 4;
+			case VertexAttributeDataType::Mat3:     return 4 * 3 * 3;;
+			case VertexAttributeDataType::Mat4:     return 4 * 4 * 4;
 			case VertexAttributeDataType::Int:      return 1;
 			case VertexAttributeDataType::Int2:     return 2;
 			case VertexAttributeDataType::Int3:     return 3;
@@ -60,7 +60,7 @@ namespace Violet {
 		bool normalized;
 	};
 	
-	class VertexLayout {
+	class VIOLET_API VertexLayout {
 	public:
 		VertexLayout() = default;
 		VertexLayout(const std::initializer_list<VertexAttribute>& layoutAttributes) : m_vertexAttributes(layoutAttributes), m_stride(0){

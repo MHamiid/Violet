@@ -12,7 +12,7 @@ namespace Violet {
 			return nullptr;
 
 		case RendererAPI::OPENGL:
-			VIO_CORE_INFO("[Renderer] OpenGL Selected");
+			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
 			return new OpenGLVertexBuffer(vertices, size);
 		}
 
@@ -29,7 +29,7 @@ namespace Violet {
 			return nullptr;
 
 		case RendererAPI::OPENGL:
-			VIO_CORE_INFO("[Renderer] OpenGL Selected");
+			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
 			return new OpenGLIndexBuffer(indices, count);
 		}
 

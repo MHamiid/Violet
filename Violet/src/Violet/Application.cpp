@@ -18,8 +18,7 @@ namespace Violet {
 		m_layerStack.pushOverlay(m_ImGuiLayer);
 		
 		//Test OpenGL
-		glGenVertexArrays(1, &m_vertexArray);
-		glBindVertexArray(m_vertexArray);
+		m_vertexArray.reset(VertexArray::Create());	
 
 		
 		float vertices[] = {
@@ -29,28 +28,22 @@ namespace Violet {
 
 		};
 		 
-		m_vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
+		std::shared_ptr<VertexBuffer>vertexBuffer;
+		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
 
 		
 		VertexLayout layout = { {VertexAttributeDataType::Float3, "Position"},
 								{VertexAttributeDataType::Float4, "Color"} };
 		
-		m_vertexBuffer->setLayout(layout);
+		vertexBuffer->setLayout(layout);
 		
-		//Temp
-		const std::vector<VertexAttribute>& attributes = m_vertexBuffer->getLayout().getLayoutAttributes();
-		for(int i = 0 ; i< attributes.size(); i++){
-			glEnableVertexAttribArray(i);
-			glVertexAttribPointer(i, attributes[i].getDataTypeCount(),
-				GL_FLOAT /*Temp, Should be automated*/, 
-				attributes[i].normalized ? GL_TRUE :GL_FALSE,
-				m_vertexBuffer->getLayout().getStride(),
-				(const void*)attributes[i].offset);
-		}
+		m_vertexArray->addVertexBufferAndLinkLayout(vertexBuffer);
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
-		m_indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+		std::shared_ptr<IndexBuffer> indexBuffer;
+		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
+		m_vertexArray->setIndexBuffer(indexBuffer);
 
 		//Create shaders
 		std::string vertexSrc = R"(
@@ -124,7 +117,7 @@ namespace Violet {
 			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 			glClear(GL_COLOR_BUFFER_BIT);
 
-			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, nullptr);
+			glDrawElements(GL_TRIANGLES, m_vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
 
 			//Iterate over all the layers
 			for (Layer* layer : m_layerStack) {
