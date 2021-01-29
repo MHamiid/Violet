@@ -1,6 +1,6 @@
 #include "VIOPCH.h"
 #include "Application.h"
-#include "glad/glad.h"
+#include "Renderer/Renderer.h"
 
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
@@ -113,12 +113,13 @@ namespace Violet {
 
 		while (m_applicationRunning) {
 
-			//Test OpenGl 
-			glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
+			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+			RenderCommand::Clear();
 
-			glDrawElements(GL_TRIANGLES, m_vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+			Renderer::BeginScene();
+			Renderer::Submit(m_vertexArray);
 
+			Renderer::EndScene();
 			//Iterate over all the layers
 			for (Layer* layer : m_layerStack) {
 			

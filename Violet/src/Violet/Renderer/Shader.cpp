@@ -5,13 +5,13 @@
 namespace Violet {
     Shader* Shader::Create(const std::string& vertexSrc, const std::string& fragmentSrc)
     {
-		switch (Renderer::GetCurrentRendererApi())
+		switch (Renderer::GetCurrentGraphicsAPI())
 		{
-		case RendererAPI::NONE:
+		case GraphicsAPI::API::NONE:
 			VIO_CORE_ASSERT(false, "[Renderer] No Renderer API Specified!");
 			return nullptr;
 
-		case RendererAPI::OPENGL:
+		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
 			return new OpenGLShader(vertexSrc, fragmentSrc);
 		}

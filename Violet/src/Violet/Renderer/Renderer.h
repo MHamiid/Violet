@@ -1,16 +1,16 @@
 #pragma once
+#include "GraphicsAPI.h"
+#include "RenderCommand.h"
 
 namespace Violet {
-	enum class RendererAPI {
-		NONE = 0,
-		OPENGL = 1
-	};
+	
 
 	class VIOLET_API Renderer {
 	public:
-		static RendererAPI GetCurrentRendererApi() { return s_RendererAPI; }
-	private:
-		static RendererAPI s_RendererAPI;
+		static void BeginScene(); //TODO
+		static void EndScene(); //TODO
+		static void Submit(const std::shared_ptr<VertexArray>& vertexArray);
+		static GraphicsAPI::API GetCurrentGraphicsAPI() { return GraphicsAPI::getAPI(); }
 
 	};
 

@@ -3,7 +3,6 @@
 #include "Violet/Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Violet/ImGui/ImGuiLayer.h"
-#include "Renderer/Buffer.h" //Temp
 #include "Renderer/Shader.h" //Temp
 #include "Renderer/VertexArray.h" //Temp
 namespace Violet {
@@ -29,7 +28,7 @@ namespace Violet {
 	private:
 		static Application* s_ApplicationInstance;
 		std::unique_ptr<Shader> m_shader;	//Temp
-		std::unique_ptr<VertexArray> m_vertexArray; //Temp
+		std::shared_ptr<VertexArray> m_vertexArray; //Temp
 	};
 
 
