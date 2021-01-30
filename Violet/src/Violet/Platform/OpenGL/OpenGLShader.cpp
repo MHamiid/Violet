@@ -1,6 +1,7 @@
 #include "VIOPCH.h"
 #include "OpenGLShader.h"
 #include <glad/glad.h>
+#include <glm/gtc/type_ptr.hpp>
 namespace Violet {
 
 	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) : m_programID(0) //initialize with 0
@@ -128,6 +129,15 @@ namespace Violet {
 	void OpenGLShader::unBind()
 	{
 		glUseProgram(0);
+	}
+
+	//Temp
+	//Assumes that shader is bound first
+	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix)
+	{
+		//TODO: cache uniform location
+		GLint location =glGetUniformLocation(m_programID, name.c_str());
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
 }

@@ -27,7 +27,7 @@ namespace Violet {
 
 	private:
 		static Application* s_ApplicationInstance;
-		std::unique_ptr<Shader> m_shader;	//Temp
+		std::shared_ptr<Shader> m_shader;	//Temp
 		std::shared_ptr<VertexArray> m_vertexArray; //Temp
 	};
 

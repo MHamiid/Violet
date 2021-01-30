@@ -107,7 +107,8 @@ project "Sandbox"
 	includedirs{
 		
 		"Violet/vendor/spdlog/include",
-		"Violet/src"
+		"Violet/src",
+		"Violet/vendor/glm"			 --Include dir for glm
 	}
 
 	links{

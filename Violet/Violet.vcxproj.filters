@@ -13,8 +13,14 @@
     <Filter Include="Violet\Platform">
       <UniqueIdentifier>{0CBA67DF-7845-D5A3-8156-5898ED6031A4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Violet\Platform\OpenGL">
+      <UniqueIdentifier>{C01DA56F-AC17-CEC1-9584-64D2811D342E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Violet\Platform\Windows">
       <UniqueIdentifier>{46B064BC-B2E7-AC53-BBF1-107727A8D34C}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Violet\Renderer">
+      <UniqueIdentifier>{5EC144BA-CA4C-B27E-D35D-35733F680E7F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -62,27 +68,54 @@
     <ClInclude Include="src\Violet\MouseCodes.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.h">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLShader.h">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h">
       <Filter>Violet\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\Windows\WindowsWindow.h">
       <Filter>Violet\Platform\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\Buffer.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\GraphicsAPI.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\GraphicsContext.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\OrthographicCamera.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\RenderCommand.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\Renderer.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\Shader.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\VertexArray.h">
+      <Filter>Violet\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Window.h">
       <Filter>Violet</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Renderer\GraphicsContext.h" />
-    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h" />
-    <ClInclude Include="src\Violet\Renderer\Shader.h" />
-    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLShader.h" />
-    <ClInclude Include="src\Violet\Renderer\Buffer.h" />
-    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h" />
-    <ClInclude Include="src\Violet\Renderer\Renderer.h" />
-    <ClInclude Include="src\Violet\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Violet\Renderer\GraphicsAPI.h" />
-    <ClInclude Include="src\Violet\Renderer\RenderCommand.h" />
-    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />
@@ -101,22 +134,47 @@
     <ClCompile Include="src\Violet\Log.cpp">
       <Filter>Violet</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.cpp">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLShader.cpp">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.cpp">
+      <Filter>Violet\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsInput.cpp">
       <Filter>Violet\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp">
       <Filter>Violet\Platform\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp" />
-    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLShader.cpp" />
-    <ClCompile Include="src\Violet\Renderer\Buffer.cpp" />
-    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp" />
-    <ClCompile Include="src\Violet\Renderer\Renderer.cpp" />
-    <ClCompile Include="src\Violet\Renderer\Shader.cpp" />
-    <ClCompile Include="src\Violet\Renderer\VertexArray.cpp" />
-    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.cpp" />
-    <ClCompile Include="src\Violet\Renderer\GraphicsAPI.cpp" />
-    <ClCompile Include="src\Violet\Renderer\RenderCommand.cpp" />
-    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.cpp" />
+    <ClCompile Include="src\Violet\Renderer\Buffer.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\GraphicsAPI.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\OrthographicCamera.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\RenderCommand.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\Renderer.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\Shader.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\VertexArray.cpp">
+      <Filter>Violet\Renderer</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

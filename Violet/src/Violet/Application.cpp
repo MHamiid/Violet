@@ -1,6 +1,7 @@
 #include "VIOPCH.h"
 #include "Application.h"
 #include "Renderer/Renderer.h"
+#include "Renderer/OrthographicCamera.h"
 
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
@@ -51,11 +52,13 @@ namespace Violet {
 			
 			layout(location = 0) in vec4 a_position;			
 			layout(location = 1) in vec4 a_color;
+			uniform mat4 u_viewProjection;
+
 			out vec4 v_color;
 			
 			void main(){
 				v_color = a_color;
-				gl_Position = a_position;
+				gl_Position = u_viewProjection * a_position;
 			}
 		)";
 
@@ -71,7 +74,6 @@ namespace Violet {
 		)";
 
 		m_shader.reset(Shader::Create(vertexSrc, fragmentSrc));
-		m_shader->bind();
 	}
 	Application::~Application()
 	{
@@ -111,13 +113,18 @@ namespace Violet {
 	void Application::run()
 	{	
 
+		OrthographicCamera camera(-1.0f, 1.0f, -1.0f, 1.0f);
+		camera.setPosition(glm::vec3(0.1f, 0.0f, 0.4f));
+		camera.setRotationZ(90.0f);
+
 		while (m_applicationRunning) {
 
 			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 			RenderCommand::Clear();
 
-			Renderer::BeginScene();
-			Renderer::Submit(m_vertexArray);
+			Renderer::BeginScene(camera);
+
+			Renderer::Submit(m_shader, m_vertexArray);
 
 			Renderer::EndScene();
 			//Iterate over all the layers
