@@ -1,7 +1,5 @@
 #include "VIOPCH.h"
 #include "Application.h"
-#include "Renderer/Renderer.h"
-#include "Renderer/OrthographicCamera.h"
 
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
@@ -18,62 +16,6 @@ namespace Violet {
 		m_ImGuiLayer = new ImGuiLayer();
 		m_layerStack.pushOverlay(m_ImGuiLayer);
 		
-		//Test OpenGL
-		m_vertexArray.reset(VertexArray::Create());	
-
-		
-		float vertices[] = {
-		   -0.5f, -0.5f, 0.0f,    0.9f,  0.9f, 0.3f, 1.0f,
-			0.5f, -0.5f, 0.0f,	  0.9f,  0.9f, 0.3f, 1.0f,
-			0.0f,  0.5f, 0.0f,    0.9f,  0.3f, 0.3f, 1.0f
-
-		};
-		 
-		std::shared_ptr<VertexBuffer>vertexBuffer;
-		vertexBuffer.reset(VertexBuffer::Create(vertices, sizeof(vertices)));
-
-		
-		VertexLayout layout = { {VertexAttributeDataType::Float3, "Position"},
-								{VertexAttributeDataType::Float4, "Color"} };
-		
-		vertexBuffer->setLayout(layout);
-		
-		m_vertexArray->addVertexBufferAndLinkLayout(vertexBuffer);
-
-		uint32_t indices[3] = { 0, 1, 2 };
-
-		std::shared_ptr<IndexBuffer> indexBuffer;
-		indexBuffer.reset(IndexBuffer::Create(indices, sizeof(indices)/sizeof(uint32_t)));
-		m_vertexArray->setIndexBuffer(indexBuffer);
-
-		//Create shaders
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec4 a_position;			
-			layout(location = 1) in vec4 a_color;
-			uniform mat4 u_viewProjection;
-
-			out vec4 v_color;
-			
-			void main(){
-				v_color = a_color;
-				gl_Position = u_viewProjection * a_position;
-			}
-		)";
-
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 o_color;			
-			in vec4 v_color;
-			
-			void main(){
-				o_color = v_color;
-			}
-		)";
-
-		m_shader.reset(Shader::Create(vertexSrc, fragmentSrc));
 	}
 	Application::~Application()
 	{
@@ -113,20 +55,8 @@ namespace Violet {
 	void Application::run()
 	{	
 
-		OrthographicCamera camera(-1.0f, 1.0f, -1.0f, 1.0f);
-		camera.setPosition(glm::vec3(0.1f, 0.0f, 0.4f));
-		camera.setRotationZ(90.0f);
-
 		while (m_applicationRunning) {
 
-			RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-			RenderCommand::Clear();
-
-			Renderer::BeginScene(camera);
-
-			Renderer::Submit(m_shader, m_vertexArray);
-
-			Renderer::EndScene();
 			//Iterate over all the layers
 			for (Layer* layer : m_layerStack) {
 			

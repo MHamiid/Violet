@@ -9,6 +9,8 @@
 #include "Violet/ImGui/ImGuiLayer.h"
 #include "Violet/Input.h"
 #include "Violet/Events/KeyEvent.h"
+//#### Renderer ####
+#include "Violet/Renderer/Renderer.h"
 //#### Entry Point ####
 #include "Violet/EntryPoint.h"
 //#### End Entry Point ####
