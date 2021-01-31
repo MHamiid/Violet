@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Events/Event.h"
+#include "Core/DeltaTime.h"
 
 namespace Violet{
 
@@ -11,7 +12,7 @@ public:
 
 	virtual void onAttach() {}
 	virtual void onDetach() {}
-	virtual void onUpdate() {}
+	virtual void onUpdate(DeltaTime& deltaTime) {}
 	virtual void onImGuiRender() {}
 	virtual void onEvent(Event& event) {}
 

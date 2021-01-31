@@ -15,9 +15,9 @@
 class GameLayer : public Violet::Layer {
 
 public:
-	GameLayer(const std::string layerDebugName = "Layer") : Layer(layerDebugName), m_camera(-1.0f, 1.0f, -1.0f, 1.0f) {
-		m_camera.setPosition(glm::vec3(0.1f, 0.0f, 0.4f));
-		m_camera.setRotationZ(90.0f);
+	GameLayer(const std::string layerDebugName = "Layer") : Layer(layerDebugName), m_camera(-1.0f, 1.0f, -1.0f, 1.0f),
+		m_cameraPosition(0.0f, 0.0f, 0.0f), m_cameraRotation(0.0f) {
+		
 		m_vertexArray.reset(Violet::VertexArray::Create());
 
 
@@ -75,7 +75,32 @@ public:
 		m_shader.reset(Violet::Shader::Create(vertexSrc, fragmentSrc));
 	}
 	
-	void onUpdate() override {
+	void onUpdate(Violet::DeltaTime& deltaTime) override {
+		//VIO_TRACE("Delta Time: {0} ({1}ms)",deltaTime.getSeconds(), deltaTime.getMilliSeconds());
+
+		if (Violet::Input::IsKeyPressed(Violet::Key::A)) {
+			m_cameraPosition.x -= m_cameraMovementSpeed *deltaTime;
+		}
+		else if (Violet::Input::IsKeyPressed(Violet::Key::D)) {
+			m_cameraPosition.x += m_cameraMovementSpeed * deltaTime;
+		}
+
+		if (Violet::Input::IsKeyPressed(Violet::Key::W)) {
+			m_cameraPosition.y += m_cameraMovementSpeed * deltaTime;
+		}
+		else if (Violet::Input::IsKeyPressed(Violet::Key::S)) {
+			m_cameraPosition.y -= m_cameraMovementSpeed * deltaTime;
+		}
+
+		if (Violet::Input::IsKeyPressed(Violet::Key::E)) {
+			m_cameraRotation -= m_cameraRotationSpeed * deltaTime;
+		}
+		else if (Violet::Input::IsKeyPressed(Violet::Key::Q)) {
+			m_cameraRotation += m_cameraRotationSpeed * deltaTime;
+		}
+
+		m_camera.setPosition(m_cameraPosition);
+		m_camera.setRotationZ(m_cameraRotation);
 
 		Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Violet::RenderCommand::Clear();
@@ -110,10 +135,15 @@ public:
 		
 		}*/
 	}
+
 private:
 	std::shared_ptr<Violet::Shader> m_shader;
 	std::shared_ptr<Violet::VertexArray> m_vertexArray;
 	Violet::OrthographicCamera m_camera;
+	glm::vec3 m_cameraPosition;
+	float m_cameraRotation;
+	float m_cameraMovementSpeed = 0.3f;
+	float m_cameraRotationSpeed = 90.0f;
 };
 
 class SandBox : public Violet::Application {

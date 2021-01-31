@@ -67,7 +67,7 @@ namespace Violet {
 		m_context->init();
 
 		glfwSetWindowUserPointer(m_window, &m_properties); //Data to pass to Event callbacks.
-		//setVSync(true);
+		setVSync(m_properties.m_VSync);
 
 
 		//Getting GLFW events(setting callbacks) and link it to Violet events.

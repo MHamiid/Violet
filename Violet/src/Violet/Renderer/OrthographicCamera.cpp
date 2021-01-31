@@ -13,12 +13,9 @@ namespace Violet {
 
 	void OrthographicCamera::calculateViewMatrix()
 	{
-		/*glm::mat4 transformationMatrix = glm::translate(glm::mat4(1.0f), m_position) *
-										glm::rotate(glm::mat4(1.0f), m_rotationZ, glm::vec3(0, 0, 1));*/
-		//Set the translation
-		m_viewMatrix = glm::translate(m_viewMatrix, -m_position);
-		//Set the rotation
-		m_viewMatrix = glm::rotate(m_viewMatrix, glm::radians(-m_rotationZ), glm::vec3(0, 0, 1));
+		//Set the new position and the rotation
+		m_viewMatrix = glm::translate(glm::mat4(1.0f), -m_position) *
+										glm::rotate(glm::mat4(1.0f), glm::radians(-m_rotationZ), glm::vec3(0, 0, 1));
 
 		//Update the View Projection Matrix 
 		m_viewProjectionMatrix = m_projectionMatrix * m_viewMatrix;

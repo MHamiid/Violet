@@ -116,6 +116,7 @@
     <ClInclude Include="src\Violet\Window.h">
       <Filter>Violet</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Core\DeltaTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />

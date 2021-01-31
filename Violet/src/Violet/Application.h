@@ -3,6 +3,7 @@
 #include "Violet/Events/ApplicationEvent.h"
 #include "LayerStack.h"
 #include "Violet/ImGui/ImGuiLayer.h"
+#include "Core/DeltaTime.h"
 namespace Violet {
 	class VIOLET_API Application
 	{
@@ -22,6 +23,7 @@ namespace Violet {
 		bool m_applicationRunning = true;
 		LayerStack m_layerStack;
 		ImGuiLayer* m_ImGuiLayer;
+		DeltaTime f_deltaTime;
 
 	private:
 		static Application* s_ApplicationInstance;
