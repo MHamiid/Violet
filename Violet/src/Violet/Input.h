@@ -8,7 +8,9 @@ namespace Violet {
 	/// </summary>
 	class VIOLET_API Input {
 	public:
-		virtual ~Input() = default;
+		//virtual ~Input() = default; NOTE: No need to have a virtual destructor, it would be a singleton anyway stored in a static member
+		Input(const Input&) = delete;
+		Input& operator=(const Input&) = delete;
 		static bool IsKeyPressed(Key keyCode) { return s_InputInstance->isKeyPressedIMPL(keyCode); }
 
 		static bool IsMouseButtonPressed(Mouse button) { return s_InputInstance->isMouseButtonPressedIMPL(button); }
@@ -17,6 +19,8 @@ namespace Violet {
 		static float GetMouseY() { return s_InputInstance->getMouseYIMPL(); }
 
 	protected:
+		Input() = default;
+
 		virtual bool isKeyPressedIMPL(Key keyCode) = 0;
 
 		virtual bool isMouseButtonPressedIMPL(Mouse button) = 0;
