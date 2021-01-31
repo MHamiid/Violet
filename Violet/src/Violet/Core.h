@@ -34,3 +34,6 @@
 #define VIO_CORE_ASSERT(x,...)
 
 #endif //VIO_ENABLE_ASSERTS
+
+//Defines
+#define VIO_BIND_EVENT_FUNCTION(functionName) std::bind(&functionName, this, std::placeholders::_1)
