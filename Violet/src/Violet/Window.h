@@ -26,6 +26,8 @@ namespace Violet {
 		virtual bool isVSyncEnabled() const = 0;
 		virtual void* getNativeWindow() const = 0;
 
+		virtual float getCurrentTime() const = 0;  //Semi-Temp, Preferable to be in a platform class
+
 	public:
 		static Window* Create(const WindowProperties& properties);	//Has to be implemented in child per platform
 	protected:

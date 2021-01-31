@@ -19,6 +19,7 @@ namespace Violet {
 		virtual bool isVSyncEnabled() const override;
 
 		virtual void* getNativeWindow() const override { return m_window; }
+		virtual float getCurrentTime() const override { return (float)glfwGetTime(); } //Semi-Temp
 	protected:
 		//Overriding Pure Virtual funcitons
 		virtual void init() override;

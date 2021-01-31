@@ -1,6 +1,5 @@
 #include "VIOPCH.h"
 #include "Application.h"
-#include <GLFW/glfw3.h>
 
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
@@ -59,7 +58,7 @@ namespace Violet {
 		while (m_applicationRunning) {
 
 			//Calculate delta time
-			f_deltaTime.calculateDeltaTime((float)glfwGetTime());
+			f_deltaTime.calculateDeltaTime(m_window->getCurrentTime());
 
 			//Iterate over all the layers
 			for (Layer* layer : m_layerStack) {
