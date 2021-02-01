@@ -15,11 +15,12 @@ namespace Violet {
 	{
 		//TODO
 	}
-	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray)
+	void Renderer::Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transformation)
 	{
 		//Setup the shader and camera uniform
 		shader->bind();
 		shader->setMat4("u_viewProjection", s_SceneData->viewProjectionMatrix); //Set the uniform
+		shader->setMat4("u_transformation", transformation);
 
 
 		vertexArray->bind();

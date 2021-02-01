@@ -137,6 +137,8 @@ namespace Violet {
 	{
 		//TODO: cache uniform location
 		GLint location =glGetUniformLocation(m_programID, name.c_str());
+		//If you want to Check if the retrieved location is valid
+		if (location == -1) VIO_CORE_WARN("[OpenGL Shader] Uniform {0} Not Found Or Maybe Is Not Used!", name);
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 

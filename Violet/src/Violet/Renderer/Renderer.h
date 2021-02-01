@@ -10,7 +10,7 @@ namespace Violet {
 	public:
 		static void BeginScene(OrthographicCamera& camera); //TODO
 		static void EndScene(); //TODO
-		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray); //Temp
+		static void Submit(const std::shared_ptr<Shader>& shader, const std::shared_ptr<VertexArray>& vertexArray, const glm::mat4& transformation = glm::mat4(1.0f)); //Temp
 		static GraphicsAPI::API GetCurrentGraphicsAPI() { return GraphicsAPI::getAPI(); }
 	private:
 		struct SceneData{
