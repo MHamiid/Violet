@@ -131,11 +131,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Violet\Core\DeltaTime.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Application.h" />
     <ClInclude Include="src\Violet\Core.h" />
+    <ClInclude Include="src\Violet\Core\DeltaTime.h" />
     <ClInclude Include="src\Violet\EntryPoint.h" />
     <ClInclude Include="src\Violet\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Violet\Events\Event.h" />

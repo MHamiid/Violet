@@ -9,7 +9,11 @@ namespace Violet {
 		virtual ~OpenGLShader();
 		virtual void bind() override;
 		virtual void unBind() override;
-		virtual void setMat4(const std::string& name, const glm::mat4& matrix) override;
+		virtual void setMat4(const std::string& name, const glm::mat4& matrix) override; //Temp
+		virtual void setFloat4(const std::string& name, const glm::vec4& values) override; //Temp
+	public:
+		void uploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+		void uploadUniformFloat4(const std::string& name, const glm::vec4& values);
 	private:
 		uint32_t m_programID;
 	};

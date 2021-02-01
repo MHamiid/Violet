@@ -108,7 +108,9 @@ project "Sandbox"
 		
 		"Violet/vendor/spdlog/include",
 		"Violet/src",
-		"Violet/vendor/glm"			 --Include dir for glm
+		"Violet/vendor/glm",			--Include dir for glm
+		"Violet/vendor/imgui"		--Include dir for ImGui
+
 	}
 
 	links{

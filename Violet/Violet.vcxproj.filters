@@ -4,6 +4,9 @@
     <Filter Include="Violet">
       <UniqueIdentifier>{B86E25D8-A410-50AE-8DCB-6302790CD7FE}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Violet\Core">
+      <UniqueIdentifier>{108668FF-7C3B-E1F4-0530-DBCB71E4D7F8}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Violet\Events">
       <UniqueIdentifier>{9C5BC480-081C-40B7-D156-89343DD68493}</UniqueIdentifier>
     </Filter>
@@ -31,6 +34,9 @@
     </ClInclude>
     <ClInclude Include="src\Violet\Core.h">
       <Filter>Violet</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\DeltaTime.h">
+      <Filter>Violet\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\EntryPoint.h">
       <Filter>Violet</Filter>
@@ -116,7 +122,6 @@
     <ClInclude Include="src\Violet\Window.h">
       <Filter>Violet</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Core\DeltaTime.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp" />

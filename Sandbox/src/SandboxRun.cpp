@@ -68,8 +68,10 @@ public:
 			layout(location = 0) out vec4 o_color;			
 			in vec4 v_color;
 			
+			uniform vec4 u_color;			
+
 			void main(){
-				o_color = v_color;
+				o_color = u_color;
 			}
 		)";
 
@@ -124,6 +126,8 @@ public:
 
 		Violet::Renderer::BeginScene(m_camera);
 
+
+		m_shader->setFloat4("u_color", m_objectColor); //Note: will not be set up at the first frame,cuz the shader is not bound, but it will be bound when submit is called
 		Violet::Renderer::Submit(m_shader, m_vertexArray, glm::translate(glm::mat4(1.0f),m_objectPosition));
 
 		Violet::Renderer::EndScene();
@@ -153,6 +157,13 @@ public:
 		}*/
 	}
 
+	void onImGuiRender() override {
+		ImGui::Begin("Object Color");
+		ImGui::ColorEdit4("Object Color", glm::value_ptr(m_objectColor));
+		ImGui::End();
+	
+	}
+
 private:
 	std::shared_ptr<Violet::Shader> m_shader;
 	std::shared_ptr<Violet::VertexArray> m_vertexArray;
@@ -165,6 +176,7 @@ private:
 	
 	glm::vec3 m_objectPosition;
 	float m_objectMovementSpeed = 0.5f;
+	glm::vec4 m_objectColor = {1.0f, 0.7f, 0.6f, 1.0f};
 };
 
 class SandBox : public Violet::Application {
