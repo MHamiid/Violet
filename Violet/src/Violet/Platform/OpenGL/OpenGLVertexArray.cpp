@@ -52,7 +52,7 @@ namespace Violet {
 		glBindVertexArray(0);
 	}
 
-	void OpenGLVertexArray::addVertexBufferAndLinkLayout(const std::shared_ptr<VertexBuffer>& vertexBuffer)
+	void OpenGLVertexArray::addVertexBufferAndLinkLayout(const Ref<VertexBuffer>& vertexBuffer)
 	{
 		const std::vector<VertexAttribute>& attributes = vertexBuffer->getLayout().getLayoutAttributes();
 		//Check if the attributes vector is not equal to zero
@@ -77,7 +77,7 @@ namespace Violet {
 		m_vertexBuffers.push_back(vertexBuffer);
 	}
 
-	void OpenGLVertexArray::setIndexBuffer(const std::shared_ptr<IndexBuffer>& indexBuffer)
+	void OpenGLVertexArray::setIndexBuffer(const Ref<IndexBuffer>& indexBuffer)
 	{
 		//Bind the vertex array
 		glBindVertexArray(m_vertexArrayID);

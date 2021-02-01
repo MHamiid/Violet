@@ -37,3 +37,13 @@
 
 //Defines
 #define VIO_BIND_EVENT_FUNCTION(functionName) std::bind(&functionName, this, std::placeholders::_1)
+
+#include <memory> //Make sure memory is included first
+namespace Violet {
+
+	template <typename T>
+	using Scoped = std::unique_ptr<T>;
+
+	template <typename T>
+	using Ref = std::shared_ptr<T>;
+}

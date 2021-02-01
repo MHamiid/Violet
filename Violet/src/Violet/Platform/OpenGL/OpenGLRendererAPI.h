@@ -8,7 +8,7 @@ namespace Violet {
 		virtual void setClearColor(const glm::vec4& color) override;
 		virtual void clear() override;
 
-		virtual void drawIndices(const std::shared_ptr<VertexArray>& vertexArray) override;
+		virtual void drawIndices(const Ref<VertexArray>& vertexArray) override;
 	};
 
 }

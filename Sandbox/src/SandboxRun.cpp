@@ -28,7 +28,7 @@ public:
 
 		};
 
-		std::shared_ptr<Violet::VertexBuffer>vertexBuffer;
+		Violet::Ref<Violet::VertexBuffer>vertexBuffer;
 		vertexBuffer.reset(Violet::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 
@@ -41,7 +41,7 @@ public:
 
 		uint32_t indices[3] = { 0, 1, 2 };
 
-		std::shared_ptr<Violet::IndexBuffer> indexBuffer;
+		Violet::Ref<Violet::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Violet::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
@@ -165,8 +165,8 @@ public:
 	}
 
 private:
-	std::shared_ptr<Violet::Shader> m_shader;
-	std::shared_ptr<Violet::VertexArray> m_vertexArray;
+	Violet::Ref<Violet::Shader> m_shader;
+	Violet::Ref<Violet::VertexArray> m_vertexArray;
 
 	Violet::OrthographicCamera m_camera;
 	glm::vec3 m_cameraPosition;

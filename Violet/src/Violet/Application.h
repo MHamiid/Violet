@@ -19,7 +19,7 @@ namespace Violet {
 	public:
 		static Application& getApplicationInstance() { return *s_ApplicationInstance; }
 	private:
-		std::unique_ptr<Window> m_window;
+		Scoped<Window> m_window;
 		bool m_applicationRunning = true;
 		LayerStack m_layerStack;
 		ImGuiLayer* m_ImGuiLayer;
