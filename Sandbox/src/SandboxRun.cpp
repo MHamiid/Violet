@@ -21,25 +21,33 @@ public:
 		m_vertexArray.reset(Violet::VertexArray::Create());
 
 
-		float vertices[] = {
+		/*float vertices[] = {
 		   -0.5f, -0.5f, 0.0f,    0.9f,  0.9f, 0.3f, 1.0f,
 			0.5f, -0.5f, 0.0f,	  0.9f,  0.9f, 0.3f, 1.0f,
 			0.0f,  0.5f, 0.0f,    0.9f,  0.3f, 0.3f, 1.0f
 
+		};*/
+
+		float vertices[] = {
+		   -0.5f, -0.5f, 0.0f,    0.0f,  0.0f,
+			0.5f, -0.5f, 0.0f,	  1.0f,  0.0f,
+			0.5f,  0.5f, 0.0f,    1.0f,  1.0f,
+		   -0.5f,  0.5f, 0.0f,    0.0f,  1.0f
 		};
+
 
 		Violet::Ref<Violet::VertexBuffer>vertexBuffer;
 		vertexBuffer.reset(Violet::VertexBuffer::Create(vertices, sizeof(vertices)));
 
 
 		Violet::VertexLayout layout = { {Violet::VertexAttributeDataType::Float3, "Position"},
-								{Violet::VertexAttributeDataType::Float4, "Color"} };
+								{Violet::VertexAttributeDataType::Float2, "TexCoord"} };
 
 		vertexBuffer->setLayout(layout);
 
 		m_vertexArray->addVertexBufferAndLinkLayout(vertexBuffer);
 
-		uint32_t indices[3] = { 0, 1, 2 };
+		uint32_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
 		Violet::Ref<Violet::IndexBuffer> indexBuffer;
 		indexBuffer.reset(Violet::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
@@ -50,14 +58,14 @@ public:
 			#version 330 core
 			
 			layout(location = 0) in vec4 a_position;			
-			layout(location = 1) in vec4 a_color;
+			layout(location = 1) in vec2 a_texCoord;
 			uniform mat4 u_viewProjection;
 			uniform mat4 u_transformation;
 
-			out vec4 v_color;
+			out vec2 v_texCoord;
 			
 			void main(){
-				v_color = a_color;
+				v_texCoord = a_texCoord;
 				gl_Position = u_viewProjection * u_transformation * a_position;
 			}
 		)";
@@ -66,16 +74,20 @@ public:
 			#version 330 core
 			
 			layout(location = 0) out vec4 o_color;			
-			in vec4 v_color;
+			in vec2 v_texCoord;
 			
-			uniform vec4 u_color;			
+			uniform sampler2D u_texture;			
 
 			void main(){
-				o_color = u_color;
+				o_color =  texture(u_texture, v_texCoord);
 			}
 		)";
 
 		m_shader.reset(Violet::Shader::Create(vertexSrc, fragmentSrc));
+		m_texture = Violet::Texture2D::Create("assets/textures/CheckerBoard_RGB.png");
+
+		m_shader->bind();
+		m_shader->setInt("u_texture", 0); //Which texture slot to use
 	}
 	
 	void onUpdate(Violet::DeltaTime& deltaTime) override {
@@ -126,8 +138,8 @@ public:
 
 		Violet::Renderer::BeginScene(m_camera);
 
-
-		m_shader->setFloat4("u_color", m_objectColor); //Note: will not be set up at the first frame,cuz the shader is not bound, but it will be bound when submit is called
+		m_texture->bind(0);
+		//m_shader->setFloat4("u_color", m_objectColor); //Note: will not be set up at the first frame,cuz the shader is not bound, but it will be bound when submit is called
 		Violet::Renderer::Submit(m_shader, m_vertexArray, glm::translate(glm::mat4(1.0f),m_objectPosition));
 
 		Violet::Renderer::EndScene();
@@ -166,6 +178,7 @@ public:
 
 private:
 	Violet::Ref<Violet::Shader> m_shader;
+	Violet::Ref<Violet::Texture2D> m_texture;
 	Violet::Ref<Violet::VertexArray> m_vertexArray;
 
 	Violet::OrthographicCamera m_camera;

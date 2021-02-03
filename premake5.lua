@@ -30,7 +30,9 @@ project "Violet"
 	files{
 	
 		"%{prj.name}/src/**.h",
-		"%{prj.name}/src/**.cpp"
+		"%{prj.name}/src/**.cpp",
+		"%{prj.name}/vendor/stb_image/**.h",  
+		"%{prj.name}/vendor/stb_image/**.cpp"  --Include stb_image to be included and compiled by the project
 	}
 
 	includedirs{
@@ -40,7 +42,8 @@ project "Violet"
 		"%{prj.name}/vendor/GLFW/include",	 --Include dir for GLFW
 		"%{prj.name}/vendor/Glad/include",	 --Include dir for Glad
 		"%{prj.name}/vendor/imgui",			 --Include dir for ImGui
-		"%{prj.name}/vendor/glm"			 --Include dir for glm
+		"%{prj.name}/vendor/glm",			 --Include dir for glm
+		"%{prj.name}/vendor/stb_image"		 --Include dir for stb_image
 	}
 
 	links{
@@ -108,7 +111,7 @@ project "Sandbox"
 		
 		"Violet/vendor/spdlog/include",
 		"Violet/src",
-		"Violet/vendor/glm",			--Include dir for glm
+		"Violet/vendor/glm",		--Include dir for glm
 		"Violet/vendor/imgui"		--Include dir for ImGui
 
 	}

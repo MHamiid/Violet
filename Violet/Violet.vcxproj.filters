@@ -1,186 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Violet">
-      <UniqueIdentifier>{B86E25D8-A410-50AE-8DCB-6302790CD7FE}</UniqueIdentifier>
+    <Filter Include="src">
+      <UniqueIdentifier>{2DAB880B-99B4-887C-2230-9F7C8E38947C}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\Core">
-      <UniqueIdentifier>{108668FF-7C3B-E1F4-0530-DBCB71E4D7F8}</UniqueIdentifier>
+    <Filter Include="src\Violet">
+      <UniqueIdentifier>{EF478435-DBFF-C582-4407-9FDE30DE6073}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\Events">
-      <UniqueIdentifier>{9C5BC480-081C-40B7-D156-89343DD68493}</UniqueIdentifier>
+    <Filter Include="src\Violet\Core">
+      <UniqueIdentifier>{A7B94217-1345-B0DB-1C56-33D088600CDC}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\ImGui">
-      <UniqueIdentifier>{E20DE4EC-CE70-7391-77F6-AB4763383F14}</UniqueIdentifier>
+    <Filter Include="src\Violet\Events">
+      <UniqueIdentifier>{F3D0F9F7-5FE7-F78D-A85E-83AF14B4C815}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\Platform">
-      <UniqueIdentifier>{0CBA67DF-7845-D5A3-8156-5898ED6031A4}</UniqueIdentifier>
+    <Filter Include="src\Violet\ImGui">
+      <UniqueIdentifier>{59B40400-45AD-2352-6EDF-08D75A37035E}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\Platform\OpenGL">
-      <UniqueIdentifier>{C01DA56F-AC17-CEC1-9584-64D2811D342E}</UniqueIdentifier>
+    <Filter Include="src\Violet\Platform">
+      <UniqueIdentifier>{23E1CFF9-8F42-AD07-18B0-F3B98410E4C6}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\Platform\Windows">
-      <UniqueIdentifier>{46B064BC-B2E7-AC53-BBF1-107727A8D34C}</UniqueIdentifier>
+    <Filter Include="src\Violet\Platform\OpenGL">
+      <UniqueIdentifier>{F7846506-E394-11D7-4C4E-76F5387D0070}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Violet\Renderer">
-      <UniqueIdentifier>{5EC144BA-CA4C-B27E-D35D-35733F680E7F}</UniqueIdentifier>
+    <Filter Include="src\Violet\Platform\Windows">
+      <UniqueIdentifier>{5DFE312B-C90B-6011-52F2-5BFCBEFE2BC8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\Violet\Renderer">
+      <UniqueIdentifier>{75E8ACD4-E149-8AE2-6AB7-D094D617C1A1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor">
+      <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\stb_image">
+      <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\VIOPCH.h" />
-    <ClInclude Include="src\Violet.h" />
+    <ClInclude Include="src\VIOPCH.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet.h">
+      <Filter>src</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Application.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Core.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Core\DeltaTime.h">
-      <Filter>Violet\Core</Filter>
+      <Filter>src\Violet\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\EntryPoint.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Events\ApplicationEvent.h">
-      <Filter>Violet\Events</Filter>
+      <Filter>src\Violet\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Events\Event.h">
-      <Filter>Violet\Events</Filter>
+      <Filter>src\Violet\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Events\KeyEvent.h">
-      <Filter>Violet\Events</Filter>
+      <Filter>src\Violet\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Events\MouseEvent.h">
-      <Filter>Violet\Events</Filter>
+      <Filter>src\Violet\Events</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h">
-      <Filter>Violet\ImGui</Filter>
+      <Filter>src\Violet\ImGui</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Input.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\KeyCodes.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Layer.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\LayerStack.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Log.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\MouseCodes.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.h">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLShader.h">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLTexture.h">
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h">
-      <Filter>Violet\Platform\Windows</Filter>
+      <Filter>src\Violet\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\Windows\WindowsWindow.h">
-      <Filter>Violet\Platform\Windows</Filter>
+      <Filter>src\Violet\Platform\Windows</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\Buffer.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\GraphicsAPI.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\GraphicsContext.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\OrthographicCamera.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\RenderCommand.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\Renderer.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\Shader.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\Texture.h">
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\VertexArray.h">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Window.h">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb_image\stb_image.h">
+      <Filter>vendor\stb_image</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\VIOPCH.cpp" />
+    <ClCompile Include="src\VIOPCH.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Application.cpp">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\ImGui\ImGuiLayer.cpp">
-      <Filter>Violet\ImGui</Filter>
+      <Filter>src\Violet\ImGui</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Layer.cpp">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\LayerStack.cpp">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Log.cpp">
-      <Filter>Violet</Filter>
+      <Filter>src\Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.cpp">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLShader.cpp">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLTexture.cpp">
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.cpp">
-      <Filter>Violet\Platform\OpenGL</Filter>
+      <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsInput.cpp">
-      <Filter>Violet\Platform\Windows</Filter>
+      <Filter>src\Violet\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp">
-      <Filter>Violet\Platform\Windows</Filter>
+      <Filter>src\Violet\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\Buffer.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\GraphicsAPI.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\OrthographicCamera.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\RenderCommand.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\Renderer.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\Shader.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\Texture.cpp">
+      <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\VertexArray.cpp">
-      <Filter>Violet\Renderer</Filter>
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\stb_image\stb_image.cpp">
+      <Filter>vendor\stb_image</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

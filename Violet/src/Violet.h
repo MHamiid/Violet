@@ -15,6 +15,7 @@
 #include <imgui.h>
 //#### Renderer ####
 #include "Violet/Renderer/Renderer.h"
+#include "Violet/Renderer/Texture.h"
 //#### Entry Point ####
 #include "Violet/EntryPoint.h"
 //#### End Entry Point ####
