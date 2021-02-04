@@ -65,17 +65,16 @@ namespace Violet {
 
 		//Set the layout for the buffer
 		for (int i = 0; i < attributes.size(); i++) {
-			glEnableVertexAttribArray(i + m_lastEnabledVertexAttribute);
-			glVertexAttribPointer(i + m_lastEnabledVertexAttribute, attributes[i].getDataTypeCount(),
+			glEnableVertexAttribArray(m_lastEnabledVertexAttribute);
+			glVertexAttribPointer(m_lastEnabledVertexAttribute, attributes[i].getDataTypeCount(),
 				VertexAttributeDataTypeToOpenGLType(attributes[i].dataType),
 				attributes[i].normalized ? GL_TRUE : GL_FALSE,
 				vertexBuffer->getLayout().getStride(),
 				(const void*)attributes[i].offset);
+			//Update the last enabled attribute
+			m_lastEnabledVertexAttribute++;
 		}
 		
-		//Update the last enabled attribute
-		m_lastEnabledVertexAttribute += attributes.size();
-
 		//Store the vertex buffer into the vertex buffers vector
 		m_vertexBuffers.push_back(vertexBuffer);
 	}
