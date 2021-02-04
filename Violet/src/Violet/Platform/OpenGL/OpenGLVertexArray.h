@@ -14,6 +14,7 @@ namespace Violet {
 		virtual const Ref<IndexBuffer>& getIndexBuffer() const override { return m_indexBuffer; }
 	private:
 		uint32_t m_vertexArrayID;
+		uint32_t m_lastEnabledVertexAttribute = 0;
 		std::vector<Ref<VertexBuffer>> m_vertexBuffers;
 		Ref<IndexBuffer> m_indexBuffer;
 	};
