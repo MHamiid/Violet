@@ -2,7 +2,12 @@
 #include "OpenGLRendererAPI.h"
 #include <glad/glad.h>
 namespace Violet {
-
+	void OpenGLRendererAPI::init()
+	{
+		//Setup blending
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set the blending function
+	}
 	void OpenGLRendererAPI::setClearColor(const glm::vec4& color)
 	{
 		glClearColor(color.r, color.g, color.b, color.a);

@@ -1,5 +1,6 @@
 #include "VIOPCH.h"
 #include "Application.h"
+#include "Renderer/Renderer.h"
 
 namespace Violet {
 	/*bool eventHandling(MouseButtonPressedEvent& ev) {
@@ -16,6 +17,8 @@ namespace Violet {
 		m_ImGuiLayer = new ImGuiLayer();
 		m_layerStack.pushOverlay(m_ImGuiLayer);
 		
+		Renderer::Init();
+
 	}
 	Application::~Application()
 	{

@@ -85,7 +85,7 @@ public:
 
 		m_shader.reset(Violet::Shader::Create(vertexSrc, fragmentSrc));
 		m_texture = Violet::Texture2D::Create("assets/textures/CheckerBoard_RGB.png");
-
+		m_transparentTexture = Violet::Texture2D::Create("assets/textures/LetterV_RGBA.png");
 		m_shader->bind();
 		m_shader->setInt("u_texture", 0); //Which texture slot to use
 	}
@@ -142,6 +142,9 @@ public:
 		//m_shader->setFloat4("u_color", m_objectColor); //Note: will not be set up at the first frame,cuz the shader is not bound, but it will be bound when submit is called
 		Violet::Renderer::Submit(m_shader, m_vertexArray, glm::translate(glm::mat4(1.0f),m_objectPosition));
 
+		m_transparentTexture->bind(0);
+		Violet::Renderer::Submit(m_shader, m_vertexArray, glm::translate(glm::mat4(1.0f), m_objectPosition));
+
 		Violet::Renderer::EndScene();
 
 	
@@ -178,7 +181,7 @@ public:
 
 private:
 	Violet::Ref<Violet::Shader> m_shader;
-	Violet::Ref<Violet::Texture2D> m_texture;
+	Violet::Ref<Violet::Texture2D> m_texture, m_transparentTexture;
 	Violet::Ref<Violet::VertexArray> m_vertexArray;
 
 	Violet::OrthographicCamera m_camera;
