@@ -15,6 +15,7 @@ namespace Violet {
 		virtual void setFloat4(const std::string& name, const glm::vec4& values) = 0; //Temp
 		virtual void setInt(const std::string& name, int value) = 0; //Temp
 	public:
+		static Shader* Create(const std::string& filePath);
 		static Shader* Create(const std::string& vertexSrc, const std::string& fragmentSrc);
 
 	};

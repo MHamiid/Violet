@@ -53,37 +53,9 @@ public:
 		indexBuffer.reset(Violet::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
-		//Create shaders
-		std::string vertexSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) in vec4 a_position;			
-			layout(location = 1) in vec2 a_texCoord;
-			uniform mat4 u_viewProjection;
-			uniform mat4 u_transformation;
 
-			out vec2 v_texCoord;
-			
-			void main(){
-				v_texCoord = a_texCoord;
-				gl_Position = u_viewProjection * u_transformation * a_position;
-			}
-		)";
 
-		std::string fragmentSrc = R"(
-			#version 330 core
-			
-			layout(location = 0) out vec4 o_color;			
-			in vec2 v_texCoord;
-			
-			uniform sampler2D u_texture;			
-
-			void main(){
-				o_color =  texture(u_texture, v_texCoord);
-			}
-		)";
-
-		m_shader.reset(Violet::Shader::Create(vertexSrc, fragmentSrc));
+		m_shader.reset(Violet::Shader::Create("assets/shaders/Texture.glsl"));
 		m_texture = Violet::Texture2D::Create("assets/textures/CheckerBoard_RGB.png");
 		m_transparentTexture = Violet::Texture2D::Create("assets/textures/LetterV_RGBA.png");
 		m_shader->bind();
