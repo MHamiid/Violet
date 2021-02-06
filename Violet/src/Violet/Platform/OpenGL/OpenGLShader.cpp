@@ -167,6 +167,7 @@ namespace Violet {
 		// Always detach shaders after a successful link.
 		for (auto shaderID : glShaderIDs) {
 			glDetachShader(program, shaderID);
+			glDeleteShader(shaderID);
 		}
 		m_programID = program;
 	}
