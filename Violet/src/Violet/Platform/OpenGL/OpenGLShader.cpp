@@ -98,8 +98,10 @@ namespace Violet {
 	{
 		// Get a program object.
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs;
-		glShaderIDs.reserve(shaderSources.size());
+		constexpr size_t maxNumberOfShadersAllowed = 10;  //Defines the storage to allocate
+		VIO_CORE_ASSERT((shaderSources.size() <= maxNumberOfShadersAllowed), "glShaderIDs Array Doesn't Have Enough Storage!");
+		std::array<GLenum, maxNumberOfShadersAllowed> glShaderIDs;
+		int indexOfLastFreeStorage = 0; //Points to the next free space
 		for (auto&& [shaderType, shaderSourceCode] : shaderSources) {
 		
 			GLuint shader = glCreateShader(shaderType);
@@ -133,7 +135,7 @@ namespace Violet {
 			// Now time to link them together into a program.
 			// Attach our shaders to our program
 			glAttachShader(program, shader);
-			glShaderIDs.push_back(shader);
+			glShaderIDs[indexOfLastFreeStorage++] = (shader);
 		 }
 
 		// Link our program
@@ -154,8 +156,8 @@ namespace Violet {
 			// We don't need the program anymore.
 			glDeleteProgram(program);
 			// Don't leak shaders either.
-			for (auto shaderID : glShaderIDs) {
-				glDeleteShader(shaderID);
+			for (int i = 0; i < indexOfLastFreeStorage; i++) {
+				glDeleteShader(glShaderIDs[i]);
 			}
 
 			// Use the infoLog as you see fit.
@@ -166,9 +168,9 @@ namespace Violet {
 			return; //Exit the function
 		}
 		// Always detach shaders after a successful link.
-		for (auto shaderID : glShaderIDs) {
-			glDetachShader(program, shaderID);
-			glDeleteShader(shaderID);
+		for (int i = 0; i < indexOfLastFreeStorage; i++) {
+			glDetachShader(program, glShaderIDs[i]);
+			glDeleteShader(glShaderIDs[i]);
 		}
 		m_programID = program;
 	}
