@@ -63,7 +63,7 @@ namespace Violet {
 
 
 		//Read the content of the file
-		std::ifstream stream(filePath);
+		std::ifstream stream(filePath, std::ios::in | std::ios::binary);
 		VIO_CORE_ASSERT(stream, "[OpenGL]Couldn't Open Shaders File!");
 		if (stream) {
 			std::string line;
