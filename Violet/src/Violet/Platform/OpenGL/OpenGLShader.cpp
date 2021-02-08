@@ -98,7 +98,8 @@ namespace Violet {
 	{
 		// Get a program object.
 		GLuint program = glCreateProgram();
-		std::vector<GLenum> glShaderIDs(shaderSources.size());
+		std::vector<GLenum> glShaderIDs;
+		glShaderIDs.reserve(shaderSources.size());
 		for (auto&& [shaderType, shaderSourceCode] : shaderSources) {
 		
 			GLuint shader = glCreateShader(shaderType);
