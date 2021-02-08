@@ -54,8 +54,7 @@ public:
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
 
-
-		m_shader.reset(Violet::Shader::Create("assets/shaders/Texture.glsl"));
+		m_shader = m_shaderLibrary.createAndAdd("assets/shaders/Texture.glsl");
 		m_texture = Violet::Texture2D::Create("assets/textures/CheckerBoard_RGB.png");
 		m_transparentTexture = Violet::Texture2D::Create("assets/textures/LetterV_RGBA.png");
 		m_shader->bind();
@@ -152,6 +151,7 @@ public:
 	}
 
 private:
+	Violet::ShaderLibrary m_shaderLibrary;  //Temp, Should be created in the renderer
 	Violet::Ref<Violet::Shader> m_shader;
 	Violet::Ref<Violet::Texture2D> m_texture, m_transparentTexture;
 	Violet::Ref<Violet::VertexArray> m_vertexArray;

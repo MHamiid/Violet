@@ -2,6 +2,7 @@
 #include "OpenGLShader.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <fstream>
+#include <filesystem>
 namespace Violet {
 	OpenGLShader::OpenGLShader(const std::string& filePath) : m_programID(0) //initialize with 0
 	{	
@@ -9,13 +10,53 @@ namespace Violet {
 		std::unordered_map<GLenum, std::string> shaderSources= parseShadersFile(filePath);
 		createProgram(shaderSources);
 
+		//Extract the shaderName from the filePath
+		std::filesystem::path path = filePath;
+		m_shaderName = path.stem().string();
+
+		//###IF WE ARE NOT USING filesystem(C++17)
+		/* 
+			//@example assets/shaders/Texture.glsl  ===> Texture
+
+			//Find the last slash if exists
+			size_t lastSlashPos = filePath.find_last_of("/\\"); //meaning last of forward slash or back slash
+
+			if (lastSlashPos == std::string::npos) { lastSlashPos = 0; } //If the filePath doesn't contain slashes @example Texture.glsl, 
+																		 //We set the position to point at the first char of the file name
+																		 //@example Texture.glsl ===> indexOf(T)
+			else { lastSlashPos = lastSlashPos + 1; }  //Points to the first char of the file name
+													   //@example assets/shaders/Texture.glsl  ===> indexOf(T)
+
+			//Find the last dot if exists
+			size_t lastDotPos = filePath.rfind('.'); //Find the last dot
+
+			size_t shaderNameCharCount = lastDotPos == std::string::npos ? filePath.size() - lastSlashPos : lastDotPos - lastSlashPos;	//[If] the filePath doesn't contain dots @example  assets/shaders/Texture, 
+																																		//We set the count to be the number of chars from lastSlashPos to the end
+																																		//[Else] we set the count to be the number of chars between the dot and the slash
+																		 
+			m_shaderName = filePath.substr(lastSlashPos, shaderNameCharCount); //Note: lastSlashPos points to the first char of the file name
+		*/
+		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From File", m_shaderName);
+
+
 	}
-	OpenGLShader::OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc) : m_programID(0) //initialize with 0
+	OpenGLShader::OpenGLShader(const std::string& shaderName, const std::string& filePath) : m_shaderName(shaderName)
+	{
+		//Parse the file content
+		std::unordered_map<GLenum, std::string> shaderSources = parseShadersFile(filePath);
+		createProgram(shaderSources);
+
+		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From File With It's Provided Name", m_shaderName);
+	}
+	OpenGLShader::OpenGLShader(const std::string& shaderName, const std::string& vertexSrc, const std::string& fragmentSrc) : m_programID(0) //initialize with 0
+		, m_shaderName(shaderName)
 	{
 		std::unordered_map<GLenum, std::string> shaderSources;
 		shaderSources[GL_VERTEX_SHADER] = vertexSrc;
 		shaderSources[GL_FRAGMENT_SHADER] = fragmentSrc;
 		createProgram(shaderSources);
+
+		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From Strings With It's Provided Name", m_shaderName);
 	}
 
 	OpenGLShader::~OpenGLShader()
