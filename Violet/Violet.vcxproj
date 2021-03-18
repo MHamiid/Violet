@@ -135,6 +135,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="src\Violet\OrthographicCameraController.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Application.h" />
@@ -173,6 +174,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Violet\OrthographicCameraController.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

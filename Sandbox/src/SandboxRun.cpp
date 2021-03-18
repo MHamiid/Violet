@@ -15,8 +15,8 @@
 class GameLayer : public Violet::Layer {
 
 public:
-	GameLayer(const std::string layerDebugName = "Layer") : Layer(layerDebugName), m_camera(-1.0f, 1.0f, -1.0f, 1.0f),
-		m_cameraPosition(0.0f, 0.0f, 0.0f), m_cameraRotation(0.0f), m_objectPosition(0.0f, 0.0f, 0.0f){
+	GameLayer(const std::string layerDebugName = "Layer") : Layer(layerDebugName), m_cameraController(1280.0f / 720.0f, true),
+	 m_objectPosition(0.0f, 0.0f, 0.0f){
 		
 		m_vertexArray.reset(Violet::VertexArray::Create());
 
@@ -64,27 +64,8 @@ public:
 	void onUpdate(Violet::DeltaTime& deltaTime) override {
 		//VIO_TRACE("Delta Time: {0} ({1}ms)",deltaTime.getSeconds(), deltaTime.getMilliSeconds());
 
-		//Camera controls
-		if (Violet::Input::IsKeyPressed(Violet::Key::A)) {
-			m_cameraPosition.x -= m_cameraMovementSpeed *deltaTime;
-		}
-		else if (Violet::Input::IsKeyPressed(Violet::Key::D)) {
-			m_cameraPosition.x += m_cameraMovementSpeed * deltaTime;
-		}
-
-		if (Violet::Input::IsKeyPressed(Violet::Key::W)) {
-			m_cameraPosition.y += m_cameraMovementSpeed * deltaTime;
-		}
-		else if (Violet::Input::IsKeyPressed(Violet::Key::S)) {
-			m_cameraPosition.y -= m_cameraMovementSpeed * deltaTime;
-		}
-
-		if (Violet::Input::IsKeyPressed(Violet::Key::E)) {
-			m_cameraRotation -= m_cameraRotationSpeed * deltaTime;
-		}
-		else if (Violet::Input::IsKeyPressed(Violet::Key::Q)) {
-			m_cameraRotation += m_cameraRotationSpeed * deltaTime;
-		}
+		//Update
+		m_cameraController.onUpdate(deltaTime);
 
 		//Object controls
 		if (Violet::Input::IsKeyPressed(Violet::Key::LEFT)) {
@@ -101,13 +82,11 @@ public:
 			m_objectPosition.y -= m_objectMovementSpeed * deltaTime;
 		}
 
-		m_camera.setPosition(m_cameraPosition);
-		m_camera.setRotationZ(m_cameraRotation);
-
+		//Render
 		Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		Violet::RenderCommand::Clear();
 
-		Violet::Renderer::BeginScene(m_camera);
+		Violet::Renderer::BeginScene(m_cameraController.getCamera());
 
 		m_texture->bind(0);
 		//m_shader->setFloat4("u_color", m_objectColor); //Note: will not be set up at the first frame,cuz the shader is not bound, but it will be bound when submit is called
@@ -133,7 +112,8 @@ public:
 		}*/
 	}
 
-	void onEvent(Violet::Event& event) override {
+	void onEvent(Violet::Event& e) override {
+		m_cameraController.onEvent(e);
 		//VIO_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());
 		//event.setEventHandleStatus(true); 
 		/*if (event.getEventType() == Violet::EventType::KeyPressed) {
@@ -156,11 +136,7 @@ private:
 	Violet::Ref<Violet::Texture2D> m_texture, m_transparentTexture;
 	Violet::Ref<Violet::VertexArray> m_vertexArray;
 
-	Violet::OrthographicCamera m_camera;
-	glm::vec3 m_cameraPosition;
-	float m_cameraRotation;
-	float m_cameraMovementSpeed = 0.3f;
-	float m_cameraRotationSpeed = 90.0f;
+	Violet::OrthographicCameraController m_cameraController;
 	
 	glm::vec3 m_objectPosition;
 	float m_objectMovementSpeed = 0.5f;

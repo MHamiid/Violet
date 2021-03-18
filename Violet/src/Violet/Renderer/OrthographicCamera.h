@@ -6,6 +6,7 @@ namespace Violet {
 	class VIOLET_API OrthographicCamera {
 	public:
 		OrthographicCamera(float left, float right, float bottom, float top);
+		void setProjection(float left, float right, float bottom, float top);
 
 		void setPosition(const glm::vec3& position) { m_position = position; calculateViewMatrix(); }
 		const glm::vec3& getPosition() { return m_position; }

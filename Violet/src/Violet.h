@@ -9,6 +9,7 @@
 #include "Violet/ImGui/ImGuiLayer.h"
 #include "Violet/Input.h"
 #include "Violet/Events/KeyEvent.h"
+#include "Violet/OrthographicCameraController.h"
 //#### Vendor ####
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
