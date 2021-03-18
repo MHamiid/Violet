@@ -29,6 +29,7 @@ namespace Violet {
 		//VIO_DEBUG(event.getName());
 		EventDispatcher dispatcher(event);	
 		dispatcher.dispatch<WindowCloseEvent>(VIO_BIND_EVENT_FUNCTION(Application::onWindowClose)); //Dispatch all window close events to onWindowClose function
+		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_FUNCTION(Application::onWindowResize));
 
 		//Events that are handled by layers
 
@@ -47,6 +48,19 @@ namespace Violet {
 		m_applicationRunning = false;
 		return true; //Confirm that the evet has been handled 
 	}
+	bool Application::onWindowResize(WindowResizeEvent& event)
+	{
+		Renderer::OnWindowResize(event.getWidth(), event.getHeight());
+		if (event.getWidth() == 0 || event.getHeight() == 0) {   //If the window is minimized, //NOTE: when window is minimized the width and height are set to zero
+
+			m_windowMinimized = true;
+			return false;
+		}
+
+		m_windowMinimized = false;
+		
+		return false;  //Don't block the event
+	}
 	void Application::pushLayer(Layer* layer)
 	{
 		m_layerStack.pushLayer(layer);
@@ -63,10 +77,14 @@ namespace Violet {
 			//Calculate delta time
 			f_deltaTime.calculateDeltaTime(m_window->getCurrentTime());
 
-			//Iterate over all the layers
-			for (Layer* layer : m_layerStack) {
-			
-				layer->onUpdate(f_deltaTime);
+			//Don't update if the window is minimized
+			//NOTE: We still update ImGuiLayer incase if ImGui is docked for example and still visible even when window is minimized
+			if (!m_windowMinimized) {
+				//Iterate over all the layers
+				for (Layer* layer : m_layerStack) {
+
+					layer->onUpdate(f_deltaTime);
+				}
 			}
 
 			//Rendering ImGui stuff

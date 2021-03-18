@@ -13,6 +13,7 @@ namespace Violet {
 		void run();
 		void onEvent(Event& event);
 		bool onWindowClose(WindowCloseEvent& event);
+		bool onWindowResize(WindowResizeEvent& event);
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* layer);
 		Window& getWindow() { return *m_window; }
@@ -21,6 +22,7 @@ namespace Violet {
 	private:
 		Scoped<Window> m_window;
 		bool m_applicationRunning = true;
+		bool m_windowMinimized = false;
 		LayerStack m_layerStack;
 		ImGuiLayer* m_ImGuiLayer;
 		DeltaTime f_deltaTime;

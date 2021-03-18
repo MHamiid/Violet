@@ -6,7 +6,8 @@ namespace Violet {
 	class VIOLET_API RenderCommand {
 	public:
 		static void Init() { s_GraphicsAPI->init(); }
-		static void SetClearColor(const glm::vec4& color) { s_GraphicsAPI->setClearColor(color); };
+		static void SetViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height) { s_GraphicsAPI->setViewPort(x, y, width, height); }
+		static void SetClearColor(const glm::vec4& color) { s_GraphicsAPI->setClearColor(color); }
 		static void Clear() { s_GraphicsAPI->clear(); }
 		static void DrawIndices(const Ref<VertexArray>& vertexArray) { s_GraphicsAPI->drawIndices(vertexArray); }
 	private:
