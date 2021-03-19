@@ -42,17 +42,38 @@
     <ClInclude Include="src\Violet.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Application.h">
-      <Filter>src\Violet</Filter>
+    <ClInclude Include="src\Violet\Core\Application.h">
+      <Filter>src\Violet\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Core.h">
-      <Filter>src\Violet</Filter>
+    <ClInclude Include="src\Violet\Core\Core.h">
+      <Filter>src\Violet\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Core\DeltaTime.h">
       <Filter>src\Violet\Core</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\EntryPoint.h">
-      <Filter>src\Violet</Filter>
+    <ClInclude Include="src\Violet\Core\EntryPoint.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\Input.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\KeyCodes.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\Layer.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\LayerStack.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\Log.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\MouseCodes.h">
+      <Filter>src\Violet\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Core\Window.h">
+      <Filter>src\Violet\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Events\ApplicationEvent.h">
       <Filter>src\Violet\Events</Filter>
@@ -68,24 +89,6 @@
     </ClInclude>
     <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h">
       <Filter>src\Violet\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Violet\Input.h">
-      <Filter>src\Violet</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Violet\KeyCodes.h">
-      <Filter>src\Violet</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Violet\Layer.h">
-      <Filter>src\Violet</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Violet\LayerStack.h">
-      <Filter>src\Violet</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Violet\Log.h">
-      <Filter>src\Violet</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Violet\MouseCodes.h">
-      <Filter>src\Violet</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Violet\Platform\OpenGL</Filter>
@@ -123,6 +126,9 @@
     <ClInclude Include="src\Violet\Renderer\OrthographicCamera.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\OrthographicCameraController.h">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Renderer\RenderCommand.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
@@ -138,32 +144,28 @@
     <ClInclude Include="src\Violet\Renderer\VertexArray.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Window.h">
-      <Filter>src\Violet</Filter>
-    </ClInclude>
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\OrthographicCameraController.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Application.cpp">
-      <Filter>src\Violet</Filter>
+    <ClCompile Include="src\Violet\Core\Application.cpp">
+      <Filter>src\Violet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Core\Layer.cpp">
+      <Filter>src\Violet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Core\LayerStack.cpp">
+      <Filter>src\Violet\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Core\Log.cpp">
+      <Filter>src\Violet\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\ImGui\ImGuiLayer.cpp">
       <Filter>src\Violet\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Violet\Layer.cpp">
-      <Filter>src\Violet</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Violet\LayerStack.cpp">
-      <Filter>src\Violet</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Violet\Log.cpp">
-      <Filter>src\Violet</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Violet\Platform\OpenGL</Filter>
@@ -198,6 +200,9 @@
     <ClCompile Include="src\Violet\Renderer\OrthographicCamera.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\OrthographicCameraController.cpp">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Renderer\RenderCommand.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
@@ -216,6 +221,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\OrthographicCameraController.cpp" />
   </ItemGroup>
 </Project>

@@ -135,24 +135,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Violet\OrthographicCameraController.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
-    <ClInclude Include="src\Violet\Application.h" />
-    <ClInclude Include="src\Violet\Core.h" />
+    <ClInclude Include="src\Violet\Core\Application.h" />
+    <ClInclude Include="src\Violet\Core\Core.h" />
     <ClInclude Include="src\Violet\Core\DeltaTime.h" />
-    <ClInclude Include="src\Violet\EntryPoint.h" />
+    <ClInclude Include="src\Violet\Core\EntryPoint.h" />
+    <ClInclude Include="src\Violet\Core\Input.h" />
+    <ClInclude Include="src\Violet\Core\KeyCodes.h" />
+    <ClInclude Include="src\Violet\Core\Layer.h" />
+    <ClInclude Include="src\Violet\Core\LayerStack.h" />
+    <ClInclude Include="src\Violet\Core\Log.h" />
+    <ClInclude Include="src\Violet\Core\MouseCodes.h" />
+    <ClInclude Include="src\Violet\Core\Window.h" />
     <ClInclude Include="src\Violet\Events\ApplicationEvent.h" />
     <ClInclude Include="src\Violet\Events\Event.h" />
     <ClInclude Include="src\Violet\Events\KeyEvent.h" />
     <ClInclude Include="src\Violet\Events\MouseEvent.h" />
     <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h" />
-    <ClInclude Include="src\Violet\Input.h" />
-    <ClInclude Include="src\Violet\KeyCodes.h" />
-    <ClInclude Include="src\Violet\Layer.h" />
-    <ClInclude Include="src\Violet\LayerStack.h" />
-    <ClInclude Include="src\Violet\Log.h" />
-    <ClInclude Include="src\Violet\MouseCodes.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.h" />
@@ -165,24 +165,23 @@
     <ClInclude Include="src\Violet\Renderer\GraphicsAPI.h" />
     <ClInclude Include="src\Violet\Renderer\GraphicsContext.h" />
     <ClInclude Include="src\Violet\Renderer\OrthographicCamera.h" />
+    <ClInclude Include="src\Violet\Renderer\OrthographicCameraController.h" />
     <ClInclude Include="src\Violet\Renderer\RenderCommand.h" />
     <ClInclude Include="src\Violet\Renderer\Renderer.h" />
     <ClInclude Include="src\Violet\Renderer\Shader.h" />
     <ClInclude Include="src\Violet\Renderer\Texture.h" />
     <ClInclude Include="src\Violet\Renderer\VertexArray.h" />
-    <ClInclude Include="src\Violet\Window.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Violet\OrthographicCameraController.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\Violet\Application.cpp" />
+    <ClCompile Include="src\Violet\Core\Application.cpp" />
+    <ClCompile Include="src\Violet\Core\Layer.cpp" />
+    <ClCompile Include="src\Violet\Core\LayerStack.cpp" />
+    <ClCompile Include="src\Violet\Core\Log.cpp" />
     <ClCompile Include="src\Violet\ImGui\ImGuiLayer.cpp" />
-    <ClCompile Include="src\Violet\Layer.cpp" />
-    <ClCompile Include="src\Violet\LayerStack.cpp" />
-    <ClCompile Include="src\Violet\Log.cpp" />
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp" />
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp" />
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.cpp" />
@@ -194,6 +193,7 @@
     <ClCompile Include="src\Violet\Renderer\Buffer.cpp" />
     <ClCompile Include="src\Violet\Renderer\GraphicsAPI.cpp" />
     <ClCompile Include="src\Violet\Renderer\OrthographicCamera.cpp" />
+    <ClCompile Include="src\Violet\Renderer\OrthographicCameraController.cpp" />
     <ClCompile Include="src\Violet\Renderer\RenderCommand.cpp" />
     <ClCompile Include="src\Violet\Renderer\Renderer.cpp" />
     <ClCompile Include="src\Violet\Renderer\Shader.cpp" />

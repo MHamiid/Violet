@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Core/DeltaTime.h"
+#include "Violet/Events/Event.h"
+#include "DeltaTime.h"
 
 namespace Violet{
 

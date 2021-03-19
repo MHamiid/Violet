@@ -3,13 +3,13 @@
 //For client usage
 #include <string>
 #include <memory>
-#include "Violet/Core.h"
-#include "Violet/Log.h"
-#include "Violet/Application.h"
+#include "Violet/Core/Core.h"
+#include "Violet/Core/Log.h"
+#include "Violet/Core/Application.h"
 #include "Violet/ImGui/ImGuiLayer.h"
-#include "Violet/Input.h"
+#include "Violet/Core/Input.h"
 #include "Violet/Events/KeyEvent.h"
-#include "Violet/OrthographicCameraController.h"
+#include "Violet/Renderer/OrthographicCameraController.h"
 //#### Vendor ####
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,5 +18,5 @@
 #include "Violet/Renderer/Renderer.h"
 #include "Violet/Renderer/Texture.h"
 //#### Entry Point ####
-#include "Violet/EntryPoint.h"
+#include "Violet/Core/EntryPoint.h"
 //#### End Entry Point ####

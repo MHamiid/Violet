@@ -23,5 +23,5 @@
 
 
 //Violet Defined includes
-#include "Violet/Core.h"
-#include "Violet/Log.h"
+#include "Violet/Core/Core.h"
+#include "Violet/Core/Log.h"

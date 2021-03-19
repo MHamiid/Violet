@@ -1,7 +1,7 @@
 #include "VIOPCH.h"
 #include "OrthographicCameraController.h"
-#include "Violet/Input.h"
-#include "Violet/KeyCodes.h"
+#include "Violet/Core/Input.h"
+#include "Violet/Core/KeyCodes.h"
 
 namespace Violet {
 

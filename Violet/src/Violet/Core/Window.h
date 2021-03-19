@@ -1,5 +1,5 @@
 #pragma once
-#include "Events/Event.h"
+#include "Violet/Events/Event.h"
 namespace Violet {
 	struct  WindowProperties {
 		WindowProperties(const std::string& title ,unsigned int width , unsigned int height , bool VSync = true , const std::function<void(Event&)>& FUNCEventCallback = NULL)

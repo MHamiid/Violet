@@ -1,6 +1,6 @@
 #pragma once
-#include "Violet/Layer.h"
-#include "Violet/Window.h"
+#include "Violet/Core/Layer.h"
+#include "Violet/Core/Window.h"
 namespace Violet {
 	
 	class VIOLET_API ImGuiLayer : public Layer {
