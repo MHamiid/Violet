@@ -17,6 +17,3 @@
 //#### Renderer ####
 #include "Violet/Renderer/Renderer.h"
 #include "Violet/Renderer/Texture.h"
-//#### Entry Point ####
-#include "Violet/Core/EntryPoint.h"
-//#### End Entry Point ####
