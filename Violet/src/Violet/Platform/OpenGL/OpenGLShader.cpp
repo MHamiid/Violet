@@ -74,7 +74,6 @@ namespace Violet {
 		glUseProgram(0);
 	}
 
-	//Temp
 	//Assumes that shader is bound first
 	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix)
 	{

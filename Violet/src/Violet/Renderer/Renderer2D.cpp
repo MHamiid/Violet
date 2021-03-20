@@ -61,16 +61,18 @@ namespace Violet {
 	{
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, color);
+		DrawQuad({ position.x, position.y, 0.0f }, size, rotationZ, color);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
 	{
 		s_data->shader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
 		s_data->shader->setFloat4("u_color", color);
-		s_data->shader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position));
+		s_data->shader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
+													glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), glm::vec3(0, 0, 1)) *
+													glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f}));
 
 		s_data->vertexArray->bind();
 		RenderCommand::DrawIndices(s_data->vertexArray);
