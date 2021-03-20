@@ -95,7 +95,7 @@ namespace Violet {
 		virtual const VertexLayout& getLayout() const = 0;
 		virtual void setLayout(const VertexLayout& layout) = 0;
 	public:
-		static VertexBuffer* Create(float* vertices, uint32_t size);
+		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 	/*
@@ -108,7 +108,7 @@ namespace Violet {
 		virtual void unBind() const = 0;
 		virtual uint32_t getCount() const = 0;
 	public:
-		static IndexBuffer* Create(uint32_t* indices, uint32_t count);
+		static Ref<IndexBuffer> Create(uint32_t* indices, uint32_t count);
 	
 	};
 

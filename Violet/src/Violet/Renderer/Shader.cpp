@@ -19,7 +19,7 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return std::make_shared<OpenGLShader>(filePath);
+			return CreateRef<OpenGLShader>(filePath);
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");
@@ -36,7 +36,7 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return std::make_shared<OpenGLShader>(shaderName, filePath);
+			return CreateRef<OpenGLShader>(shaderName, filePath);
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");
@@ -53,7 +53,7 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return std::make_shared<OpenGLShader>(shaderName, vertexSrc, fragmentSrc);
+			return CreateRef<OpenGLShader>(shaderName, vertexSrc, fragmentSrc);
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");

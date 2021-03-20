@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "Violet/Platform/OpenGL/OpenGLVertexArray.h"
 namespace Violet {
-	VertexArray* VertexArray::Create()
+	Ref<VertexArray> VertexArray::Create()
 	{
 		switch (Renderer::GetCurrentGraphicsAPI())
 		{
@@ -13,7 +13,7 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return new OpenGLVertexArray();
+			return CreateRef<OpenGLVertexArray>();
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");

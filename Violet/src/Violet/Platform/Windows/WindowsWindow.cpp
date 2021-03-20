@@ -11,8 +11,8 @@ namespace Violet {
 	static void GLFWErrorCallback(int error, const char* description) {
 		VIO_CORE_ERROR("GLFW Error ({0}): {1}", error , description);
 	}
-	Window* Window::Create(const WindowProperties& props) {
-		return new WindowsWindow(props);
+	Scoped<Window> Window::Create(const WindowProperties& props) {
+		return CreateScope<WindowsWindow>(props);
 	}
 
 
@@ -63,7 +63,7 @@ namespace Violet {
 		m_window = glfwCreateWindow((int)m_properties.m_width, (int)m_properties.m_height, m_properties.m_title.c_str(), nullptr, nullptr);
 		
 		//Setting up Graphics context for the window
-		m_context = new OpenGLContext(m_window);
+		m_context = CreateScope<OpenGLContext>(m_window);
 		m_context->init();
 
 		glfwSetWindowUserPointer(m_window, &m_properties); //Data to pass to Event callbacks.

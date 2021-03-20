@@ -11,7 +11,7 @@ namespace Violet {
 		static void Clear() { s_GraphicsAPI->clear(); }
 		static void DrawIndices(const Ref<VertexArray>& vertexArray) { s_GraphicsAPI->drawIndices(vertexArray); }
 	private:
-		static GraphicsAPI* s_GraphicsAPI;  //Contains a pointer to the implementation class of GraphicsAPI interface
+		static Scoped<GraphicsAPI> s_GraphicsAPI;  //Contains a pointer to the implementation class of GraphicsAPI interface
 
 	};
 }

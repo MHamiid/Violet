@@ -18,7 +18,7 @@ public:
 	GameLayer(const std::string layerDebugName = "Layer") : Layer(layerDebugName), m_cameraController(1280.0f / 720.0f, true),
 	 m_objectPosition(0.0f, 0.0f, 0.0f){
 		
-		m_vertexArray.reset(Violet::VertexArray::Create());
+		m_vertexArray = Violet::VertexArray::Create();
 
 
 		/*float vertices[] = {
@@ -37,7 +37,7 @@ public:
 
 
 		Violet::Ref<Violet::VertexBuffer>vertexBuffer;
-		vertexBuffer.reset(Violet::VertexBuffer::Create(vertices, sizeof(vertices)));
+		vertexBuffer = Violet::VertexBuffer::Create(vertices, sizeof(vertices));
 
 
 		Violet::VertexLayout layout = { {Violet::VertexAttributeDataType::Float3, "Position"},
@@ -50,7 +50,7 @@ public:
 		uint32_t indices[] = { 0, 1, 2, 2, 3, 0 };
 
 		Violet::Ref<Violet::IndexBuffer> indexBuffer;
-		indexBuffer.reset(Violet::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t)));
+		indexBuffer = Violet::IndexBuffer::Create(indices, sizeof(indices) / sizeof(uint32_t));
 		m_vertexArray->setIndexBuffer(indexBuffer);
 
 

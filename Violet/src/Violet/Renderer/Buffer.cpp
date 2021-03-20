@@ -3,7 +3,7 @@
 #include "Renderer.h"
 #include "Violet/Platform/OpenGL/OpenGLBuffer.h"
 namespace Violet {
-	VertexBuffer* VertexBuffer::Create(float* vertices, uint32_t size)
+	Ref<VertexBuffer> VertexBuffer::Create(float* vertices, uint32_t size)
 	{
 		switch (Renderer::GetCurrentGraphicsAPI())
 		{
@@ -13,14 +13,14 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return new OpenGLVertexBuffer(vertices, size);
+			return CreateRef<OpenGLVertexBuffer>(vertices, size);
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");
 		return nullptr;
 	}
 
-	IndexBuffer* IndexBuffer::Create(uint32_t* indices, uint32_t count)
+	Ref<IndexBuffer> IndexBuffer::Create(uint32_t* indices, uint32_t count)
 	{
 		switch(Renderer::GetCurrentGraphicsAPI())
 		{
@@ -30,7 +30,7 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return new OpenGLIndexBuffer(indices, count);
+			return CreateRef<OpenGLIndexBuffer>(indices, count);
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");

@@ -26,7 +26,7 @@ namespace Violet {
 		virtual void shutDown() override;
 	private:
 		GLFWwindow* m_window;
-		GraphicsContext* m_context;
+		Scoped<GraphicsContext> m_context;
 	};
 
 

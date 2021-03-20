@@ -2,5 +2,5 @@
 #include "RenderCommand.h"
 #include "Violet/Platform/OpenGL/OpenGLRendererAPI.h"
 namespace Violet {
-	GraphicsAPI* RenderCommand::s_GraphicsAPI = new OpenGLRendererAPI();
+	Scoped<GraphicsAPI> RenderCommand::s_GraphicsAPI = CreateScope<OpenGLRendererAPI>();
 }

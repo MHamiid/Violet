@@ -29,7 +29,7 @@ namespace Violet {
 		virtual float getCurrentTime() const = 0;  //Semi-Temp, Preferable to be in a platform class
 
 	public:
-		static Window* Create(const WindowProperties& properties);	//Has to be implemented in child per platform
+		static Scoped<Window> Create(const WindowProperties& properties);	//Has to be implemented in child per platform
 	protected:
 		virtual void init() = 0;
 		virtual void shutDown() = 0;

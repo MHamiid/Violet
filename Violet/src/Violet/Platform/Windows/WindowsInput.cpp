@@ -5,7 +5,7 @@
 #include <GLFW/glfw3.h>
 namespace Violet {
 
-	Input* WindowsInput::s_InputInstance = new WindowsInput();
+	Scoped<Input> WindowsInput::s_InputInstance = CreateScope<WindowsInput>();
 
 	bool WindowsInput::isKeyPressedIMPL(Key keyCode)
 	{

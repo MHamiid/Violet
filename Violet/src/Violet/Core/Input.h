@@ -29,7 +29,7 @@ namespace Violet {
 		virtual float getMouseYIMPL() = 0;
 		
 	private:
-		static Input* s_InputInstance; //To be set to a pointer of the implementation class
+		static Scoped<Input> s_InputInstance; //To be set to a pointer of the implementation class
 
 	
 	};

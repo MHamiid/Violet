@@ -18,7 +18,7 @@ namespace Violet {
 		struct SceneData{
 			glm::mat4 viewProjectionMatrix;
 		};
-		static SceneData* s_SceneData;	
+		static Scoped<SceneData> s_SceneData;	
 	};
 
 }

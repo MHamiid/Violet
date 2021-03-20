@@ -14,7 +14,7 @@ namespace Violet {
 
 		case GraphicsAPI::API::OPENGL:
 			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
-			return std::make_shared<OpenGLTexture2D>(path); //Temp, replace std::make_shared with a macro
+			return CreateRef<OpenGLTexture2D>(path);
 		}
 
 		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");
