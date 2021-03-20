@@ -16,4 +16,5 @@
 #include <imgui.h>
 //#### Renderer ####
 #include "Violet/Renderer/Renderer.h"
+#include "Violet/Renderer/Renderer2D.h"
 #include "Violet/Renderer/Texture.h"

@@ -13,8 +13,6 @@ public:
 	void onEvent(Violet::Event& e) override;
 private:
 	Violet::OrthographicCameraController m_cameraController;
-	Violet::Ref<Violet::VertexArray> m_vertexArray; //Temp
-	Violet::Ref<Violet::Shader> m_shader;
 	glm::vec3 m_objectPosition{ 0.0f, 0.0f, 0.0f };
 	glm::vec4 m_objectColor = { 1.0f, 0.7f, 0.6f, 1.0f };
 
