@@ -8,7 +8,7 @@ uniform mat4 u_transformation;
 out vec2 v_texCoord;
 
 void main(){
-	v_texCoord = a_texCoord;
+	v_texCoord = a_texCoord * 2.0f;
 	gl_Position = u_viewProjection * u_transformation * a_position;
 }
 #type fragment

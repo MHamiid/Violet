@@ -15,6 +15,14 @@ namespace Violet {
 
 		OrthographicCamera& getCamera() { return m_camera; }
 		const OrthographicCamera& getCamera() const { return m_camera; } //Provide a const verstion of the function
+		float getAspectRatio() { return m_aspectRatio; }
+		float getZoomLevel() { return m_zoomLevel; }
+		/*
+		*	Width and height calculated from the glm::ortho projection
+		*	m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel , m_zoomLevel)
+		*/
+		float getWidth() { return m_aspectRatio * m_zoomLevel * 2.0f; }
+		float getHeight() { return m_zoomLevel * 2.0f; }
 	private:
 		//Functions to be dispatched in onEvent
 		bool onMouseScrolled(MouseScrolledEvent& e);
