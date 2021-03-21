@@ -4,6 +4,24 @@
 #include "Violet/Platform/OpenGL/OpenGLTexture.h"
 namespace Violet {
 
+	Ref<Texture2D> Texture2D::Create(uint32_t width, uint32_t height)
+	{
+		switch (Renderer::GetCurrentGraphicsAPI())
+		{
+		case GraphicsAPI::API::NONE:
+			VIO_CORE_ASSERT(false, "[Renderer] No Renderer API Specified!");
+			return nullptr;
+
+		case GraphicsAPI::API::OPENGL:
+			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
+			return CreateRef<OpenGLTexture2D>(width, height);
+		}
+
+		VIO_CORE_ASSERT(false, "[Renderer] Renderer API Selection Failed!");
+		return nullptr;
+
+	}
+
 	Ref<Texture2D> Texture2D::Create(const std::string& path)
 	{
 		switch (Renderer::GetCurrentGraphicsAPI())
@@ -21,5 +39,6 @@ namespace Violet {
 		return nullptr;
 	
 	}
+
 
 }

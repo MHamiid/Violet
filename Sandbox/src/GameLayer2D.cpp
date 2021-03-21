@@ -27,7 +27,7 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 
 	Violet::Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.5f },  30.0f, m_objectColor);
 	Violet::Renderer2D::DrawQuad({  0.6f, 0.2f }, { 0.5f, 0.5f }, -30.0f, m_objectColor);
-	Violet::Renderer2D::DrawQuad({  0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() },  0.0f, m_transparentTexture);
+	Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, 0.0f, m_transparentTexture);
 
 	Violet::Renderer2D::EndScene();
 }
