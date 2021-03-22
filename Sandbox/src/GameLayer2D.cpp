@@ -25,9 +25,9 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	//TODO: Should call Renderer2D::Shutdown() in Renderer's Shutdown()-> "To be made function". 
 	Violet::Renderer2D::BeginScene(m_cameraController.getCamera());
 
-	Violet::Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.5f },  30.0f, m_objectColor);
-	Violet::Renderer2D::DrawQuad({  0.6f, 0.2f }, { 0.5f, 0.5f }, -30.0f, m_objectColor);
-	Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, 0.0f, m_transparentTexture);
+	Violet::Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.5f }, m_objectColor);
+	Violet::Renderer2D::DrawRotatedQuad({  0.6f, 0.2f }, { 0.5f, 0.5f }, -30.0f, m_objectColor);
+	Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, m_transparentTexture, 2.0f);
 
 	Violet::Renderer2D::EndScene();
 }

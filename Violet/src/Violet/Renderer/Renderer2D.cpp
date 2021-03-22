@@ -67,16 +67,62 @@ namespace Violet {
 	void Renderer2D::EndScene()
 	{
 	}
-
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, rotationZ, color);
+		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
-
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
+	/*
+		QUADS
+	*/
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
 		s_data->textureShader->setFloat4("u_color", color);
+		s_data->textureShader->setFloat("u_sizeFactor", 1.0f);  //Has no effect cuz we are not using a texture, only the default 1 pixel white texture, it is set to avoid warnings of unused uniform
+		s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }));
+
+		//Bind white default texture to add no effect to the color (No Texture)
+		s_data->defaultWhiteTexture->bind(0);
+
+		s_data->vertexArray->bind();
+		RenderCommand::DrawIndices(s_data->vertexArray);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float sizeFactor, const glm::vec4& tintColor)
+	{
+		DrawQuad({ position.x, position.y, 0.0f }, size, texture, sizeFactor, tintColor);
+	}
+
+	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float sizeFactor, const glm::vec4& tintColor)
+	{
+		/*
+		* NOTE: Set the color to white to make no effect on the texture (No Color)
+		*/
+		s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
+		s_data->textureShader->setFloat4("u_color", tintColor);
+		s_data->textureShader->setFloat("u_sizeFactor", sizeFactor);
+		s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }));
+
+		texture->bind(0);
+
+		s_data->vertexArray->bind();
+		RenderCommand::DrawIndices(s_data->vertexArray);
+	}
+	/*
+		ROTATED QUADS
+	*/
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotationZ, color);
+	}
+
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
+	{
+		s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
+		s_data->textureShader->setFloat4("u_color", color);
+		s_data->textureShader->setFloat("u_sizeFactor", 1.0f);  //Has no effect cuz we are not using a texture, only the default 1 pixel white texture, it is set to avoid warnings of unused uniform
 		s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
 													glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), glm::vec3(0, 0, 1)) *
 													glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f}));
@@ -88,18 +134,19 @@ namespace Violet {
 		RenderCommand::DrawIndices(s_data->vertexArray);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float sizeFactor, const glm::vec4& tintColor)
 	{
-		DrawQuad({ position.x, position.y, 0.0f }, size, rotationZ, texture);
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotationZ, texture, sizeFactor, tintColor);
 	}
 
-	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, const glm::vec4& color)
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float sizeFactor, const glm::vec4& tintColor)
 	{
 		/*
 		* NOTE: Set the color to white to make no effect on the texture (No Color)
 		*/
 		s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
-		s_data->textureShader->setFloat4("u_color", color); 
+		s_data->textureShader->setFloat4("u_color", tintColor);
+		s_data->textureShader->setFloat("u_sizeFactor", sizeFactor);
 		s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
 													glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), glm::vec3(0, 0, 1)) *
 													glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }));
