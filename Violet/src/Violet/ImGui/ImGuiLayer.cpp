@@ -59,17 +59,6 @@ namespace Violet {
 		ImGui_ImplGlfw_Shutdown();
 		ImGui::DestroyContext();
 	}
-	void ImGuiLayer::onImGuiRender()
-	{
-		//##Content##//
-		ImGui::Begin("ImGui Test!");
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-
-		static bool showWindow = true;
-		ImGui::ShowDemoWindow(&showWindow);
-	}
-	
 	void ImGuiLayer::onEvent(Event& event)
 	{
 		//VIO_CORE_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());

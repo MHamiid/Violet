@@ -9,7 +9,6 @@ namespace Violet {
 		virtual ~ImGuiLayer() = default;
 		virtual void onAttach() override;
 		virtual void onDetach() override;
-		virtual void onImGuiRender() override;
 		virtual void onEvent(Event& event) override;
 	public:
 		static void BeginImGuiFrame();
