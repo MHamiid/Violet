@@ -18,9 +18,13 @@ namespace Violet {
 		float getAspectRatio() { return m_aspectRatio; }
 		float getZoomLevel() { return m_zoomLevel; }
 		/*
-		*	Width and height calculated from the glm::ortho projection
+		*	Following functions calculated from the glm::ortho projection
 		*	m_camera(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel , m_zoomLevel)
 		*/
+		float getLeft() { return -m_aspectRatio * m_zoomLevel; }
+		float getRight() { return m_aspectRatio * m_zoomLevel; }
+		float getBottom() { return -m_zoomLevel; }
+		float getTop() { return m_zoomLevel; }
 		float getWidth() { return m_aspectRatio * m_zoomLevel * 2.0f; }
 		float getHeight() { return m_zoomLevel * 2.0f; }
 	private:
