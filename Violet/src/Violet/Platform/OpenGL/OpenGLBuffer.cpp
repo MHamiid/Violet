@@ -8,9 +8,16 @@ namespace Violet {
 		//////////////////Vertex Buffer Implementation///////////////	
 	   /////////////////////////////////////////////////////////////
 	*/
-	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size) 
+	OpenGLVertexBuffer::OpenGLVertexBuffer(uint32_t size)
+	{
+		//glCreateBuffers(1, &m_vertexBufferID);	//For OpenGL 4.5
+		glGenBuffers(1, &m_vertexBufferID);
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+		glBufferData(GL_ARRAY_BUFFER, size, nullptr, GL_DYNAMIC_DRAW);
+	}
+	OpenGLVertexBuffer::OpenGLVertexBuffer(float* vertices, uint32_t size)
 	{	
-		//glCreateBuffers(1, &m_vertexBufferID);
+		//glCreateBuffers(1, &m_vertexBufferID);	//For OpenGL 4.5
 		glGenBuffers(1, &m_vertexBufferID);
 		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
 		glBufferData(GL_ARRAY_BUFFER, size, vertices, GL_STATIC_DRAW);
@@ -32,6 +39,12 @@ namespace Violet {
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	void OpenGLVertexBuffer::setData(const void* data, uint32_t size) const
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, m_vertexBufferID);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, size, data);
+	}
+
 	/*
 		 /////////////////////////////////////////////////////////////
 		//////////////////Index Buffer Implementation////////////////
@@ -39,7 +52,7 @@ namespace Violet {
 	*/
 	OpenGLIndexBuffer::OpenGLIndexBuffer(uint32_t* indices, uint32_t count) : m_count(count)
 	{
-		//glCreateBuffers(1, &m_indexBufferID);
+		//glCreateBuffers(1, &m_indexBufferID);	//For OpenGL 4.5
 		glGenBuffers(1, &m_indexBufferID);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indexBufferID);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER, count * sizeof(UINT32), indices, GL_STATIC_DRAW);

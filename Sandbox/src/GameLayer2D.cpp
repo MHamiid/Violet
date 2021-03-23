@@ -30,10 +30,15 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	Violet::Renderer2D::BeginScene(m_cameraController.getCamera());
 	
 	Violet::Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
-	Violet::Renderer2D::DrawRotatedQuad({  0.6f, 0.2f }, { 0.5f, 0.5f }, -m_objectRotation, m_objectColor);
-	Violet::Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f },  m_objectRotation, m_objectColor);
+	Violet::Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+	Violet::Renderer2D::DrawQuad({ -1.2f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+	Violet::Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+	Violet::Renderer2D::DrawQuad({ -0.6f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+	Violet::Renderer2D::DrawQuad({ -0.3f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+	//Violet::Renderer2D::DrawRotatedQuad({ 0.6f, 0.2f }, { 0.5f, 0.5f }, -m_objectRotation, {1.0f, 0.93f, 0.24f, 1.0f});
+	//Violet::Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f },  m_objectRotation, { 0.18f, 0.6f, 0.96f, 1.0f});
 	//Background
-	Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, m_transparentTexture, 2.0f);
+	//Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, m_transparentTexture, 2.0f);
 
 	Violet::Renderer2D::EndScene();
 }

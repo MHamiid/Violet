@@ -22,8 +22,10 @@ namespace Violet {
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
-	void OpenGLRendererAPI::drawIndices(const Ref<VertexArray>& vertexArray)
+	void OpenGLRendererAPI::drawIndices(const Ref<VertexArray>& vertexArray, uint32_t numberOfIndicesToDraw)
 	{
-		glDrawElements(GL_TRIANGLES, vertexArray->getIndexBuffer()->getCount(), GL_UNSIGNED_INT, nullptr);
+		//If set to 0 draw the entire IndexBuffer
+		uint32_t indicesCount = numberOfIndicesToDraw == 0 ? vertexArray->getIndexBuffer()->getCount() : numberOfIndicesToDraw;
+		glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 }	

@@ -10,6 +10,7 @@ namespace Violet {
 		static void Shutdown();
 		static void BeginScene(const OrthographicCamera& camera);
 		static void EndScene();
+		static void Flush();
 
 		//#########//
 		/*
@@ -35,6 +36,9 @@ namespace Violet {
 		*/
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float sizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float sizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
+
+	private:
+		static void AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color, glm::vec2& textureCoordinates);
 
 	};
 }

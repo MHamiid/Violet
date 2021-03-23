@@ -92,14 +92,17 @@ namespace Violet {
 		virtual ~VertexBuffer() = default;
 		virtual void bind() const = 0;
 		virtual void unBind() const = 0;
+		virtual void setData(const void* data, uint32_t size) const = 0;
 		virtual const VertexLayout& getLayout() const = 0;
 		virtual void setLayout(const VertexLayout& layout) = 0;
 	public:
+		static Ref<VertexBuffer> Create(uint32_t size);  //For dynamic buffer
 		static Ref<VertexBuffer> Create(float* vertices, uint32_t size);
 	};
 
 	/*
 	Interface
+	NOTE: Currently using 32-bit per index only
 	*/
 	class VIOLET_API IndexBuffer {
 	public:
