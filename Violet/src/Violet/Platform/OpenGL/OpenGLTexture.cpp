@@ -97,7 +97,7 @@ namespace Violet {
 	void OpenGLTexture2D::bind(uint32_t textureSlot) const
 	{
 		//glBindTextureUnit(textureSlot, m_textureID);   //For OpenGL 4.5
-		glBindTexture(GL_TEXTURE_2D, m_textureID);
+		glActiveTexture(GL_TEXTURE0 + textureSlot);
 		glBindTexture(GL_TEXTURE_2D, m_textureID);
 	}
 }

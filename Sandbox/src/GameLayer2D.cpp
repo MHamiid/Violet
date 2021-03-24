@@ -6,6 +6,7 @@ GameLayer2D::GameLayer2D() : Layer("2D Layer"), m_cameraController(1280.0f / 720
 
 void GameLayer2D::onAttach()
 {
+	m_LetterVTexture = Violet::Texture2D::Create("assets/textures/LetterV_RGBA.png");
 	m_transparentTexture = Violet::Texture2D::Create("assets/textures/Checkerboard_RGB.png");
 }
 
@@ -22,7 +23,7 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	m_objectPosition.x = m_objectPosition.x > m_cameraController.getRight() ? m_objectPosition.x = m_cameraController.getLeft() : m_objectPosition.x + 0.009f;
 	m_objectRotation = m_objectRotation == 360.0f ? 0.0f : m_objectRotation + 1.0f;
 
-	//Render
+	//Render m
 	Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	Violet::RenderCommand::Clear();
 
@@ -38,7 +39,8 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	//Violet::Renderer2D::DrawRotatedQuad({ 0.6f, 0.2f }, { 0.5f, 0.5f }, -m_objectRotation, {1.0f, 0.93f, 0.24f, 1.0f});
 	//Violet::Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f },  m_objectRotation, { 0.18f, 0.6f, 0.96f, 1.0f});
 	//Background
-	//Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, m_transparentTexture, 2.0f);
+	Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, m_transparentTexture, 2.0f);
+	Violet::Renderer2D::DrawQuad({  0.3f, 0.0f }, { 0.5f, 0.5f }, m_LetterVTexture);
 
 	Violet::Renderer2D::EndScene();
 }

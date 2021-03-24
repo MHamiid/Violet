@@ -75,11 +75,14 @@ namespace Violet {
 	}
 
 	//Assumes that shader is bound first
-	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix)
+	void OpenGLShader::setInt(const std::string& name, int value)
 	{
-		uploadUniformMat4(name, matrix);
+		uploadUniformInt(name, value);
 	}
-
+	void OpenGLShader::setIntArray(const std::string& name, int* values, uint32_t count)
+	{
+		uploadUniformIntArray(name, values, count);
+	}
 	void OpenGLShader::setFloat(const std::string& name, float value)
 	{
 		uploadUniformFloat(name, value);
@@ -89,11 +92,12 @@ namespace Violet {
 	{
 		uploadUniformFloat4(name, values);
 	}
-
-	void OpenGLShader::setInt(const std::string& name, int value)
+	void OpenGLShader::setMat4(const std::string& name, const glm::mat4& matrix)
 	{
-		uploadUniformInt(name, value);
+		uploadUniformMat4(name, matrix);
 	}
+
+
 
 
 	std::unordered_map<GLenum, std::string> OpenGLShader::parseShadersFile(const std::string& filePath)
@@ -221,16 +225,24 @@ namespace Violet {
 	}
 
 	//Assumes that shader is bound first
-	void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4& matrix)
+	void OpenGLShader::uploadUniformInt(const std::string& name, int value)
 	{
 		//TODO: cache uniform location
 		GLint location = glGetUniformLocation(m_programID, name.c_str());
 		//If you want to Check if the retrieved location is valid
 		if (location == -1) VIO_CORE_WARN("[OpenGL Shader] Uniform {0} Not Found Or Maybe Is Not Used!", name);
-		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
+		glUniform1i(location, value);
 	}
 
-	void OpenGLShader::uploadUniformFloat(const std::string& name, int value)
+	void OpenGLShader::uploadUniformIntArray(const std::string& name, int* values, uint32_t count)
+	{
+		//TODO: cache uniform location
+		GLint location = glGetUniformLocation(m_programID, name.c_str());
+		//If you want to Check if the retrieved location is valid
+		if (location == -1) VIO_CORE_WARN("[OpenGL Shader] Uniform {0} Not Found Or Maybe Is Not Used!", name);
+		glUniform1iv(location, count, values);
+	}
+	void OpenGLShader::uploadUniformFloat(const std::string& name, float value)
 	{
 		//TODO: cache uniform location
 		GLint location = glGetUniformLocation(m_programID, name.c_str());
@@ -247,14 +259,15 @@ namespace Violet {
 		if (location == -1) VIO_CORE_WARN("[OpenGL Shader] Uniform {0} Not Found Or Maybe Is Not Used!", name);
 		glUniform4f(location, values.x, values.y, values.z, values.a);
 	}
-
-	void OpenGLShader::uploadUniformInt(const std::string& name, int value)
+	void OpenGLShader::uploadUniformMat4(const std::string& name, const glm::mat4& matrix)
 	{
 		//TODO: cache uniform location
 		GLint location = glGetUniformLocation(m_programID, name.c_str());
 		//If you want to Check if the retrieved location is valid
 		if (location == -1) VIO_CORE_WARN("[OpenGL Shader] Uniform {0} Not Found Or Maybe Is Not Used!", name);
-		glUniform1i(location, value);
+		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
+
+
 
 }

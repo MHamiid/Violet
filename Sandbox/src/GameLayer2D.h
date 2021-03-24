@@ -16,5 +16,6 @@ private:
 	glm::vec3 m_objectPosition{ 0.0f, 0.0f, 0.0f };
 	glm::vec4 m_objectColor = { 1.0f, 0.7f, 0.6f, 1.0f };
 	float m_objectRotation = 0.0f;
+	Violet::Ref<Violet::Texture2D> m_LetterVTexture;
 	Violet::Ref<Violet::Texture2D> m_transparentTexture;
 };

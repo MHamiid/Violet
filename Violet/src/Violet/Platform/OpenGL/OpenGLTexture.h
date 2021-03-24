@@ -16,6 +16,8 @@ namespace Violet {
 		virtual void setData(void* data, uint32_t size) override;
 
 		virtual void bind(uint32_t textureSlot = 0) const override;
+
+		virtual bool operator==(const Texture& other) const override { return m_textureID == ((OpenGLTexture2D&)other).m_textureID; }
 	private:
 		std::string m_path;
 		uint32_t m_width, m_height;

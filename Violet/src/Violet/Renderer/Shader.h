@@ -1,4 +1,4 @@
-#pragma once
+	#pragma once
 #include <glm/glm.hpp>
 
 namespace Violet {
@@ -11,10 +11,11 @@ namespace Violet {
 		virtual ~Shader() = default;
 		virtual void bind() = 0;
 		virtual void unBind() = 0;
-		virtual void setMat4(const std::string& name, const glm::mat4& matrix) = 0;
+		virtual void setInt(const std::string& name, int value) = 0;
+		virtual void setIntArray(const std::string& name, int* values, uint32_t count) = 0;
 		virtual void setFloat(const std::string& name, float value) = 0;
 		virtual void setFloat4(const std::string& name, const glm::vec4& values) = 0;
-		virtual void setInt(const std::string& name, int value) = 0;
+		virtual void setMat4(const std::string& name, const glm::mat4& matrix) = 0;
 		virtual const std::string& getName() const = 0;
 	public:
 		static Ref<Shader> Create(const std::string& filePath);  //shaderName will be named after the file name in the filePath
