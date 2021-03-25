@@ -32,6 +32,8 @@ namespace Violet {
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> textureSlots;
 		uint32_t textureSlotIndex = 1;  //Points to the first free space in the textureSlots array, starts from 1, 0 = default white texture
+
+		glm::vec4 quadVertexPositions[4];   //Vec4 to match with the multiplication with the mat4 for tranformation later on
 	};
 	
 	static Renderer2DData* s_data; 
@@ -100,6 +102,11 @@ namespace Violet {
 
 		s_data->textureSlots[0] = s_data->defaultWhiteTexture;    //Set the first element to our default white texture (no texture used and only the color is taken in the shader)
 
+		//Set the positions for the initial quad where (0.0f, 0.0f) is the origin with size of (1.0f, 1.0f) going clock-wise
+		s_data->quadVertexPositions[0] = { -0.5f, -0.5f, 0.0f , 1.0f };  //Bottom_Left
+		s_data->quadVertexPositions[1] = {  0.5f, -0.5f, 0.0f , 1.0f };  //Bottom_Right
+		s_data->quadVertexPositions[2] = {  0.5f,  0.5f, 0.0f , 1.0f };  //Top_Right
+		s_data->quadVertexPositions[3] = { -0.5f,  0.5f, 0.0f , 1.0f };  //Top_Left
 	}
 
 	void Renderer2D::Shutdown()
@@ -146,45 +153,41 @@ namespace Violet {
 		s_data->quadVertexArray->bind();
 		RenderCommand::DrawIndices(s_data->quadVertexArray, s_data->indicesToBeDrawnCount);
 	}
+	/*
+		QUADS
+	*/
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		DrawQuad({ position.x, position.y, 0.0f }, size, color);
 	}
-	/*
-		QUADS
-	*/
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color)
 	{
 		/*
-		* NOTE: position points to the middle of the object.
-		* Quad vertices goes counter clock-wise.
-		* In textureIndex parameter we bind the default white texture at index 0.0f to add no effect to the color (No Texture)
+		NOTE: Position points to the middle of the object
 		*/
-		const float textureIndex = 0.0f; //Default white texture
-		const float textureSizeFactor = 1.0f; //Has no effect cuz we are not using a texture, only the default 1 pixel white texture, it is set to avoid warnings of unused uniform
+		glm::mat4 transfromationMatrix = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-		//Bottom-Left
-		AddVertexToBuffer({ position.x - (size.x / 2.0f), position.y - (size.y / 2.0f), position.z }, color,  glm::vec2(0.0f, 0.0f), textureIndex, textureSizeFactor);
-		//Bottom-Right
-		AddVertexToBuffer({ position.x + (size.x / 2.0f), position.y - (size.y / 2.0f), position.z }, color, glm::vec2(1.0f, 0.0f), textureIndex, textureSizeFactor);
-		//Top-Right
-		AddVertexToBuffer({ position.x + (size.x / 2.0f), position.y + (size.y / 2.0f), position.z }, color, glm::vec2(1.0f, 1.0f), textureIndex, textureSizeFactor);
-		//Top-Left
-		AddVertexToBuffer({ position.x - (size.x / 2.0f), position.y + (size.y / 2.0f), position.z }, color, glm::vec2(0.0f, 1.0f), textureIndex, textureSizeFactor);
+		DrawQuad(transfromationMatrix, color);
+	}
+
+	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const glm::vec4& color)
+	{
+		/*
+		* Quad vertices goes counter clock-wise.
+		* In textureIndex parameter we bind the default white texture at index 0.0f to add no effect to the color (No Texture).
+		*/
+		constexpr size_t QuadVertexCount = 4;
+		constexpr glm::vec2 TextureCoordinates[4] = { {0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+		const float TextureIndex = 0.0f; //Default white texture
+		const float TextureSizeFactor = 1.0f; //Has no effect cuz we are not using a texture, only the default 1 pixel white texture, it is set to avoid warnings of unused uniform
+
+
+		for (size_t i = 0; i < QuadVertexCount; i++) {
+			AddVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i], color, TextureCoordinates[i], TextureIndex, TextureSizeFactor);
+		}
 
 		s_data->indicesToBeDrawnCount += 6;   //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
-
-		//s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
-		//s_data->textureShader->setFloat4("u_color", color);
-		//s_data->textureShader->setFloat("u_sizeFactor", 1.0f);  //Has no effect cuz we are not using a texture, only the default 1 pixel white texture, it is set to avoid warnings of unused uniform
-		//s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
-		//	glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }));
-
-		////Bind white default texture to add no effect to the color (No Texture)
-		//s_data->defaultWhiteTexture->bind(0);
-
-		//s_data->quadVertexArray->bind();
-		//RenderCommand::DrawIndices(s_data->quadVertexArray);
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
@@ -195,15 +198,29 @@ namespace Violet {
 	void Renderer2D::DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
 	{
 		/*
-		* NOTE: Set the color to white to make no effect on the texture (No Color)
+		NOTE: Position points to the middle of the object
 		*/
-		
+		glm::mat4 transfromationMatrix = glm::translate(glm::mat4(1.0f), position) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+
+		DrawQuad(transfromationMatrix, texture, textureSizeFactor, tintColor);
+
+	}
+	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
+	{
+		/*
+		* Quad vertices goes counter clock-wise.
+		* Set the color to white to make no effect on the texture (No Color).
+		*/
+		constexpr size_t QuadVertexCount = 4;
+		constexpr glm::vec2 TextureCoordinates[4] = { {0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
+
 		float textureIndex = 0.0f;    //Is sent to the shader to choose which texture slot to sample from
-		
+
 		//Search if the texture already exists in textureSlots array
 		for (uint32_t i = 1; i < s_data->textureSlotIndex; i++) {
-		
-			if(*(s_data->textureSlots[i]) == *texture)  //If texture already in the array
+
+			if (*(s_data->textureSlots[i]) == *texture)  //If texture already in the array
 			{
 				textureIndex = (float)i;
 				break;
@@ -216,83 +233,53 @@ namespace Violet {
 			textureIndex = float(s_data->textureSlotIndex);
 			s_data->textureSlots[s_data->textureSlotIndex] = texture;
 			s_data->textureSlotIndex++;
-		
+
 		}
 
-		/*
-		* NOTE: position points to the middle of the object.
-		* Quad vertices goes counter clock-wise.
-		*/
-		//Bottom-Left
-		AddVertexToBuffer({ position.x - (size.x / 2.0f), position.y - (size.y / 2.0f), position.z }, tintColor, glm::vec2(0.0f, 0.0f), textureIndex, textureSizeFactor);
-		//Bottom-Right
-		AddVertexToBuffer({ position.x + (size.x / 2.0f), position.y - (size.y / 2.0f), position.z }, tintColor, glm::vec2(1.0f, 0.0f), textureIndex, textureSizeFactor);
-		//Top-Right
-		AddVertexToBuffer({ position.x + (size.x / 2.0f), position.y + (size.y / 2.0f), position.z }, tintColor, glm::vec2(1.0f, 1.0f), textureIndex, textureSizeFactor);
-		//Top-Left
-		AddVertexToBuffer({ position.x - (size.x / 2.0f), position.y + (size.y / 2.0f), position.z }, tintColor, glm::vec2(0.0f, 1.0f), textureIndex, textureSizeFactor);
+		for (size_t i = 0; i < QuadVertexCount; i++) {
+			AddVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i], tintColor, TextureCoordinates[i], textureIndex, textureSizeFactor);
+		}
 
 		s_data->indicesToBeDrawnCount += 6;   //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
-
-		//s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
-		//s_data->textureShader->setFloat4("u_color", tintColor);
-		//s_data->textureShader->setFloat("u_sizeFactor", sizeFactor);
-		//s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
-		//	glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }));
-
-		//texture->bind(0);
-
-		//s_data->quadVertexArray->bind();
-		//RenderCommand::DrawIndices(s_data->quadVertexArray);
 	}
 	/*
-	//	ROTATED QUADS
-	//*/
-	//void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
-	//{
-	//	DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotationZ, color);
-	//}
+		ROTATED QUADS
+	*/
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotationZ, color);
+	}
 
-	//void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
-	//{
-	//	s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
-	//	s_data->textureShader->setFloat4("u_color", color);
-	//	s_data->textureShader->setFloat("u_sizeFactor", 1.0f);  //Has no effect cuz we are not using a texture, only the default 1 pixel white texture, it is set to avoid warnings of unused uniform
-	//	s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
-	//												glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), glm::vec3(0, 0, 1)) *
-	//												glm::scale(glm::mat4(1.0f), {size.x, size.y, 1.0f}));
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const glm::vec4& color)
+	{
+		/*
+		NOTE: Position points to the middle of the object
+		*/
+		glm::mat4 transfromationMatrix = glm::translate(glm::mat4(1.0f), position) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), { 0.0f, 0.0f, 1.0f }) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
-	//	//Bind white default texture to add no effect to the color (No Texture)
-	//	s_data->defaultWhiteTexture->bind(0);
+		DrawQuad(transfromationMatrix, color);
+	}
 
-	//	s_data->quadVertexArray->bind();
-	//	RenderCommand::DrawIndices(s_data->quadVertexArray);
-	//}
+	void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
+	{
+		DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotationZ, texture, textureSizeFactor, tintColor);
+	}
 
-	//void Renderer2D::DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float sizeFactor, const glm::vec4& tintColor)
-	//{
-	//	DrawRotatedQuad({ position.x, position.y, 0.0f }, size, rotationZ, texture, sizeFactor, tintColor);
-	//}
+	void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
+	{
+		/*
+		NOTE: Position points to the middle of the object
+		*/
+		glm::mat4 transfromationMatrix = glm::translate(glm::mat4(1.0f), position) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), { 0.0f, 0.0f, 1.0f }) *
+			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
+	
+		DrawQuad(transfromationMatrix, texture, textureSizeFactor, tintColor);
+	}
 
-	//void Renderer2D::DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float sizeFactor, const glm::vec4& tintColor)
-	//{
-	//	/*
-	//	* NOTE: Set the color to white to make no effect on the texture (No Color)
-	//	*/
-	//	s_data->textureShader->bind(); //Make sure that the shader is bound, TODO: We may keep track of the current bound shader and in bind() function we ignore the call if the shader is already bound.
-	//	s_data->textureShader->setFloat4("u_color", tintColor);
-	//	s_data->textureShader->setFloat("u_sizeFactor", sizeFactor);
-	//	s_data->textureShader->setMat4("u_transformation", glm::translate(glm::mat4(1.0f), position) *
-	//												glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), glm::vec3(0, 0, 1)) *
-	//												glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f }));
-
-	//	texture->bind(0);
-
-	//	s_data->quadVertexArray->bind();
-	//	RenderCommand::DrawIndices(s_data->quadVertexArray);
-	//}
-
-	void Renderer2D::AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color, glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor)
+	void Renderer2D::AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color,const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor)
 	{
 		//quadVertexBufferDataPtr points to the first empty space in the buffer
 		s_data->quadVertexBufferDataPtr->position = position;

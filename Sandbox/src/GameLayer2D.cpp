@@ -40,7 +40,8 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	//Violet::Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f },  m_objectRotation, { 0.18f, 0.6f, 0.96f, 1.0f});
 	//Background
 	Violet::Renderer2D::DrawQuad({ 0.0f,  0.0f, -0.1f }, { m_cameraController.getWidth() ,  m_cameraController.getHeight() }, m_transparentTexture, 2.0f);
-	Violet::Renderer2D::DrawQuad({  0.3f, 0.0f }, { 0.5f, 0.5f }, m_LetterVTexture);
+	Violet::Renderer2D::DrawRotatedQuad({  0.5f, -0.5f }, { 0.5f, 0.5f }, -45.0f, m_LetterVTexture);
+	Violet::Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f }, { 0.5f, 0.5f }, 45.0f, { 0.18f, 0.6f, 0.96f, 1.0f });
 
 	Violet::Renderer2D::EndScene();
 }
