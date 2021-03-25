@@ -48,10 +48,20 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 
 void GameLayer2D::onImGuiRender()
 {
-	ImGui::Begin("Object Color");
+	ImGui::Begin("Render2D Scene Statistics");
+	ImGui::Text("Draw Calls: %d", Violet::Renderer2D::GetSceneStatistics().getTotalDrawCallsCount());
+	ImGui::Text("Quads: %d", Violet::Renderer2D::GetSceneStatistics().getTotalQuadCount());
+	ImGui::Text("Vertices: %d", Violet::Renderer2D::GetSceneStatistics().getTotalVertexCount());
+	ImGui::Text("Indices: % d", Violet::Renderer2D::GetSceneStatistics().getTotalIndexCount());
+	ImGui::End();
+
+	ImGui::Begin("Object Color");	
 	ImGui::ColorEdit4("Object Color", glm::value_ptr(m_objectColor));
 	ImGui::End();
 
+	ImGui::Begin("FPS");
+	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::End();
 }
 
 void GameLayer2D::onEvent(Violet::Event& e)

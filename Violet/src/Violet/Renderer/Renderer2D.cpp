@@ -17,9 +17,9 @@ namespace Violet {
 	};
 
 	struct Renderer2DData {
-		const uint32_t MaxObjectsPerDraw = 10000;   //Batch 10000 object together
-		const uint32_t MaxVerticesPerDraw = MaxObjectsPerDraw * 4;  // Times 4 cause we are drawing quads
-		const uint32_t MaxIndicesPerDraw = MaxObjectsPerDraw * 6;   // Times 6 cause 6 indices are required to draw a quad
+		static const uint32_t MaxQuadsPerBatch = 10000;   //Batch 10000 quads together
+		static const uint32_t MaxVerticesPerBatch = MaxQuadsPerBatch * 4;  // Times 4 cause we are drawing quads
+		static const uint32_t MaxIndicesPerBatch = MaxQuadsPerBatch * 6;   // Times 6 cause 6 indices are required to draw a quad
 		static const uint32_t MaxTextureSlots = 32;        //TODO: Query the gpu driver to ask for the max texture slots
 
 		Ref<VertexArray> quadVertexArray;
@@ -34,9 +34,13 @@ namespace Violet {
 		uint32_t textureSlotIndex = 1;  //Points to the first free space in the textureSlots array, starts from 1, 0 = default white texture
 
 		glm::vec4 quadVertexPositions[4];   //Vec4 to match with the multiplication with the mat4 for tranformation later on
+
+		/*STATISTICS*/
+		static Renderer2D::SceneStatistics sceneStatistics;
 	};
 	
 	static Renderer2DData* s_data; 
+	Renderer2D::SceneStatistics Renderer2DData::sceneStatistics = Renderer2D::SceneStatistics(); //Intialize static member
 
 	void Renderer2D::Init()
 	{
@@ -44,7 +48,7 @@ namespace Violet {
 
 		s_data->quadVertexArray = VertexArray::Create();
 
-		Ref<VertexBuffer> quadVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerDraw * sizeof(QuadVertex));
+		Ref<VertexBuffer> quadVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(QuadVertex));
 
 		quadVertexBuffer->setLayout({ {VertexAttributeDataType::Float3, "Position"},
 									{VertexAttributeDataType::Float4, "Color"},
@@ -55,17 +59,17 @@ namespace Violet {
 		s_data->quadVertexArray->addVertexBufferAndLinkLayout(quadVertexBuffer);
 
 		//Allocate enough storage for vertices
-		s_data->quadVertexBufferData = new QuadVertex[s_data->MaxVerticesPerDraw];
+		s_data->quadVertexBufferData = new QuadVertex[s_data->MaxVerticesPerBatch];
 
 		/*
 		*NOTE: Use ref pointer instead and send it as a parameter to IndexBuffer::Create if we muliple threads are used to avoid deleting
 		* quadIndices while it's being handled in IndexBuffer::Create on another thread
 		*/
-		uint32_t* quadIndices = new uint32_t[s_data->MaxIndicesPerDraw];
+		uint32_t* quadIndices = new uint32_t[s_data->MaxIndicesPerBatch];
 
 		uint32_t offset = 0;
 		//Set data into quadIndices buffer
-		for (uint32_t i = 0; i < s_data->MaxIndicesPerDraw; i+=6)  //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
+		for (uint32_t i = 0; i < s_data->MaxIndicesPerBatch; i+=6)  //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
 		{  
 			//First triangle in the quad
 			quadIndices[i + 0] = offset + 0;
@@ -80,7 +84,7 @@ namespace Violet {
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> quadIndexBuffer = IndexBuffer::Create(quadIndices, s_data->MaxIndicesPerDraw);
+		Ref<IndexBuffer> quadIndexBuffer = IndexBuffer::Create(quadIndices, s_data->MaxIndicesPerBatch);
 		s_data->quadVertexArray->setIndexBuffer(quadIndexBuffer);
 		delete[] quadIndices;
 
@@ -121,11 +125,12 @@ namespace Violet {
 		s_data->textureShader->bind();
 		s_data->textureShader->setMat4("u_viewProjection", camera.getViewProjectionMatrix()); //Set the uniform
 
-		/*Reset Scene*/
-		s_data->indicesToBeDrawnCount = 0;
-		s_data->quadVertexBufferDataPtr = s_data->quadVertexBufferData;  //Let the pointer point to the begining of the buffer
+		/*Reset Scene Statistics*/
+		s_data->sceneStatistics.drawCallsCount = 0;
+		s_data->sceneStatistics.quadCount = 0;
 
-		s_data->textureSlotIndex = 1;
+		/*Reset Scene*/
+		StartNewBatch();
 	}
 
 	void Renderer2D::EndScene()
@@ -152,6 +157,10 @@ namespace Violet {
 
 		s_data->quadVertexArray->bind();
 		RenderCommand::DrawIndices(s_data->quadVertexArray, s_data->indicesToBeDrawnCount);
+
+		/*STATISTICS*/
+		//Keep track of draw calls count for scene statistics
+		s_data->sceneStatistics.drawCallsCount++;
 	}
 	/*
 		QUADS
@@ -171,12 +180,20 @@ namespace Violet {
 		DrawQuad(transfromationMatrix, color);
 	}
 
+	//Main DrawQuad function for colored quads
 	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const glm::vec4& color)
 	{
 		/*
 		* Quad vertices goes counter clock-wise.
 		* In textureIndex parameter we bind the default white texture at index 0.0f to add no effect to the color (No Texture).
 		*/
+
+		//Check if the batch buffer is full
+		if (IsBatchBufferFull()) {
+			EndScene();
+			StartNewBatch();
+		}
+
 		constexpr size_t QuadVertexCount = 4;
 		constexpr glm::vec2 TextureCoordinates[4] = { {0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 		const float TextureIndex = 0.0f; //Default white texture
@@ -188,6 +205,10 @@ namespace Violet {
 		}
 
 		s_data->indicesToBeDrawnCount += 6;   //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
+
+		/*STATISTICS*/
+		//Keep track of quad count for scene statistics
+		s_data->sceneStatistics.quadCount++;
 	}
 
 	void Renderer2D::DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
@@ -206,12 +227,20 @@ namespace Violet {
 		DrawQuad(transfromationMatrix, texture, textureSizeFactor, tintColor);
 
 	}
+	//Main DrawQuad function for textured quads
 	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
 	{
 		/*
 		* Quad vertices goes counter clock-wise.
 		* Set the color to white to make no effect on the texture (No Color).
 		*/
+
+		//Check if the batch buffer is full
+		if (IsBatchBufferFull()) {
+			EndScene();
+			StartNewBatch();
+		}
+
 		constexpr size_t QuadVertexCount = 4;
 		constexpr glm::vec2 TextureCoordinates[4] = { {0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
@@ -241,6 +270,10 @@ namespace Violet {
 		}
 
 		s_data->indicesToBeDrawnCount += 6;   //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
+		
+		/*STATISTICS*/
+		//Keep track of quad count for scene statistics
+		s_data->sceneStatistics.quadCount++;
 	}
 	/*
 		ROTATED QUADS
@@ -279,6 +312,27 @@ namespace Violet {
 		DrawQuad(transfromationMatrix, texture, textureSizeFactor, tintColor);
 	}
 
+
+
+	void Renderer2D::StartNewBatch()
+	{
+		s_data->indicesToBeDrawnCount = 0;
+		s_data->quadVertexBufferDataPtr = s_data->quadVertexBufferData;  //Let the pointer point to the begining of the buffer
+
+		s_data->textureSlotIndex = 1;
+	}
+
+	bool Renderer2D::IsBatchBufferFull()
+	{
+		/*
+		* Returns true if the buffer is full
+		*/
+		if (s_data->indicesToBeDrawnCount >= Renderer2DData::MaxIndicesPerBatch) {
+			return true;
+		}
+		return false;
+	}
+
 	void Renderer2D::AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color,const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor)
 	{
 		//quadVertexBufferDataPtr points to the first empty space in the buffer
@@ -290,5 +344,11 @@ namespace Violet {
 		s_data->quadVertexBufferDataPtr++; //Increment pointer to the next vertex
 	}
 
-
+	/*
+	* Scene Statistics
+	*/
+	Renderer2D::SceneStatistics Renderer2D::GetSceneStatistics()
+	{
+		return Renderer2DData::sceneStatistics;
+	}
 }
