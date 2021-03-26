@@ -9,6 +9,7 @@ namespace Violet {
 	class VIOLET_API Renderer {
 	public:
 		static void Init();
+		static void Shutdown();
 		static void OnWindowResize(uint32_t width, uint32_t height);
 		static void BeginScene(OrthographicCamera& camera); //TODO
 		static void EndScene(); //TODO

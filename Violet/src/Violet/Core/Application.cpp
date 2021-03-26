@@ -22,7 +22,7 @@ namespace Violet {
 	}
 	Application::~Application()
 	{
-	
+		Renderer::Shutdown();
 	}
 	void Application::onEvent(Event& event) {
 

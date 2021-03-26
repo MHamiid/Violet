@@ -28,7 +28,7 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	Violet::RenderCommand::Clear();
 
-	//TODO: Should call Renderer2D::Shutdown() in Renderer's Shutdown()-> "To be made function". 
+
 	Violet::Renderer2D::BeginScene(m_cameraController.getCamera());
 	
 	Violet::Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);

@@ -122,7 +122,7 @@ namespace Violet {
 	void Renderer2D::Shutdown()
 	{
 		delete [] s_data->quadVertexBufferData;
-		//Free the memory and let vertex array free gpu memory
+		//Free the memory and let VertexArray's destructor free gpu memory and other cleanups
 		delete s_data;
 	}
 
