@@ -8,10 +8,10 @@ namespace Violet {
 		OrthographicCamera(float left, float right, float bottom, float top);
 		void setProjection(float left, float right, float bottom, float top);
 
-		void setPosition(const glm::vec3& position) { m_position = position; calculateViewMatrix(); }
+		void setPosition(const glm::vec3& position) { if (m_position == position) return; m_position = position; calculateViewMatrix(); }
 		const glm::vec3& getPosition() { return m_position; }
 
-		void setRotationZ(float rotationZ) { m_rotationZ = rotationZ; calculateViewMatrix(); }
+		void setRotationZ(float rotationZ) { if (m_rotationZ == rotationZ) return; m_rotationZ = rotationZ; calculateViewMatrix(); }
 		float getRotationZ() { return m_rotationZ; }
 		
 		
