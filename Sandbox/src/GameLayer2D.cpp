@@ -24,7 +24,7 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	m_objectPosition.x = m_objectPosition.x > m_cameraController.getRight() ? m_objectPosition.x = m_cameraController.getLeft() : m_objectPosition.x + (0.3f * deltaTime);
 	m_objectRotation = m_objectRotation == 360.0f ? 0.0f : m_objectRotation+ (30.0f * deltaTime);
 
-	//Render m
+	//Render
 	Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	Violet::RenderCommand::Clear();
 
