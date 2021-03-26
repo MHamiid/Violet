@@ -22,6 +22,7 @@ namespace Violet {
 		virtual void drawIndices(const Ref<VertexArray>& vertexArray, uint32_t numberOfIndicesToDraw) = 0;
 	public:
 		static API getAPI() { return s_GraphicsAPI; }
+		static Scoped<GraphicsAPI> Create();
 	private:
 		static API s_GraphicsAPI;  //What type of api is set to use
 	};

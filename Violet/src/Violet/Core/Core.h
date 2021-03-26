@@ -25,11 +25,15 @@
 //Debug Assertion
 #ifdef VIO_ENABLE_ASSERTS
 
+#define VIO_BREAK(x) {__debugbreak();}   //Creating two BREAK macros for the same functionality for consistency with the rest of the macros
+#define VIO_CORE_BREAK(x) {__debugbreak();}
 #define VIO_ASSERT(x,...) {if(!(x)){ VIO_ERROR("Assertion Failed: {0}" , __VA_ARGS__); __debugbreak();}}
 #define VIO_CORE_ASSERT(x,...) {if(!(x)){ VIO_CORE_ERROR("Assertion Failed: {0}" , __VA_ARGS__); __debugbreak();}}
 
 
 #else
+#define VIO_BREAK(x)
+#define VIO_CORE_BREAK(x)
 #define VIO_ASSERT(x,...)
 #define VIO_CORE_ASSERT(x,...)
 

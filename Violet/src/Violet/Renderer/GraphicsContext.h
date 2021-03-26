@@ -10,6 +10,8 @@ namespace Violet {
 		virtual ~GraphicsContext() = default;
 		virtual void init() = 0;
 		virtual void swapBuffers() = 0;
+
+		static Scoped<GraphicsContext> Create(void* window);
 	};
 
 

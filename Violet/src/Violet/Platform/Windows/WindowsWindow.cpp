@@ -3,7 +3,7 @@
 #include "Violet/Events/ApplicationEvent.h"
 #include "Violet/Events/KeyEvent.h"
 #include "Violet/Events/MouseEvent.h"
-#include "Violet/Platform/OpenGL/OpenGLContext.h"
+#include "Violet/Renderer/GraphicsContext.h"
 namespace Violet {
 	
 	static bool s_GLFWInitialized = false;
@@ -63,7 +63,7 @@ namespace Violet {
 		m_window = glfwCreateWindow((int)m_properties.m_width, (int)m_properties.m_height, m_properties.m_title.c_str(), nullptr, nullptr);
 		
 		//Setting up Graphics context for the window
-		m_context = CreateScope<OpenGLContext>(m_window);
+		m_context = GraphicsContext::Create(m_window);
 		m_context->init();
 
 		glfwSetWindowUserPointer(m_window, &m_properties); //Data to pass to Event callbacks.

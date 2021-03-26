@@ -175,6 +175,7 @@
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Violet\Renderer\GraphicsContext.cpp" />
     <ClCompile Include="src\Violet\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
