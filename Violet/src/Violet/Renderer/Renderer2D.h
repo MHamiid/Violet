@@ -57,6 +57,7 @@ namespace Violet {
 	private:
 		static void StartNewBatch();
 		static bool IsBatchBufferFull();
+		static bool IsTextureSlotsFull();
 		static void AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor);
 
 	};

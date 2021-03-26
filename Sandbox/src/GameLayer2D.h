@@ -18,4 +18,5 @@ private:
 	float m_objectRotation = 0.0f;
 	Violet::Ref<Violet::Texture2D> m_LetterVTexture;
 	Violet::Ref<Violet::Texture2D> m_transparentTexture;
+	Violet::Ref<Violet::Texture2D> m_grassTexture;
 };

@@ -20,7 +20,10 @@ namespace Violet {
 		static const uint32_t MaxQuadsPerBatch = 10000;   //Batch 10000 quads together
 		static const uint32_t MaxVerticesPerBatch = MaxQuadsPerBatch * 4;  // Times 4 cause we are drawing quads
 		static const uint32_t MaxIndicesPerBatch = MaxQuadsPerBatch * 6;   // Times 6 cause 6 indices are required to draw a quad
-		static const uint32_t MaxTextureSlots = 32;        //TODO: Query the gpu driver to ask for the max texture slots
+		static const uint32_t MaxTextureSlots = 32;        //NOTE: Min value is 2, cause default white texture occupies the first slot,
+														   //Setting MaxTextureSlots to 1 means we can't use any texture other than the default white texture,
+														   //So that assertion is required in Init() that MaxTextureSlots >= 2
+														   //TODO: Query the gpu driver to ask for the max texture slots
 
 		Ref<VertexArray> quadVertexArray;
 		Ref<Shader> textureShader;
@@ -46,15 +49,18 @@ namespace Violet {
 	{
 		s_data = new Renderer2DData();
 
+		//Assert There is atleast one slot texture can be used other than the default white texture
+		VIO_CORE_ASSERT(Renderer2DData::MaxTextureSlots >= 2, "[Renderer2D] No Available Texture Slot");
+
 		s_data->quadVertexArray = VertexArray::Create();
 
 		Ref<VertexBuffer> quadVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(QuadVertex));
 
 		quadVertexBuffer->setLayout({ {VertexAttributeDataType::Float3, "Position"},
-									{VertexAttributeDataType::Float4, "Color"},
-									{VertexAttributeDataType::Float2, "TextureCoordinates"},
-									{VertexAttributeDataType::Float, "TextureIndex"},
-									{VertexAttributeDataType::Float, "TextureSizeFactor"} });
+									  {VertexAttributeDataType::Float4, "Color"},
+									  {VertexAttributeDataType::Float2, "TextureCoordinates"},
+									  {VertexAttributeDataType::Float, "TextureIndex"},
+									  {VertexAttributeDataType::Float, "TextureSizeFactor"} });
 
 		s_data->quadVertexArray->addVertexBufferAndLinkLayout(quadVertexBuffer);
 
@@ -258,7 +264,10 @@ namespace Violet {
 
 		if (textureIndex == 0.0f) //If texture not found in textureSlots array
 		{
-			//TODO: If textureSlotIndex exceeded the MaxTextureSlots end and flush the scene
+			if (IsTextureSlotsFull()) {
+				EndScene();
+				StartNewBatch();
+			}
 			textureIndex = float(s_data->textureSlotIndex);
 			s_data->textureSlots[s_data->textureSlotIndex] = texture;
 			s_data->textureSlotIndex++;
@@ -289,7 +298,7 @@ namespace Violet {
 		NOTE: Position points to the middle of the object
 		*/
 		glm::mat4 transfromationMatrix = glm::translate(glm::mat4(1.0f), position) *
-			glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), { 0.0f, 0.0f, 1.0f }) *
+			glm::rotate(glm::mat4(1.0f), glm::radians(rotationZ), { 0.0f, 0.0f, 1.0f }) *   //TODO: Don't convert to radians if rotationZ already passed in radians (extra conversion processing)
 			glm::scale(glm::mat4(1.0f), { size.x, size.y, 1.0f });
 
 		DrawQuad(transfromationMatrix, color);
@@ -319,7 +328,7 @@ namespace Violet {
 		s_data->indicesToBeDrawnCount = 0;
 		s_data->quadVertexBufferDataPtr = s_data->quadVertexBufferData;  //Let the pointer point to the begining of the buffer
 
-		s_data->textureSlotIndex = 1;
+		s_data->textureSlotIndex = 1;   //Resets to 1, cause index 0 is occupied by the default white texture
 	}
 
 	bool Renderer2D::IsBatchBufferFull()
@@ -328,6 +337,17 @@ namespace Violet {
 		* Returns true if the buffer is full
 		*/
 		if (s_data->indicesToBeDrawnCount >= Renderer2DData::MaxIndicesPerBatch) {
+			return true;
+		}
+		return false;
+	}
+
+	bool Renderer2D::IsTextureSlotsFull()
+	{
+		/*
+		* Returns true if the textureSlots array reached Renderer2D::MaxTextureSlots
+		*/
+		if (s_data->textureSlotIndex >= Renderer2DData::MaxTextureSlots) {
 			return true;
 		}
 		return false;
