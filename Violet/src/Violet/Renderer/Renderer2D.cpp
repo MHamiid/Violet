@@ -141,6 +141,11 @@ namespace Violet {
 
 	void Renderer2D::EndScene()
 	{
+		//If there is nothing to render return from function
+		if (s_data->indicesToBeDrawnCount == 0) {
+			return;
+		}
+
 		uint32_t dataSize = (uint32_t)((uint8_t*)s_data->quadVertexBufferDataPtr - (uint8_t*)s_data->quadVertexBufferData);  //NOTE: Converted to uint8_t (1 Byte) to get the size and not the number of vertcies
 		//Upload vertex buffer to GPU
 		s_data->quadVertexArray->getVertexBuffers()[0]->setData(s_data->quadVertexBufferData, dataSize);
