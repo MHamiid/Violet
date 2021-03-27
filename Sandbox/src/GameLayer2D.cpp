@@ -9,6 +9,13 @@ void GameLayer2D::onAttach()
 	m_LetterVTexture = Violet::Texture2D::Create("assets/textures/LetterV_RGBA.png");
 	m_transparentTexture = Violet::Texture2D::Create("assets/textures/Checkerboard_RGB.png");
 	m_grassTexture = Violet::Texture2D::Create("assets/textures/WildGrass_1024x1024.png");
+
+	//Create specs for the frame buffer
+	Violet::FrameBufferSpecification specs;
+	specs.width = 1280; //Window width
+	specs.height = 720; //Window height
+	
+	m_frameBuffer = Violet::FrameBuffer::Create(specs);
 }
 
 void GameLayer2D::onDetach()
@@ -25,6 +32,15 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	m_objectRotation = m_objectRotation == 360.0f ? 0.0f : m_objectRotation+ (30.0f * deltaTime);
 
 	//Render
+
+	//Clears the window screen
+	Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+	Violet::RenderCommand::Clear();
+
+	//Render FrameBuffer
+	m_frameBuffer->bind();
+
+	//Clears the frame buffer screen
 	Violet::RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 	Violet::RenderCommand::Clear();
 
@@ -45,6 +61,9 @@ void GameLayer2D::onUpdate(Violet::DeltaTime& deltaTime)
 	Violet::Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f }, { 0.5f, 0.5f }, 45.0f, m_grassTexture);
 
 	Violet::Renderer2D::EndScene();
+
+	m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
+
 }
 
 void GameLayer2D::onImGuiRender()
@@ -62,6 +81,10 @@ void GameLayer2D::onImGuiRender()
 
 	ImGui::Begin("FPS");
 	ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+	ImGui::End();
+
+	ImGui::Begin("FrameBuffer");
+	ImGui::Image((void*)(m_frameBuffer->getColorAttachmentID()), ImVec2(320.0f, 180.0f));
 	ImGui::End();
 }
 

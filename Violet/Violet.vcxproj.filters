@@ -148,6 +148,8 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\Renderer2D.h" />
+    <ClInclude Include="src\Violet\Renderer\FrameBuffer.h" />
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -224,5 +226,7 @@
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\Renderer2D.cpp" />
     <ClCompile Include="src\Violet\Renderer\GraphicsContext.cpp" />
+    <ClCompile Include="src\Violet\Renderer\FrameBuffer.cpp" />
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>

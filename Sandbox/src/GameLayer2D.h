@@ -19,4 +19,5 @@ private:
 	Violet::Ref<Violet::Texture2D> m_LetterVTexture;
 	Violet::Ref<Violet::Texture2D> m_transparentTexture;
 	Violet::Ref<Violet::Texture2D> m_grassTexture;
+	Violet::Ref<Violet::FrameBuffer> m_frameBuffer;
 };
