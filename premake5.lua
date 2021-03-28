@@ -1,5 +1,5 @@
 workspace "Violet"
-	architecture "x64"
+	architecture "x86_64"
 	startproject "Violet-Editor"
 
 	configurations{
