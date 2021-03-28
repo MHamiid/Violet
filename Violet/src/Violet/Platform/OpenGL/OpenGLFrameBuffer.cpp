@@ -20,6 +20,8 @@ namespace Violet {
 	void OpenGLFrameBuffer::bind() const
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID);
+		//Update the viewport incase the FrameBuffer size has changed
+		glViewport(0, 0, m_specification.width, m_specification.height);
 	}
 
 	void OpenGLFrameBuffer::unBind() const
@@ -27,8 +29,29 @@ namespace Violet {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+	void OpenGLFrameBuffer::resize(uint32_t width, uint32_t height)
+	{
+		//Update the new size specification
+		m_specification.width = width;
+		m_specification.height = height;
+
+		//Invalidate the specification
+		invalidate();
+	}
+
 	void OpenGLFrameBuffer::invalidate()
 	{
+
+		if (m_frameBufferID) //If frame buffer is set
+		{ 
+			glDeleteFramebuffers(1, &m_frameBufferID);
+			//Delete attachments
+			glDeleteTextures(1, &m_colorAttachmentID);
+			glDeleteTextures(1, &m_depthAttachmentID);
+		}
+
+
+
 		//glCreateFramebuffers(1, &m_frameBufferID);  //For OpenGL 4.5
 		glGenFramebuffers(1, &m_frameBufferID);
 		glBindFramebuffer(GL_FRAMEBUFFER, m_frameBufferID);

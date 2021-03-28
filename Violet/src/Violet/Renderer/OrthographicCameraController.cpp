@@ -53,6 +53,12 @@ namespace Violet {
 		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_FUNCTION(OrthographicCameraController::onWindowResized));
 	}
 
+	void OrthographicCameraController::onResize(uint32_t width, uint32_t height)
+	{
+		m_aspectRatio = width / height;
+		m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+	}
+
 	bool OrthographicCameraController::onMouseScrolled(MouseScrolledEvent& e)
 	{	
 		m_zoomLevel -= e.getYOffset() * 0.25f;
@@ -67,8 +73,7 @@ namespace Violet {
 
 	bool OrthographicCameraController::onWindowResized(WindowResizeEvent& e)
 	{
-		m_aspectRatio = (float)e.getWidth() / (float)e.getHeight();
-		m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);
+		onResize((float)e.getWidth(), (float)e.getHeight());
 		return false;
 	}
 

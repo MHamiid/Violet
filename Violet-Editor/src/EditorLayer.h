@@ -22,6 +22,8 @@ namespace Violet {
 		Ref<Texture2D> m_transparentTexture;
 		Ref<Texture2D> m_grassTexture;
 		Ref<FrameBuffer> m_frameBuffer;
+
+		glm::vec2 m_viewPortSize = { 0.0f, 0.0f };
 	};
 
 }
