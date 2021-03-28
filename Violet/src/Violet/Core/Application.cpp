@@ -24,6 +24,11 @@ namespace Violet {
 	{
 		Renderer::Shutdown();
 	}
+	void Application::close()
+	{
+		//Stop the application's main run loop
+		m_applicationRunning = false;
+	}
 	void Application::onEvent(Event& event) {
 
 		//VIO_DEBUG(event.getName());

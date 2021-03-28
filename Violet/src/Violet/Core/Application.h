@@ -12,6 +12,7 @@ namespace Violet {
 	public:
 		Application(const std::string& applicationName = "Violet Application");
 		virtual ~Application();
+		void close();
 		void onEvent(Event& event);
 		bool onWindowClose(WindowCloseEvent& event);
 		bool onWindowResize(WindowResizeEvent& event);
