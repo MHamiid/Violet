@@ -84,7 +84,7 @@ void GameLayer2D::onImGuiRender()
 	ImGui::End();
 
 	ImGui::Begin("FrameBuffer");
-	ImGui::Image((void*)(m_frameBuffer->getColorAttachmentID()), ImVec2(320.0f, 180.0f));
+	ImGui::Image((void*)(m_frameBuffer->getColorAttachmentID()), ImVec2(320.0f, 180.0f), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 	ImGui::End();
 }
 

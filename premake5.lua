@@ -1,6 +1,6 @@
 workspace "Violet"
 	architecture "x64"
-	startproject "Sandbox"
+	startproject "Violet-Editor"
 
 	configurations{
 	
@@ -150,6 +150,64 @@ project "Sandbox"
 		defines "VIO_DISTRIBUTION_MODE"
 		runtime "Release"
 		optimize "on"
+
+
+
+project "Violet-Editor"
+	location "Violet-Editor"
+	kind "ConsoleApp"
+	language "C++"
+	cppdialect "c++17"
+	staticruntime "on"
+
+	targetdir("bin/" .. outputDir .. "/%{prj.name}")
+	objdir("bin-intermediates/" .. outputDir .. "/%{prj.name}")
+
+	files{
+	
+		"%{prj.name}/src/**.h",
+		"%{prj.name}/src/**.cpp"
+	}
+
+	includedirs{
+		
+		"Violet/vendor/spdlog/include",
+		"Violet/src",
+		"Violet/vendor/glm",		--Include dir for glm
+		"Violet/vendor/imgui"		--Include dir for ImGui
+
+	}
+
+	links{
+
+		"Violet"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+		defines{
+
+			"VIO_PLATFORM_WINDOWS",
+			--"VIO_SHARED_LIB" -When Violet build is set to "SharedLib"
+		}
+
+
+	filter "configurations:Debug"
+		defines "VIO_DEBUG_MODE"
+		runtime "Debug"
+		symbols "On"
+
+	filter "configurations:Release"
+		defines "VIO_RELEASE_MODE"
+		runtime "Release"
+		optimize "on"
+
+	filter "configurations:Distribution"
+		defines "VIO_DISTRIBUTION_MODE"
+		runtime "Release"
+		optimize "on"
+
 
 
 

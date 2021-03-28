@@ -96,6 +96,9 @@
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLContext.h">
       <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLFrameBuffer.h">
+      <Filter>src\Violet\Platform\OpenGL</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.h">
       <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
@@ -117,6 +120,9 @@
     <ClInclude Include="src\Violet\Renderer\Buffer.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\FrameBuffer.h">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Renderer\GraphicsAPI.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
@@ -135,6 +141,9 @@
     <ClInclude Include="src\Violet\Renderer\Renderer.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\Renderer2D.h">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Renderer\Shader.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
@@ -147,9 +156,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Renderer\Renderer2D.h" />
-    <ClInclude Include="src\Violet\Renderer\FrameBuffer.h" />
-    <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLFrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -176,6 +182,9 @@
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLContext.cpp">
       <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLFrameBuffer.cpp">
+      <Filter>src\Violet\Platform\OpenGL</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLRendererAPI.cpp">
       <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
@@ -197,7 +206,13 @@
     <ClCompile Include="src\Violet\Renderer\Buffer.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\FrameBuffer.cpp">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Renderer\GraphicsAPI.cpp">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\GraphicsContext.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\OrthographicCamera.cpp">
@@ -212,6 +227,9 @@
     <ClCompile Include="src\Violet\Renderer\Renderer.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\Renderer2D.cpp">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
     <ClCompile Include="src\Violet\Renderer\Shader.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
@@ -224,9 +242,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Renderer\Renderer2D.cpp" />
-    <ClCompile Include="src\Violet\Renderer\GraphicsContext.cpp" />
-    <ClCompile Include="src\Violet\Renderer\FrameBuffer.cpp" />
-    <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLFrameBuffer.cpp" />
   </ItemGroup>
 </Project>
