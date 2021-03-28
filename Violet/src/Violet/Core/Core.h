@@ -24,9 +24,9 @@
 
 //Debug Assertion
 #ifdef VIO_ENABLE_ASSERTS
-
-#define VIO_BREAK(x) {__debugbreak();}   //Creating two BREAK macros for the same functionality for consistency with the rest of the macros
-#define VIO_CORE_BREAK(x) {__debugbreak();}
+//TODO: Should detect which compiler is being used and use the correct debugbreak function
+#define VIO_BREAK __debugbreak()   //Creating two BREAK macros for the same functionality for consistency with the rest of the macros
+#define VIO_CORE_BREAK __debugbreak()
 #define VIO_ASSERT(x,...) {if(!(x)){ VIO_ERROR("Assertion Failed: {0}" , __VA_ARGS__); __debugbreak();}}
 #define VIO_CORE_ASSERT(x,...) {if(!(x)){ VIO_CORE_ERROR("Assertion Failed: {0}" , __VA_ARGS__); __debugbreak();}}
 

@@ -19,14 +19,14 @@ namespace Violet {
 		switch(s_GraphicsAPI)
 		{
 		case GraphicsAPI::API::NONE:
-			VIO_CORE_BREAK();
+			VIO_CORE_BREAK;
 			return nullptr;
 
 		case GraphicsAPI::API::OPENGL:
 			return CreateScope<OpenGLRendererAPI>();
 		}
 
-		VIO_CORE_BREAK();
+		VIO_CORE_BREAK;
 		return nullptr;
 	}
 

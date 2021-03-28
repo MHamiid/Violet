@@ -53,7 +53,7 @@ namespace Violet {
 		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_FUNCTION(OrthographicCameraController::onWindowResized));
 	}
 
-	void OrthographicCameraController::onResize(uint32_t width, uint32_t height)
+	void OrthographicCameraController::onResize(float width, float height)
 	{
 		m_aspectRatio = width / height;
 		m_camera.setProjection(-m_aspectRatio * m_zoomLevel, m_aspectRatio * m_zoomLevel, -m_zoomLevel, m_zoomLevel);

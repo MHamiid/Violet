@@ -13,7 +13,7 @@ namespace Violet {
 		void onUpdate(DeltaTime deltaTime);
 		void onEvent(Event& e);
 
-		void onResize(uint32_t width, uint32_t height);
+		void onResize(float width, float height);
 
 		OrthographicCamera& getCamera() { return m_camera; }
 		const OrthographicCamera& getCamera() const { return m_camera; } //Provide a const version of the function

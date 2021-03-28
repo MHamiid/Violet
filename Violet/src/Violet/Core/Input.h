@@ -4,9 +4,6 @@
 #include <glm/glm.hpp>
 namespace Violet {
 	
-	/// <summary>
-	/// Interface for inputs implementation 
-	/// </summary>
 	class VIOLET_API Input {
 	public:
 		static bool IsKeyPressed(Key keyCode);
@@ -16,8 +13,5 @@ namespace Violet {
 		static float GetMouseX();
 		static float GetMouseY();
 	};
-
-
-
 
 }
