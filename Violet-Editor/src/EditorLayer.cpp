@@ -27,6 +27,19 @@ namespace Violet {
 	void EditorLayer::onUpdate(DeltaTime& deltaTime)
 	{
 		//Update
+
+		//Update the frame buffer size and camera projection if the ViewPort Panel size has changed
+		FrameBufferSpecification frameBufferSpec = m_frameBuffer->getSpecification();  //Get the current frame buffer size
+		//Check if the current frame buffer size differs from the new ImGui ViewPort Panel
+		if ((m_viewPortSize.x != frameBufferSpec.width || m_viewPortSize.y != frameBufferSpec.height) && (m_viewPortSize.x > 0.0f && m_viewPortSize.y > 0.0f))   //NOTE: Check that x, y are not zero, which results in Frame Buffer Incomplete Status
+		{
+			//Update the framebuffer and the viewport in FrameBuffer.onBind function
+			m_frameBuffer->resize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
+
+			//Update the camera
+			m_cameraController.onResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
+		}
+
 		m_cameraController.onUpdate(deltaTime);
 
 		/*Animation*/
@@ -88,18 +101,11 @@ namespace Violet {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));  //Remove window padding for the viewport
 		ImGui::Begin("ViewPort");
+
 		//Get the size of the panel
 		ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
-		//VIO_TRACE("ViewPort Size: {0}, {1}", viewPortPanelSize.x, viewPortPanelSize.y);
-		if ((m_viewPortSize.x != viewPortPanelSize.x || m_viewPortSize.y != viewPortPanelSize.y) && (viewPortPanelSize.x !=0 && viewPortPanelSize.y !=0))   //NOTE: Check that x, y are not zero, which results in Frame Buffer Incomplete Status
-		{
-			//Update the framebuffer and the viewport in FrameBuffer.onBind function
-			m_frameBuffer->resize((uint32_t)viewPortPanelSize.x, (uint32_t)viewPortPanelSize.y);
-			m_viewPortSize = { viewPortPanelSize.x, viewPortPanelSize.y };  //Update the size
-
-			//Update the camera
-			m_cameraController.onResize(viewPortPanelSize.x, viewPortPanelSize.y);
-		}
+		m_viewPortSize = { viewPortPanelSize.x, viewPortPanelSize.y };  //Update the size
+		
 		ImGui::Image((void*)(m_frameBuffer->getColorAttachmentID()), ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 		ImGui::End();
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
