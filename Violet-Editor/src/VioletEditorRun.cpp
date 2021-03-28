@@ -7,9 +7,8 @@ namespace Violet {
 	class VioletEditor : public Application {
 
 	public:
-		VioletEditor() {
+		VioletEditor() : Application("Violet-Editor"){
 
-			//pushLayer(new GameLayer());
 			pushLayer(new EditorLayer());
 		}
 
@@ -17,11 +16,7 @@ namespace Violet {
 
 	Application* createApplication() {
 
-
-
 		return new VioletEditor();
-
-
 	}
 
 }

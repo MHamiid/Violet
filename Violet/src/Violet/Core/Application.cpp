@@ -8,12 +8,12 @@ namespace Violet {
 		return true;
 	}*/
 	Application* Application::s_ApplicationInstance = nullptr;
-	Application::Application()
+	Application::Application(const std::string& applicationName)
 	{	
 		VIO_CORE_ASSERT(!s_ApplicationInstance, "Application Already Created!!!");
 		s_ApplicationInstance = this; //Our single instance of application
 		
-		m_window = Window::Create(WindowProperties("Violet Engine", 1280, 720 , true , VIO_BIND_EVENT_FUNCTION(Application::onEvent)));
+		m_window = Window::Create(WindowProperties(applicationName, 1280, 720 , true , VIO_BIND_EVENT_FUNCTION(Application::onEvent)));
 		m_ImGuiLayer = new ImGuiLayer();
 		m_layerStack.pushOverlay(m_ImGuiLayer);
 		

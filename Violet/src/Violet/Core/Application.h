@@ -10,7 +10,7 @@ namespace Violet {
 	class VIOLET_API Application
 	{
 	public:
-		Application();
+		Application(const std::string& applicationName = "Violet Application");
 		virtual ~Application();
 		void onEvent(Event& event);
 		bool onWindowClose(WindowCloseEvent& event);
