@@ -160,7 +160,6 @@
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLShader.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLTexture.h" />
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h" />
-    <ClInclude Include="src\Violet\Platform\Windows\WindowsInput.h" />
     <ClInclude Include="src\Violet\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Violet\Renderer\Buffer.h" />
     <ClInclude Include="src\Violet\Renderer\FrameBuffer.h" />

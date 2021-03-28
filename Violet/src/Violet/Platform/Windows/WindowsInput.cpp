@@ -1,13 +1,16 @@
 #include "VIOPCH.h"
-#include "WindowsInput.h"
-
+#include "Violet/Core/Input.h"
 #include "Violet/Core/Application.h"
 #include <GLFW/glfw3.h>
+
+/*
+* This file should be compiled only on windows platform.
+* As that the linker would link the declarations in Input.h to the correct platform implementation.
+*/
+
 namespace Violet {
 
-	Scoped<Input> WindowsInput::s_InputInstance = CreateScope<WindowsInput>();
-
-	bool WindowsInput::isKeyPressedIMPL(Key keyCode)
+	bool Input::IsKeyPressed(const Key keyCode)
 	{
 		GLFWwindow*  glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
@@ -16,7 +19,7 @@ namespace Violet {
 		return (state == GLFW_PRESS || state == GLFW_REPEAT);
 	}
 
-	bool WindowsInput::isMouseButtonPressedIMPL(Mouse button)
+	bool Input::IsMouseButtonPressed(const Mouse button)
 	{
 		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
@@ -25,24 +28,22 @@ namespace Violet {
 		return (state == GLFW_PRESS);
 	}
 
-	std::pair<float, float> WindowsInput::getMousePositionIMPL()
+	glm::vec2 Input::GetMousePosition()
 	{
 		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 		double xPos, yPos;
 		glfwGetCursorPos(glfwWindow, &xPos, &yPos);
-		return std::pair<float, float>((float)xPos , (float)yPos);
+		return { (float)xPos, (float)yPos };
 	}
 
-	float WindowsInput::getMouseXIMPL()
+	float Input::GetMouseX()
 	{	
-		auto [x, y] = getMousePositionIMPL();
-		return x;
+		return  GetMousePosition().x;
 	}
 
-	float WindowsInput::getMouseYIMPL()
+	float Input::GetMouseY()
 	{
-		auto [x, y] = getMousePositionIMPL();
-		return y;
+		return  GetMousePosition().y;
 	}
 	
 
