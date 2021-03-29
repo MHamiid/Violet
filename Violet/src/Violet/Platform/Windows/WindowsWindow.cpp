@@ -4,6 +4,7 @@
 #include "Violet/Events/KeyEvent.h"
 #include "Violet/Events/MouseEvent.h"
 #include "Violet/Renderer/GraphicsContext.h"
+#include "Violet/Renderer/Renderer.h"
 namespace Violet {
 	
 	static bool s_GLFWInitialized = false;
@@ -65,6 +66,13 @@ namespace Violet {
 		//Setting up Graphics context for the window
 		m_context = GraphicsContext::Create(m_window);
 		m_context->init();
+
+#ifdef VIO_DEBUG_MODE
+		if (Renderer::GetCurrentGraphicsAPI() == GraphicsAPI::API::OPENGL) {
+			VIO_CORE_INFO("OpenGL Debug Messages Enabled");
+			glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GLFW_TRUE);
+		}
+#endif
 
 		glfwSetWindowUserPointer(m_window, &m_properties); //Data to pass to Event callbacks.
 		setVSync(m_properties.m_VSync);

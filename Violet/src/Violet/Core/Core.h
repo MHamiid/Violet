@@ -32,8 +32,8 @@
 
 
 #else
-#define VIO_BREAK(x)
-#define VIO_CORE_BREAK(x)
+#define VIO_BREAK
+#define VIO_CORE_BREAK
 #define VIO_ASSERT(x,...)
 #define VIO_CORE_ASSERT(x,...)
 

@@ -2,8 +2,39 @@
 #include "OpenGLRendererAPI.h"
 #include <glad/glad.h>
 namespace Violet {
+	//NOTE: If in debug mode the code that calls the function would be excluded which results this function to not be compiled and excluded also
+	static void OpenGLMessageCallback(
+		unsigned source,
+		unsigned type,
+		unsigned id,
+		unsigned severity,
+		int length,
+		const char* message,
+		const void* userParam)
+	{
+		switch (severity)
+		{
+		case GL_DEBUG_SEVERITY_HIGH:         VIO_CORE_CRITICAL("[OPENGL MESSAGE] {0}", message); return;
+		case GL_DEBUG_SEVERITY_MEDIUM:       VIO_CORE_ERROR("[OPENGL MESSAGE] {0}", message); return;
+		case GL_DEBUG_SEVERITY_LOW:          VIO_CORE_WARN("[OPENGL MESSAGE] {0}", message); return;
+		case GL_DEBUG_SEVERITY_NOTIFICATION: VIO_CORE_TRACE("[OPENGL MESSAGE] {0}", message); return;
+		}
+
+		VIO_CORE_ASSERT(false, "[OpenGL] Unknown severity level!");
+	}
+
+
 	void OpenGLRendererAPI::init()
 	{
+
+		//Enable OpenGL message callbacks to the defined function whenever Violet is in debug mode
+#ifdef VIO_DEBUG_MODE
+		glEnable(GL_DEBUG_OUTPUT);
+		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		glDebugMessageCallback(OpenGLMessageCallback, nullptr);
+#endif
+
+
 		//Setup blending
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set the blending function
