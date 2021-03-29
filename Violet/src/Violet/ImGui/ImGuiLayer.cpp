@@ -48,7 +48,7 @@ namespace Violet {
 		ImGui_ImplOpenGL3_Init("#version 410");
 
 		//Get window from the Application instance.
-		GLFWwindow* window = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow());
+		GLFWwindow* window = static_cast<GLFWwindow*>(Application::GetApplicationInstance().getWindow().getNativeWindow());
 
 		ImGui_ImplGlfw_InitForOpenGL(window, true);
 	}
@@ -63,6 +63,17 @@ namespace Violet {
 	{
 		//VIO_CORE_TRACE("{0} OnEvent: {1}" ,getName() ,event.getName());
 		//event.setEventHandleStatus(true); 
+		if (m_blockImGuiEvents) {
+		/*Let ImGui set mouse or keyboard events to handled whenever ImGui receive these events*/
+			ImGuiIO& io = ImGui::GetIO();
+
+			bool handledStatus = event.getEventHandleStatus();
+
+			handledStatus |= event.isInCategory(EventCategory::Mouse) & io.WantCaptureMouse;
+			handledStatus |= event.isInCategory(EventCategory::Keyboard) & io.WantCaptureKeyboard;
+
+			event.setEventHandleStatus(handledStatus);
+		}
 	}
 	void ImGuiLayer::BeginImGuiFrame()
 	{

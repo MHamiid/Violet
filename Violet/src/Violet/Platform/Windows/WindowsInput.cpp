@@ -12,7 +12,7 @@ namespace Violet {
 
 	bool Input::IsKeyPressed(const Key keyCode)
 	{
-		GLFWwindow*  glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
+		GLFWwindow*  glfwWindow = static_cast<GLFWwindow*>(Application::GetApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
 		int state = glfwGetKey(glfwWindow, (int)keyCode); //Get the last reported state of a key
 
@@ -21,7 +21,7 @@ namespace Violet {
 
 	bool Input::IsMouseButtonPressed(const Mouse button)
 	{
-		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
+		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::GetApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
 		int state = glfwGetMouseButton(glfwWindow, (int)button); //Get the last reported state of a mouse button
 
@@ -30,7 +30,7 @@ namespace Violet {
 
 	glm::vec2 Input::GetMousePosition()
 	{
-		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::getApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
+		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::GetApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 		double xPos, yPos;
 		glfwGetCursorPos(glfwWindow, &xPos, &yPos);
 		return { (float)xPos, (float)yPos };

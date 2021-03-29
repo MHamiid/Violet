@@ -13,7 +13,10 @@ namespace Violet {
 	public:
 		static void BeginImGuiFrame();
 		static void EndImGuiFrame();
+	public:
+		void setImGuiToBlockEvents(bool block) { m_blockImGuiEvents = block; }
 	private:
+		bool m_blockImGuiEvents = true;
 		static ImGuiLayer* s_ImGuiLayer;
 	};
 

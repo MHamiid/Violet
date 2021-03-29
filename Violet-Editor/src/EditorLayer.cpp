@@ -39,9 +39,10 @@ namespace Violet {
 			//Update the camera
 			m_cameraController.onResize(m_viewPortSize.x, m_viewPortSize.y);
 		}
-
-		m_cameraController.onUpdate(deltaTime);
-
+		if (m_viewPortFocused) //Update the camera movement only when the viewport is focused 
+		{
+			m_cameraController.onUpdate(deltaTime);
+		}
 		/*Animation*/
 		m_objectPosition.x = m_objectPosition.x > m_cameraController.getRight() ? m_objectPosition.x = m_cameraController.getLeft() : m_objectPosition.x + (0.3f * deltaTime);
 		m_objectRotation = m_objectRotation == 360.0f ? 0.0f : m_objectRotation + (30.0f * deltaTime);
@@ -138,9 +139,9 @@ namespace Violet {
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-				if (ImGui::MenuItem("VSync On")) Violet::Application::getApplicationInstance().getWindow().setVSync(true);
-				if (ImGui::MenuItem("VSync Off")) Violet::Application::getApplicationInstance().getWindow().setVSync(false);
-				if (ImGui::MenuItem("Exit")) Violet::Application::getApplicationInstance().close();
+				if (ImGui::MenuItem("VSync On")) Violet::Application::GetApplicationInstance().getWindow().setVSync(true);
+				if (ImGui::MenuItem("VSync Off")) Violet::Application::GetApplicationInstance().getWindow().setVSync(false);
+				if (ImGui::MenuItem("Exit")) Violet::Application::GetApplicationInstance().close();
 				ImGui::EndMenu();
 			}
 
@@ -167,6 +168,12 @@ namespace Violet {
 
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));  //Remove window padding for the viewport
 		ImGui::Begin("ViewPort");
+
+		m_viewPortFocused = ImGui::IsWindowFocused();  //Get the ViewPort focus status from ImGui and update the status
+		m_viewPortHovered = ImGui::IsWindowHovered();  //Get the ViewPort hover status from ImGui and update the status
+
+		Application::GetApplicationInstance().getImGuiLayer()->setImGuiToBlockEvents(!(m_viewPortFocused && m_viewPortHovered));
+	
 
 		//Get the size of the panel
 		ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();

@@ -18,6 +18,7 @@ namespace Violet {
 		bool onWindowResize(WindowResizeEvent& event);
 		void pushLayer(Layer* layer);
 		void pushOverlay(Layer* layer);
+		ImGuiLayer* getImGuiLayer() { return m_ImGuiLayer; }
 		Window& getWindow() { return *m_window; }
 	private:
 		//Application main run loop
@@ -26,7 +27,7 @@ namespace Violet {
 												    * which is handled by EntryPoint header but not in client side's Application child class. 
 													* Therefore calling run function is handled only by the engine side.*/
 	public:
-		static Application& getApplicationInstance() { return *s_ApplicationInstance; }
+		static Application& GetApplicationInstance() { return *s_ApplicationInstance; }
 	private:
 		Scoped<Window> m_window;
 		bool m_applicationRunning = true;
