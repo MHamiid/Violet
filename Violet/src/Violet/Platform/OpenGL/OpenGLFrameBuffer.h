@@ -18,6 +18,7 @@ namespace Violet {
 		uint32_t m_frameBufferID = 0;
 		uint32_t m_colorAttachmentID = 0, m_depthAttachmentID = 0; //Textures
 		FrameBufferSpecification m_specification;   //Store the specification
+		static const uint32_t s_MaxFrameBufferSize = 8192; //8k, TODO: Should query the GPU driver to find the max supported size
 
 	};
 

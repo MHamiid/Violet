@@ -31,6 +31,11 @@ namespace Violet {
 
 	void OpenGLFrameBuffer::resize(uint32_t width, uint32_t height)
 	{
+		//Check if the new size is valid
+		if (width == 0 || height == 0 || width > s_MaxFrameBufferSize || height > s_MaxFrameBufferSize) {
+			VIO_CORE_WARN("[OpenGL FrameBuffer] Attempted To Resize The FrameBuffer To {0}, {1}", width, height);
+			return;  //If not valid return from function
+		}
 		//Update the new size specification
 		m_specification.width = width;
 		m_specification.height = height;
