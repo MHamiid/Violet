@@ -16,12 +16,14 @@
 #include <unordered_map>
 #include <unordered_set>
 
-//Headers for Windows
-#ifdef VIO_PLATFORM_WINDOWS
-	#include <Windows.h>
-#endif // VIO_PLATFORM_WINDOWS 
-
 
 //Violet Defined includes
 #include "Violet/Core/Core.h"
 #include "Violet/Core/Log.h"
+
+
+//Headers for Windows
+#ifdef VIO_PLATFORM_WINDOWS   //Defined in premake as a global compiler macro
+	#include <Windows.h>
+#endif // VIO_PLATFORM_WINDOWS 
+
