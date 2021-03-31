@@ -21,9 +21,9 @@ namespace Violet {
 
 		m_activeScene = CreateRef<Scene>();
 
-		entt::entity square = m_activeScene->createEntity();
-		m_activeScene->getRegistry().emplace<TransformComponent>(square, glm::translate(glm::mat4(1.0f), {0.3f, 0.2f, 0.0f}));
-		m_activeScene->getRegistry().emplace<SpriteRendererComponent>(square, glm::vec4({0.8f, 0.0f, 0.0f, 0.3f}));
+		m_square = m_activeScene->createEntity("Square");
+		m_square.addComponent<SpriteRendererComponent>();
+
 	}
 
 	void EditorLayer::onDetach()
@@ -52,9 +52,11 @@ namespace Violet {
 
 
 		/*Animation*/
-		m_objectPosition.x = m_objectPosition.x > m_cameraController.getRight() ? m_objectPosition.x = m_cameraController.getLeft() : m_objectPosition.x + (0.3f * deltaTime);
-		m_objectRotation = m_objectRotation == 360.0f ? 0.0f : m_objectRotation + (30.0f * deltaTime);
-
+		m_translationSpeed = m_objectPosition.x >= m_cameraController.getRight() || m_objectPosition.x <= m_cameraController.getLeft() ? -1.0f * m_translationSpeed : m_translationSpeed;
+		m_objectPosition.x +=(m_translationSpeed * deltaTime);
+		m_objectRotationZ = m_objectRotationZ >= 360.0f ? m_objectRotationZ - 360.0f : m_objectRotationZ + (30.0f * deltaTime);  //(m_objectRotationZ - 360.0f) resets the rotation counter instead of setting it to 0.0f, cause m_objectRotationZ may have exceeded 360.0f
+		m_scaleSpeed = m_objectScale.x >= 1.0f || m_objectScale.x <= 0.1f ? -1.0f * m_scaleSpeed : m_scaleSpeed;
+		m_objectScale += (m_scaleSpeed * deltaTime);
 		/*Render*/
 
 		//Clears the window screen
@@ -73,20 +75,25 @@ namespace Violet {
 
 		//Update/Render the scene
 		m_activeScene->onUpdate(deltaTime);
+		TransformComponent& squareTransformation = m_square.getComponent<TransformComponent>();
+		squareTransformation.translation = m_objectPosition;
+		squareTransformation.rotation = { 0.0f, 0.0f, m_objectRotationZ };
+		squareTransformation.scale = m_objectScale;
+		m_square.getComponent<SpriteRendererComponent>().color = m_objectColor;
 
-		Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
-		Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		Renderer2D::DrawQuad({ -1.2f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		Renderer2D::DrawQuad({ -0.6f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		Renderer2D::DrawQuad({ -0.3f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		Renderer2D::DrawRotatedQuad({ 0.6f, 0.2f }, { 0.5f, 0.5f }, -m_objectRotation, { 1.0f, 0.93f, 0.24f, 1.0f });
-		Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f }, m_objectRotation, { 0.18f, 0.6f, 0.96f, 1.0f });
-		//Background
-		Renderer2D::DrawRotatedQuad({ m_cameraController.getCamera().getPosition().x, m_cameraController.getCamera().getPosition().y, -0.1f },
-			{ m_cameraController.getWidth(), m_cameraController.getHeight() }, m_cameraController.getCamera().getRotationZ(), m_transparentTexture, 2.0f);
-		Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, -45.0f, m_LetterVTexture);
-		Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f }, { 0.5f, 0.5f }, 45.0f, m_grassTexture);
+		//Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
+		//Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+		//Renderer2D::DrawQuad({ -1.2f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+		//Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+		//Renderer2D::DrawQuad({ -0.6f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+		//Renderer2D::DrawQuad({ -0.3f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
+		//Renderer2D::DrawRotatedQuad({ 0.6f, 0.2f }, { 0.5f, 0.5f }, -m_objectRotation, { 1.0f, 0.93f, 0.24f, 1.0f });
+		//Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f }, m_objectRotation, { 0.18f, 0.6f, 0.96f, 1.0f });
+		////Background
+		//Renderer2D::DrawRotatedQuad({ m_cameraController.getCamera().getPosition().x, m_cameraController.getCamera().getPosition().y, -0.1f },
+		//	{ m_cameraController.getWidth(), m_cameraController.getHeight() }, m_cameraController.getCamera().getRotationZ(), m_transparentTexture, 2.0f);
+		//Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, -45.0f, m_LetterVTexture);
+		//Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f }, { 0.5f, 0.5f }, 45.0f, m_grassTexture);
 
 		Renderer2D::EndScene();
 
@@ -168,7 +175,13 @@ namespace Violet {
 		ImGui::Text("Indices: %d", Renderer2D::GetSceneStatistics().getTotalIndexCount());
 		ImGui::End();
 
-		ImGui::Begin("Object Color");
+		ImGui::Begin("Object Properties");
+		ImGui::Text(m_square.getComponent<TagComponent>().tag.c_str());
+		TransformComponent& squareTransformation = m_square.getComponent<TransformComponent>();
+		ImGui::Text("Translation: %.2f, %.2f, %.2f", squareTransformation.translation.x, squareTransformation.translation.y, squareTransformation.translation.z);
+		ImGui::Text("Rotation: %.2f, %.2f, %.2f", squareTransformation.rotation.x, squareTransformation.rotation.y, squareTransformation.rotation.z);
+		ImGui::Text("Scale: %.2f, %.2f, %.2f", squareTransformation.scale.x, squareTransformation.scale.y, squareTransformation.scale.z);
+		ImGui::Separator();
 		ImGui::ColorEdit4("Object Color", glm::value_ptr(m_objectColor));
 		ImGui::End();
 

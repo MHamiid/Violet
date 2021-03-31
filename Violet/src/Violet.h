@@ -21,4 +21,5 @@
 #include "Violet/Renderer/FrameBuffer.h"
 //#### Scene ####
 #include "Violet/Scene/Scene.h"
+#include "Violet/Scene/Entity.h"
 #include "Violet/Scene/Components.h"
