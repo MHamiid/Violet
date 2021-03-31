@@ -25,6 +25,8 @@ namespace Violet {
 
 		bool m_viewPortFocused = false, m_viewPortHovered = false;
 		glm::vec2 m_viewPortSize = { 0.0f, 0.0f };
+
+		Ref<Scene> m_activeScene;
 	};
 
 }

@@ -18,6 +18,12 @@ namespace Violet {
 		specs.height = 720; //Window height
 
 		m_frameBuffer = FrameBuffer::Create(specs);
+
+		m_activeScene = CreateRef<Scene>();
+
+		entt::entity square = m_activeScene->createEntity();
+		m_activeScene->getRegistry().emplace<TransformComponent>(square, glm::translate(glm::mat4(1.0f), {0.3f, 0.2f, 0.0f}));
+		m_activeScene->getRegistry().emplace<SpriteRendererComponent>(square, glm::vec4({0.8f, 0.0f, 0.0f, 0.3f}));
 	}
 
 	void EditorLayer::onDetach()
@@ -43,6 +49,8 @@ namespace Violet {
 		{
 			m_cameraController.onUpdate(deltaTime);
 		}
+
+
 		/*Animation*/
 		m_objectPosition.x = m_objectPosition.x > m_cameraController.getRight() ? m_objectPosition.x = m_cameraController.getLeft() : m_objectPosition.x + (0.3f * deltaTime);
 		m_objectRotation = m_objectRotation == 360.0f ? 0.0f : m_objectRotation + (30.0f * deltaTime);
@@ -62,6 +70,9 @@ namespace Violet {
 
 
 		Renderer2D::BeginScene(m_cameraController.getCamera());
+
+		//Update/Render the scene
+		m_activeScene->onUpdate(deltaTime);
 
 		Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
 		Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
@@ -139,9 +150,9 @@ namespace Violet {
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 
-				if (ImGui::MenuItem("VSync On")) Violet::Application::GetApplicationInstance().getWindow().setVSync(true);
-				if (ImGui::MenuItem("VSync Off")) Violet::Application::GetApplicationInstance().getWindow().setVSync(false);
-				if (ImGui::MenuItem("Exit")) Violet::Application::GetApplicationInstance().close();
+				if (ImGui::MenuItem("VSync On")) Application::GetApplicationInstance().getWindow().setVSync(true);
+				if (ImGui::MenuItem("VSync Off")) Application::GetApplicationInstance().getWindow().setVSync(false);
+				if (ImGui::MenuItem("Exit")) Application::GetApplicationInstance().close();
 				ImGui::EndMenu();
 			}
 

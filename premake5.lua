@@ -42,13 +42,14 @@ project "Violet"
 
 	includedirs{
 		 
-		"%{prj.name}/src",					 --Include dir for Violet project src folder
-		"%{prj.name}/vendor/spdlog/include", --Include dir for spdlog
-		"%{prj.name}/vendor/GLFW/include",	 --Include dir for GLFW
-		"%{prj.name}/vendor/Glad/include",	 --Include dir for Glad
-		"%{prj.name}/vendor/imgui",			 --Include dir for ImGui
-		"%{prj.name}/vendor/glm",			 --Include dir for glm
-		"%{prj.name}/vendor/stb_image"		 --Include dir for stb_image
+		"%{prj.name}/src",									--Include dir for Violet project src folder
+		"%{prj.name}/vendor/spdlog/include",				--Include dir for spdlog
+		"%{prj.name}/vendor/GLFW/include",					--Include dir for GLFW
+		"%{prj.name}/vendor/Glad/include",					--Include dir for Glad
+		"%{prj.name}/vendor/imgui",							--Include dir for ImGui
+		"%{prj.name}/vendor/glm",							--Include dir for glm
+		"%{prj.name}/vendor/stb_image",						--Include dir for stb_image
+		"%{prj.name}/vendor/entt/single_include/entt"	    --Include dir for entt
 	}
 
 	links{
@@ -116,8 +117,9 @@ project "Sandbox"
 		
 		"Violet/vendor/spdlog/include",
 		"Violet/src",
-		"Violet/vendor/glm",		--Include dir for glm
-		"Violet/vendor/imgui"		--Include dir for ImGui
+		"Violet/vendor/glm",								--Include dir for glm
+		"Violet/vendor/imgui",								--Include dir for ImGui
+		"Violet/vendor/entt/single_include/entt"		    --Include dir for entt
 
 	}
 
@@ -173,8 +175,9 @@ project "Violet-Editor"
 		
 		"Violet/vendor/spdlog/include",
 		"Violet/src",
-		"Violet/vendor/glm",		--Include dir for glm
-		"Violet/vendor/imgui"		--Include dir for ImGui
+		"Violet/vendor/glm",								--Include dir for glm
+		"Violet/vendor/imgui",								--Include dir for ImGui
+		"Violet/vendor/entt/single_include/entt"			--Include dir for entt
 
 	}
 

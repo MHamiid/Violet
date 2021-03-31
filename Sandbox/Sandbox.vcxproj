@@ -79,7 +79,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_DEBUG_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Violet\vendor\spdlog\include;..\Violet\src;..\Violet\vendor\glm;..\Violet\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Violet\vendor\spdlog\include;..\Violet\src;..\Violet\vendor\glm;..\Violet\vendor\imgui;..\Violet\vendor\entt\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <MinimalRebuild>false</MinimalRebuild>
@@ -97,7 +97,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_RELEASE_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Violet\vendor\spdlog\include;..\Violet\src;..\Violet\vendor\glm;..\Violet\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Violet\vendor\spdlog\include;..\Violet\src;..\Violet\vendor\glm;..\Violet\vendor\imgui;..\Violet\vendor\entt\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -118,7 +118,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>VIO_PLATFORM_WINDOWS;VIO_DISTRIBUTION_MODE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\Violet\vendor\spdlog\include;..\Violet\src;..\Violet\vendor\glm;..\Violet\vendor\imgui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\Violet\vendor\spdlog\include;..\Violet\src;..\Violet\vendor\glm;..\Violet\vendor\imgui;..\Violet\vendor\entt\single_include\entt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>

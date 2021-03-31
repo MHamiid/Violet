@@ -19,3 +19,6 @@
 #include "Violet/Renderer/Renderer2D.h"
 #include "Violet/Renderer/Texture.h"
 #include "Violet/Renderer/FrameBuffer.h"
+//#### Scene ####
+#include "Violet/Scene/Scene.h"
+#include "Violet/Scene/Components.h"
