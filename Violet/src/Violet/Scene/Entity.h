@@ -56,6 +56,8 @@ namespace Violet {
 			* Extra debug assertion for safety and easier error debugging to make sure that the component exists
 			* NOTE: entt already makes it's own assertion
 			*/
+			VIO_CORE_ASSERT(hasComponent<T>(), "[Entity] Component Does Not Exist!");
+
 			m_scene->m_registry.remove<T>(m_enttID);
 		}
 
