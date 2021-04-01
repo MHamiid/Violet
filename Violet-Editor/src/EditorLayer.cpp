@@ -25,7 +25,7 @@ namespace Violet {
 		m_squareEntity.addComponent<SpriteRendererComponent>();
 
 		m_cameraEntity = m_activeScene->createEntity("Camera Entity");
-		m_cameraEntity.addComponent<CameraComponent>(glm::ortho(-1.6f, 1.6f, -0.9f, 0.9f, -1.0f, 1.0f));
+		m_cameraEntity.addComponent<CameraComponent>();
 
 		m_activeScene->setPrimaryCamera(m_cameraEntity);
 	}
@@ -47,11 +47,13 @@ namespace Violet {
 			m_frameBuffer->resize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 
 			//Update the camera
-			m_cameraController.onResize(m_viewPortSize.x, m_viewPortSize.y);
+			//m_cameraController.onResize(m_viewPortSize.x, m_viewPortSize.y);
+
+			m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 		}
 		if (m_viewPortFocused) //Update the camera movement only when the viewport is focused 
 		{
-			m_cameraController.onUpdate(deltaTime);
+			//m_cameraController.onUpdate(deltaTime);
 		}
 
 
@@ -197,6 +199,22 @@ namespace Violet {
 		ImGui::DragFloat3("Translation", glm::value_ptr(cameraTransformation.translation), 0.01f);
 		ImGui::DragFloat3("Rotation", glm::value_ptr(cameraTransformation.rotation), 0.1f);
 		ImGui::DragFloat3("Scale", glm::value_ptr(cameraTransformation.scale), 0.01f);
+		ImGui::Separator();
+		CameraComponent& camera = m_cameraEntity.getComponent<CameraComponent>();
+		float orthographicSize = camera.sceneCamera.getOrthographicSize();
+		ImGui::Text("Orthographic Properties");
+		ImGui::Separator();
+		if (ImGui::DragFloat("Size", &orthographicSize, 0.05f)) {
+			camera.sceneCamera.setOrthographicSize(orthographicSize);
+		}
+		float orthographicNear = camera.sceneCamera.getOrthographicNearClip();
+		if (ImGui::DragFloat("Near", &orthographicNear, 0.01f)) {
+			camera.sceneCamera.setOrthographicNearClip(orthographicNear);
+		}
+		float orthographicFar = camera.sceneCamera.getOrthographicFarClip();
+		if (ImGui::DragFloat("Far", &orthographicFar, 0.01f)) {
+			camera.sceneCamera.setOrthographicFarClip(orthographicFar);
+		}
 		ImGui::End();
 
 		ImGui::Begin("FPS");

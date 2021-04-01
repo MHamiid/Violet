@@ -4,7 +4,7 @@
 #include "Entity.h"
 
 namespace Violet {
-
+	/*TODO: Set the SceneCameras viewport on creation*/
 	Scene::Scene()
 	{
 		//NOTE: ent::entity is a uint32_t ID
@@ -18,12 +18,12 @@ namespace Violet {
 	void Scene::onUpdate(DeltaTime deltaTime)
 	{
 		if (m_primaryCameraEntity) {
-			CameraComponent& primaryCameraComp = m_primaryCameraEntity->getComponent<CameraComponent>();
+			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
-			if (primaryCameraComp.camera.getProjectionMatrix() != glm::mat4(1.0f)) //If the projection matrix has been set and not equal to the default identity matrix glm::mat4(1.0f)
+			if (primaryCameraComponent.sceneCamera.getProjectionMatrix() != glm::mat4(1.0f)) //If the projection matrix has been set and not equal to the default identity matrix glm::mat4(1.0f)
 			{
 				/*Render 2D*/
-				Renderer2D::BeginScene(primaryCameraComp.camera, m_primaryCameraEntity->getComponent<TransformComponent>().getTransform());
+				Renderer2D::BeginScene(primaryCameraComponent.sceneCamera, m_primaryCameraEntity->getComponent<TransformComponent>().getTransform());
 				entt::basic_group spriteGroup = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
 				for (auto entity : spriteGroup) {
@@ -35,6 +35,22 @@ namespace Violet {
 			}
 		}
 
+	}
+
+	void Scene::onViewPortResize(uint32_t width, uint32_t height)
+	{
+		m_viewPortWidth = width;
+		m_viewPortHeight = height;
+
+		/*Resize Non-FixedAspectRatio Cameras*/
+		auto cameraComponentsView = m_registry.view<CameraComponent>(); //Get all the camera components
+		for (auto entity : cameraComponentsView) {
+			CameraComponent& cameraComponent = cameraComponentsView.get<CameraComponent>(entity);
+			
+			if (!cameraComponent.fixedAspectRatio) {
+				cameraComponent.sceneCamera.setViewPortSize(width, height);
+			}
+		}
 	}
 
 	Entity Scene::createEntity(const std::string& tagName)

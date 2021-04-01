@@ -139,6 +139,7 @@
     <ClInclude Include="src\Violet\Scene\Components.h" />
     <ClInclude Include="src\Violet\Scene\Entity.h" />
     <ClInclude Include="src\Violet\Scene\Scene.h" />
+    <ClInclude Include="src\Violet\Scene\SceneCamera.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Core\Application.h" />
@@ -182,6 +183,7 @@
   <ItemGroup>
     <ClCompile Include="src\Violet\Scene\Entity.cpp" />
     <ClCompile Include="src\Violet\Scene\Scene.cpp" />
+    <ClCompile Include="src\Violet\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

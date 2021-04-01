@@ -1,7 +1,7 @@
 #pragma once
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "Violet/Renderer/Camera.h"
+#include "SceneCamera.h"
 
 namespace Violet {
 
@@ -55,10 +55,10 @@ namespace Violet {
 
 	struct VIOLET_API CameraComponent
 	{
-		Camera camera;
+		SceneCamera sceneCamera;
+		bool fixedAspectRatio = false;
 
 		CameraComponent() = default;
-		CameraComponent(const glm::mat4& projection) : camera(projection) {}
 
 		CameraComponent(const CameraComponent&) = default;
 
