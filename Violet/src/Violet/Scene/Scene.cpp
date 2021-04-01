@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Violet/Renderer/Renderer2D.h"
 #include "Entity.h"
+#include "Components.h"
 
 namespace Violet {
 	/*TODO: Set the SceneCameras viewport on creation*/
@@ -17,6 +18,24 @@ namespace Violet {
 
 	void Scene::onUpdate(DeltaTime deltaTime)
 	{
+		/*Update Scripts*/
+		//Get all script components
+		m_registry.view<NativeScriptComponent>().each([=](entt::entity entity, NativeScriptComponent& nativeScriptComponent) {
+			//TODO: Move to be called when Game runtime starts (Scene::onScenePlay)
+			if (!nativeScriptComponent.script) //If first time calling the script 
+			{
+				nativeScriptComponent.script = nativeScriptComponent.instantiateScriptFUNC(); //Create a script instance
+				nativeScriptComponent.script->m_entity = Entity{ entity, this }; //this refers to this scene
+				nativeScriptComponent.script->onCreate();  //TODO: Remove to run on game runtime startup
+			}
+
+			nativeScriptComponent.script->onUpdate(deltaTime);
+
+			}
+		
+		); 
+
+		/*Render 2D*/
 		if (m_primaryCameraEntity) {
 			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
@@ -27,7 +46,7 @@ namespace Violet {
 				entt::basic_group spriteGroup = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
 				for (auto entity : spriteGroup) {
-					auto& [transform, sprite] = spriteGroup.get<TransformComponent, SpriteRendererComponent>(entity);
+					auto [transform, sprite] = spriteGroup.get<TransformComponent, SpriteRendererComponent>(entity);
 
 					Renderer2D::DrawQuad(transform.getTransform(), sprite.color);
 				}

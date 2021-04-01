@@ -1,7 +1,7 @@
 #pragma once
 #include <entt.hpp>
 #include "Violet/Core/DeltaTime.h"
-#include "Components.h"
+
 namespace Violet {
 	class Entity;  //NOTE: Can't include Entity header, cause the entity includes Scene header, which result is infinite recursive include loop
 

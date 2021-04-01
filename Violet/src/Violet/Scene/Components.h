@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "SceneCamera.h"
+#include "Script.h"
 
 namespace Violet {
 
@@ -64,4 +65,23 @@ namespace Violet {
 
 	};
 
+	struct VIOLET_API NativeScriptComponent
+	{
+		Script* script = nullptr;
+
+		Script* (*instantiateScriptFUNC)();
+		void (*destroyScriptFUNC)(NativeScriptComponent*);
+
+		NativeScriptComponent() = default;
+
+		NativeScriptComponent(const NativeScriptComponent&) = default;
+
+		template<typename T>
+		void bind() {
+			instantiateScriptFUNC = []() {return static_cast<Script*>(new T()); };
+			destroyScriptFUNC = [](NativeScriptComponent* thisNativeScriptComponent) { delete thisNativeScriptComponent->script; thisNativeScriptComponent->script = nullptr; };
+		
+		}
+
+	};
 }

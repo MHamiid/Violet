@@ -28,6 +28,59 @@ namespace Violet {
 		m_cameraEntity.addComponent<CameraComponent>();
 
 		m_activeScene->setPrimaryCamera(m_cameraEntity);
+
+
+		class CameraController : public Script {
+		public:
+			float m_translationSpeed = 5.0f;
+			float m_rotationSpeed = 90.0f;
+
+			glm::vec3* m_translation;
+			glm::vec3* m_rotation;
+
+			void onCreate() override 
+			{
+				VIO_CORE_INFO("[Script] CameraController::onCreate");
+				m_translation = &getComponent<TransformComponent>().translation;
+				m_rotation = &getComponent<TransformComponent>().rotation;
+			}
+			void onUpdate(DeltaTime deltaTime) override
+			{
+
+				/*Camera Controls*/
+				if (Input::IsKeyPressed(Violet::Key::A)) {
+					m_translation->x -= m_translationSpeed * deltaTime;
+				}
+				else if (Input::IsKeyPressed(Violet::Key::D)) {
+					m_translation->x += m_translationSpeed * deltaTime;
+				}
+
+				if (Input::IsKeyPressed(Violet::Key::W)) {
+					m_translation->y += m_translationSpeed * deltaTime;
+				}
+				else if (Input::IsKeyPressed(Violet::Key::S)) {
+					m_translation->y -= m_translationSpeed * deltaTime;
+				}
+
+				//Rotation
+				if (Input::IsKeyPressed(Violet::Key::E)) {
+					m_rotation->z -= m_rotationSpeed * deltaTime;
+				}
+				else if (Input::IsKeyPressed(Violet::Key::Q)) {
+					m_rotation->z += m_rotationSpeed * deltaTime;
+				}
+
+				
+			}
+			void onDestroy() override
+			{
+				//TODO
+				//Not callable yet
+			}
+		};
+
+		m_cameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+
 	}
 
 	void EditorLayer::onDetach()
