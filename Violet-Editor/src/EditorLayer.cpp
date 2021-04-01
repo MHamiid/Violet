@@ -21,9 +21,13 @@ namespace Violet {
 
 		m_activeScene = CreateRef<Scene>();
 
-		m_square = m_activeScene->createEntity("Square");
-		m_square.addComponent<SpriteRendererComponent>();
+		m_squareEntity = m_activeScene->createEntity("Square Entity");
+		m_squareEntity.addComponent<SpriteRendererComponent>();
 
+		m_cameraEntity = m_activeScene->createEntity("Camera Entity");
+		m_cameraEntity.addComponent<CameraComponent>(glm::ortho(-1.6f, 1.6f, -0.9f, 0.9f, -1.0f, 1.0f));
+
+		m_activeScene->setPrimaryCamera(m_cameraEntity);
 	}
 
 	void EditorLayer::onDetach()
@@ -52,11 +56,11 @@ namespace Violet {
 
 
 		/*Animation*/
-		m_translationSpeed = m_objectPosition.x >= m_cameraController.getRight() || m_objectPosition.x <= m_cameraController.getLeft() ? -1.0f * m_translationSpeed : m_translationSpeed;
-		m_objectPosition.x +=(m_translationSpeed * deltaTime);
-		m_objectRotationZ = m_objectRotationZ >= 360.0f ? m_objectRotationZ - 360.0f : m_objectRotationZ + (30.0f * deltaTime);  //(m_objectRotationZ - 360.0f) resets the rotation counter instead of setting it to 0.0f, cause m_objectRotationZ may have exceeded 360.0f
-		m_scaleSpeed = m_objectScale.x >= 1.0f || m_objectScale.x <= 0.1f ? -1.0f * m_scaleSpeed : m_scaleSpeed;
-		m_objectScale += (m_scaleSpeed * deltaTime);
+		//m_translationSpeed = m_objectPosition.x >= m_cameraController.getRight() || m_objectPosition.x <= m_cameraController.getLeft() ? -1.0f * m_translationSpeed : m_translationSpeed;
+		//m_objectPosition.x +=(m_translationSpeed * deltaTime);
+		//m_objectRotationZ = m_objectRotationZ >= 360.0f ? m_objectRotationZ - 360.0f : m_objectRotationZ + (30.0f * deltaTime);  //(m_objectRotationZ - 360.0f) resets the rotation counter instead of setting it to 0.0f, cause m_objectRotationZ may have exceeded 360.0f
+		//m_scaleSpeed = m_objectScale.x >= 1.0f || m_objectScale.x <= 0.1f ? -1.0f * m_scaleSpeed : m_scaleSpeed;
+		//m_objectScale += (m_scaleSpeed * deltaTime);
 		/*Render*/
 
 		//Clears the window screen
@@ -71,15 +75,15 @@ namespace Violet {
 		RenderCommand::Clear();
 
 
-		Renderer2D::BeginScene(m_cameraController.getCamera());
+		//Renderer2D::BeginScene(m_cameraController.getCamera());
 
 		//Update/Render the scene
 		m_activeScene->onUpdate(deltaTime);
-		TransformComponent& squareTransformation = m_square.getComponent<TransformComponent>();
+		/*TransformComponent& squareTransformation = m_squareEntity.getComponent<TransformComponent>();
 		squareTransformation.translation = m_objectPosition;
 		squareTransformation.rotation = { 0.0f, 0.0f, m_objectRotationZ };
-		squareTransformation.scale = m_objectScale;
-		m_square.getComponent<SpriteRendererComponent>().color = m_objectColor;
+		squareTransformation.scale = m_objectScale;*/
+		m_squareEntity.getComponent<SpriteRendererComponent>().color = m_objectColor;
 
 		//Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
 		//Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
@@ -95,7 +99,7 @@ namespace Violet {
 		//Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, -45.0f, m_LetterVTexture);
 		//Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f }, { 0.5f, 0.5f }, 45.0f, m_grassTexture);
 
-		Renderer2D::EndScene();
+		//Renderer2D::EndScene();
 
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 
@@ -176,13 +180,23 @@ namespace Violet {
 		ImGui::End();
 
 		ImGui::Begin("Object Properties");
-		ImGui::Text(m_square.getComponent<TagComponent>().tag.c_str());
-		TransformComponent& squareTransformation = m_square.getComponent<TransformComponent>();
+		ImGui::Text(m_squareEntity.getComponent<TagComponent>().tag.c_str());
+		ImGui::Separator();
+		TransformComponent& squareTransformation = m_squareEntity.getComponent<TransformComponent>();
 		ImGui::Text("Translation: %.2f, %.2f, %.2f", squareTransformation.translation.x, squareTransformation.translation.y, squareTransformation.translation.z);
 		ImGui::Text("Rotation: %.2f, %.2f, %.2f", squareTransformation.rotation.x, squareTransformation.rotation.y, squareTransformation.rotation.z);
 		ImGui::Text("Scale: %.2f, %.2f, %.2f", squareTransformation.scale.x, squareTransformation.scale.y, squareTransformation.scale.z);
 		ImGui::Separator();
 		ImGui::ColorEdit4("Object Color", glm::value_ptr(m_objectColor));
+		ImGui::End();
+
+		ImGui::Begin("Camera Properties");
+		ImGui::Text(m_cameraEntity.getComponent<TagComponent>().tag.c_str());
+		ImGui::Separator();
+		TransformComponent& cameraTransformation = m_cameraEntity.getComponent<TransformComponent>();
+		ImGui::DragFloat3("Translation", glm::value_ptr(cameraTransformation.translation), 0.01f);
+		ImGui::DragFloat3("Rotation", glm::value_ptr(cameraTransformation.rotation), 0.1f);
+		ImGui::DragFloat3("Scale", glm::value_ptr(cameraTransformation.scale), 0.01f);
 		ImGui::End();
 
 		ImGui::Begin("FPS");

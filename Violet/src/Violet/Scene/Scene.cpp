@@ -17,13 +17,24 @@ namespace Violet {
 
 	void Scene::onUpdate(DeltaTime deltaTime)
 	{
-		entt::basic_group group = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+		if (m_primaryCameraEntity) {
+			CameraComponent& primaryCameraComp = m_primaryCameraEntity->getComponent<CameraComponent>();
+			//Render only if there is a valid camera in the primaryCameraEntity
+			if (primaryCameraComp.camera.getProjectionMatrix() != glm::mat4(1.0f)) //If the projection matrix has been set and not equal to the default identity matrix glm::mat4(1.0f)
+			{
+				/*Render 2D*/
+				Renderer2D::BeginScene(primaryCameraComp.camera, m_primaryCameraEntity->getComponent<TransformComponent>().getTransform());
+				entt::basic_group spriteGroup = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
-		for (auto entity : group) {
-			auto& [transform, sprite] = group.get<TransformComponent, SpriteRendererComponent>(entity);
+				for (auto entity : spriteGroup) {
+					auto& [transform, sprite] = spriteGroup.get<TransformComponent, SpriteRendererComponent>(entity);
 
-			Renderer2D::DrawQuad(transform.getTransform(), sprite.color);
+					Renderer2D::DrawQuad(transform.getTransform(), sprite.color);
+				}
+				Renderer2D::EndScene();
+			}
 		}
+
 	}
 
 	Entity Scene::createEntity(const std::string& tagName)

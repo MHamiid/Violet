@@ -11,8 +11,10 @@ namespace Violet {
 		~Scene();
 		void onUpdate(DeltaTime deltaTime);
 		Entity createEntity(const std::string& tagName = std::string("Empty Tag"));
+		void setPrimaryCamera(Entity& cameraEntity) { m_primaryCameraEntity = &cameraEntity; }
 	private:
 		entt::registry m_registry; //A container for all the components and entities
+		Entity* m_primaryCameraEntity = nullptr;
 	private:
 		friend class Entity;
 	};

@@ -126,6 +126,19 @@ namespace Violet {
 		delete s_data;
 	}
 
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	{
+		s_data->textureShader->bind();
+		s_data->textureShader->setMat4("u_viewProjection", camera.getProjectionMatrix() * glm::inverse(transform)); //Set the uniform
+
+		/*Reset Scene Statistics*/
+		s_data->sceneStatistics.drawCallsCount = 0;
+		s_data->sceneStatistics.quadCount = 0;
+
+		/*Reset Scene*/
+		StartNewBatch();
+	}
+
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		s_data->textureShader->bind();

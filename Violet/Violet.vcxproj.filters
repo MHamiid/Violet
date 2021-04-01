@@ -156,6 +156,7 @@
     <ClInclude Include="src\Violet\Scene\Scene.h" />
     <ClInclude Include="src\Violet\Scene\Components.h" />
     <ClInclude Include="src\Violet\Scene\Entity.h" />
+    <ClInclude Include="src\Violet\Renderer\Camera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">

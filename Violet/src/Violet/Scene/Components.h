@@ -1,6 +1,8 @@
 #pragma once
 #include <glm/glm.hpp>
-#include <glm/gtx/quaternion.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include "Violet/Renderer/Camera.h"
+
 namespace Violet {
 
 
@@ -48,6 +50,17 @@ namespace Violet {
 		SpriteRendererComponent(const glm::vec4& color) : color(color) {}
 
 		SpriteRendererComponent(const SpriteRendererComponent&) = default;
+
+	};
+
+	struct VIOLET_API CameraComponent
+	{
+		Camera camera;
+
+		CameraComponent() = default;
+		CameraComponent(const glm::mat4& projection) : camera(projection) {}
+
+		CameraComponent(const CameraComponent&) = default;
 
 	};
 

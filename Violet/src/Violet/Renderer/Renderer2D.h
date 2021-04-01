@@ -1,6 +1,7 @@
 #pragma once
-#include "OrthographicCamera.h"
-#include "Texture.h"
+#include "Violet/Renderer/OrthographicCamera.h"
+#include "Violet/Renderer/Texture.h"
+#include "Violet/Renderer/Camera.h"
 
 namespace Violet {
 
@@ -8,7 +9,8 @@ namespace Violet {
 	public:
 		static void Init();
 		static void Shutdown();
-		static void BeginScene(const OrthographicCamera& camera);
+		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const OrthographicCamera& camera);  //TODO: Remove
 		static void EndScene();
 		static void Flush();
 

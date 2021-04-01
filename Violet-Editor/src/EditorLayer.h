@@ -33,7 +33,9 @@ namespace Violet {
 		glm::vec2 m_viewPortSize = { 0.0f, 0.0f };
 
 		Ref<Scene> m_activeScene;
-		Entity m_square;
+
+		Entity m_squareEntity;
+		Entity m_cameraEntity;
 	};
 
 }
