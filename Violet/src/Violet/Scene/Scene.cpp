@@ -8,8 +8,6 @@ namespace Violet {
 	/*TODO: Set the SceneCameras viewport on creation*/
 	Scene::Scene()
 	{
-		//NOTE: ent::entity is a uint32_t ID
-		entt::entity entity = m_registry.create();
 	}
 
 	Scene::~Scene()

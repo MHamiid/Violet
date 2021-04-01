@@ -21,6 +21,8 @@ namespace Violet {
 
 		m_activeScene = CreateRef<Scene>();
 
+		m_sceneHierarchyPanel.setContextScene(m_activeScene);
+
 		m_squareEntity = m_activeScene->createEntity("Square Entity");
 		m_squareEntity.addComponent<SpriteRendererComponent>();
 
@@ -227,6 +229,9 @@ namespace Violet {
 		/*Ending ImGui DockSpace Code*/
 
 		/*Start ImGui Code*/
+		m_sceneHierarchyPanel.onImGuiRender();
+
+
 		ImGui::Begin("Render2D Scene Statistics");
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetSceneStatistics().getTotalDrawCallsCount());
 		ImGui::Text("Quads: %d", Renderer2D::GetSceneStatistics().getTotalQuadCount());

@@ -19,7 +19,7 @@ namespace Violet {
 			return (m_enttID == other.m_enttID) && (m_scene == other.m_scene);
 		}
 		bool operator!=(const Entity& other) {
-			return (*this == other); //Make use of the overloaded operator== (previous function)
+			return !(*this == other); //Make use of the overloaded operator== (previous function)
 		}
 
 		//Takes the arguments and forward them to entt's emplace directly rather than constructing them and then call entt to emplace
@@ -63,7 +63,7 @@ namespace Violet {
 
 
 	private:
-		entt::entity m_enttID{ entt::null };
+		entt::entity m_enttID{ entt::null }; //NOTE: ent::entity is a uint32_t ID
 		Scene* m_scene = nullptr;  //The scene which the entity exists in
 
 	};
