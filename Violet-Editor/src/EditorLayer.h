@@ -1,6 +1,7 @@
 #pragma once
 #include <Violet.h>
 #include "Panels/SceneHierarchyPanel.h"
+#include "Panels/PropertiesPanel.h"
 
 namespace Violet {
 
@@ -40,6 +41,7 @@ namespace Violet {
 
 		/*Panels*/
 		SceneHierarchyPanel m_sceneHierarchyPanel;
+		PropertiesPanel m_propertiesPanel;
 
 	};
 

@@ -21,7 +21,8 @@ namespace Violet {
 
 		m_activeScene = CreateRef<Scene>();
 
-		m_sceneHierarchyPanel.setContextScene(m_activeScene);
+		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
 
 		m_squareEntity = m_activeScene->createEntity("Square Entity");
 		m_squareEntity.addComponent<SpriteRendererComponent>();
@@ -37,8 +38,8 @@ namespace Violet {
 			float m_translationSpeed = 5.0f;
 			float m_rotationSpeed = 90.0f;
 
-			glm::vec3* m_translation;
-			glm::vec3* m_rotation;
+			glm::vec3* m_translation = nullptr;
+			glm::vec3* m_rotation = nullptr;
 
 			void onCreate() override 
 			{
@@ -230,7 +231,7 @@ namespace Violet {
 
 		/*Start ImGui Code*/
 		m_sceneHierarchyPanel.onImGuiRender();
-
+		m_propertiesPanel.onImGuiRender();
 
 		ImGui::Begin("Render2D Scene Statistics");
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetSceneStatistics().getTotalDrawCallsCount());
@@ -293,7 +294,8 @@ namespace Violet {
 		ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
 		m_viewPortSize = { viewPortPanelSize.x, viewPortPanelSize.y };  //Update the size
 		
-		ImGui::Image((void*)(m_frameBuffer->getColorAttachmentID()), ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
+		uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void* pointer when casting
+		ImGui::Image((void*)textureID, ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 		ImGui::End();
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 		/*End ImGui Code*/

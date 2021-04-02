@@ -3,6 +3,7 @@
 #include "Violet/Core/Log.h"
 #include "Violet/Scene/Scene.h"
 #include "Violet/Scene/Entity.h"
+#include "PropertiesPanel.h"
 
 namespace Violet {
 
@@ -11,7 +12,8 @@ namespace Violet {
 		SceneHierarchyPanel() = default;
 		SceneHierarchyPanel(const Ref<Scene>& scene);
 
-		void setContextScene(const Ref<Scene>& scene);
+		void setSceneContext(const Ref<Scene>& scene);
+		void setPropertiesPanelContext(PropertiesPanel* propertiesPanel);
 
 		void onImGuiRender();
 		
@@ -19,7 +21,8 @@ namespace Violet {
 		void drawEntityNode(Entity entity);
 
 	private:
-		Ref<Scene> m_contextScene;
+		Ref<Scene> m_sceneContext;
 		Entity m_selectedEntity;
+		PropertiesPanel* m_propertiesPanelContext = nullptr;
 	};
 }
