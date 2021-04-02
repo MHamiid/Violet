@@ -10,16 +10,14 @@ namespace Violet {
 		PropertiesPanel() = default;
 		PropertiesPanel(Entity entity);
 
-		void setContextEntity(Entity entity);
+		void setEntityContext(Entity entity);
 
 		void onImGuiRender();
 
 	private:
 		void drawComponents(Entity entity);
 	private:
-		Entity m_contextEntity;
-	private:
-		friend class SceneHierarchyPanel;
+		Entity m_entityContext;
 	};
 
 }

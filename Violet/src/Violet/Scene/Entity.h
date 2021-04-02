@@ -61,6 +61,7 @@ namespace Violet {
 			m_scene->m_registry.remove<T>(m_enttID);
 		}
 
+		Scene* getScene() { return m_scene; }  //TODO: Not final, think of better approach
 
 	private:
 		entt::entity m_enttID{ entt::null }; //NOTE: ent::entity is a uint32_t ID

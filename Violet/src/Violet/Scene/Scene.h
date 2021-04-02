@@ -12,10 +12,12 @@ namespace Violet {
 		void onUpdate(DeltaTime deltaTime);
 		void onViewPortResize(uint32_t width, uint32_t height);
 		Entity createEntity(const std::string& tagName = std::string("Unnamed Entity"));
-		void setPrimaryCamera(Entity& cameraEntity) { m_primaryCameraEntity = &cameraEntity; }
+		//Using a pointer cause of forward declaration (Can't include Entity header here), Using Ref<Entity> to take ownership of the entity
+		void setPrimaryCameraEntity(const Ref<Entity>& cameraEntity) { m_primaryCameraEntity = cameraEntity; }
+		Entity& getPrimaryCameraEntity() { return *m_primaryCameraEntity.get(); }
 	private:
 		entt::registry m_registry; //A container for all the components and entities
-		Entity* m_primaryCameraEntity = nullptr;
+		Ref<Entity> m_primaryCameraEntity; //Using a pointer cause of forward declaration (Can't include Entity header here), Using Ref<Entity> to take ownership of the entity
 		uint32_t m_viewPortWidth = 0, m_viewPortHeight = 0;
 	private:
 		friend class Entity;

@@ -30,7 +30,10 @@ namespace Violet {
 		m_cameraEntity = m_activeScene->createEntity("Camera Entity");
 		m_cameraEntity.addComponent<CameraComponent>();
 
-		m_activeScene->setPrimaryCamera(m_cameraEntity);
+		Entity secondCamera = m_activeScene->createEntity("Second Camera Entity");
+		secondCamera.addComponent<CameraComponent>();
+
+		m_activeScene->setPrimaryCameraEntity(CreateRef<Entity>(m_cameraEntity));
 
 
 		class CameraController : public Script {
@@ -241,39 +244,8 @@ namespace Violet {
 		ImGui::End();
 
 		ImGui::Begin("Object Properties");
-		ImGui::Text(m_squareEntity.getComponent<TagComponent>().tag.c_str());
-		ImGui::Separator();
-		TransformComponent& squareTransformation = m_squareEntity.getComponent<TransformComponent>();
-		ImGui::Text("Translation: %.2f, %.2f, %.2f", squareTransformation.translation.x, squareTransformation.translation.y, squareTransformation.translation.z);
-		ImGui::Text("Rotation: %.2f, %.2f, %.2f", squareTransformation.rotation.x, squareTransformation.rotation.y, squareTransformation.rotation.z);
-		ImGui::Text("Scale: %.2f, %.2f, %.2f", squareTransformation.scale.x, squareTransformation.scale.y, squareTransformation.scale.z);
 		ImGui::Separator();
 		ImGui::ColorEdit4("Object Color", glm::value_ptr(m_objectColor));
-		ImGui::End();
-
-		ImGui::Begin("Camera Properties");
-		ImGui::Text(m_cameraEntity.getComponent<TagComponent>().tag.c_str());
-		ImGui::Separator();
-		TransformComponent& cameraTransformation = m_cameraEntity.getComponent<TransformComponent>();
-		ImGui::DragFloat3("Translation", glm::value_ptr(cameraTransformation.translation), 0.01f);
-		ImGui::DragFloat3("Rotation", glm::value_ptr(cameraTransformation.rotation), 0.1f);
-		ImGui::DragFloat3("Scale", glm::value_ptr(cameraTransformation.scale), 0.01f);
-		ImGui::Separator();
-		CameraComponent& camera = m_cameraEntity.getComponent<CameraComponent>();
-		float orthographicSize = camera.sceneCamera.getOrthographicSize();
-		ImGui::Text("Orthographic Properties");
-		ImGui::Separator();
-		if (ImGui::DragFloat("Size", &orthographicSize, 0.05f)) {
-			camera.sceneCamera.setOrthographicSize(orthographicSize);
-		}
-		float orthographicNear = camera.sceneCamera.getOrthographicNearClip();
-		if (ImGui::DragFloat("Near", &orthographicNear, 0.01f)) {
-			camera.sceneCamera.setOrthographicNearClip(orthographicNear);
-		}
-		float orthographicFar = camera.sceneCamera.getOrthographicFarClip();
-		if (ImGui::DragFloat("Far", &orthographicFar, 0.01f)) {
-			camera.sceneCamera.setOrthographicFarClip(orthographicFar);
-		}
 		ImGui::End();
 
 		ImGui::Begin("FPS");

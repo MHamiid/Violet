@@ -30,8 +30,8 @@ namespace Violet {
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
 			m_selectedEntity = {};
 
-			//Update the properties panel context entity
-			m_propertiesPanelContext->m_contextEntity = {};
+			//Update the properties panel entity context
+			m_propertiesPanelContext->setEntityContext({ });
 		}
 
 		ImGui::End();
@@ -48,8 +48,8 @@ namespace Violet {
 		if (ImGui::IsItemClicked()) {
 			m_selectedEntity = entity;
 
-			//Update the properties panel context entity
-			m_propertiesPanelContext->m_contextEntity = entity;
+			//Update the properties panel entity context
+			m_propertiesPanelContext->setEntityContext(entity);
 		}
 
 		if (opened) {
