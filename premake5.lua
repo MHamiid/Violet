@@ -331,7 +331,9 @@ project "ImGui"
 		ImGuiSrcDir .."backends/imgui_impl_opengl3.cpp",
 		ImGuiSrcDir .."backends/imgui_impl_glfw.h",
 		ImGuiSrcDir .."backends/imgui_impl_glfw.cpp",
-		ImGuiSrcDir .."examples/libs/glfw/include/**"
+		ImGuiSrcDir .."examples/libs/glfw/include/**",
+		ImGuiSrcDir .."misc/cpp/imgui_stdlib.h",        --imgui_stdlib.h + imgui_stdlib.cpp InputText() wrappers for C++ standard library (STL) type: std::string.
+		ImGuiSrcDir .."misc/cpp/imgui_stdlib.cpp"
 
 	}
 	

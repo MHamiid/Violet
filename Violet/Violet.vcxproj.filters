@@ -28,6 +28,9 @@
     <Filter Include="src\Violet\Renderer">
       <UniqueIdentifier>{75E8ACD4-E149-8AE2-6AB7-D094D617C1A1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Violet\Scene">
+      <UniqueIdentifier>{4CACB400-38A5-D352-61D7-B8D74D2FB35E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
     </Filter>
@@ -117,6 +120,9 @@
     <ClInclude Include="src\Violet\Renderer\Buffer.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\Camera.h">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Renderer\FrameBuffer.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
@@ -150,15 +156,24 @@
     <ClInclude Include="src\Violet\Renderer\VertexArray.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Scene\Components.h">
+      <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Scene\Entity.h">
+      <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Scene\Scene.h">
+      <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Scene\SceneCamera.h">
+      <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Scene\Script.h">
+      <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Scene\Scene.h" />
-    <ClInclude Include="src\Violet\Scene\Components.h" />
-    <ClInclude Include="src\Violet\Scene\Entity.h" />
-    <ClInclude Include="src\Violet\Renderer\Camera.h" />
-    <ClInclude Include="src\Violet\Scene\SceneCamera.h" />
-    <ClInclude Include="src\Violet\Scene\Script.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -242,11 +257,17 @@
     <ClCompile Include="src\Violet\Renderer\VertexArray.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Scene\Entity.cpp">
+      <Filter>src\Violet\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Scene\Scene.cpp">
+      <Filter>src\Violet\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Scene\SceneCamera.cpp">
+      <Filter>src\Violet\Scene</Filter>
+    </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Scene\Scene.cpp" />
-    <ClCompile Include="src\Violet\Scene\Entity.cpp" />
-    <ClCompile Include="src\Violet\Scene\SceneCamera.cpp" />
   </ItemGroup>
 </Project>

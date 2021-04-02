@@ -135,12 +135,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\Violet\Renderer\Camera.h" />
-    <ClInclude Include="src\Violet\Scene\Components.h" />
-    <ClInclude Include="src\Violet\Scene\Entity.h" />
-    <ClInclude Include="src\Violet\Scene\Scene.h" />
-    <ClInclude Include="src\Violet\Scene\SceneCamera.h" />
-    <ClInclude Include="src\Violet\Scene\Script.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Core\Application.h" />
@@ -168,6 +162,7 @@
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLVertexArray.h" />
     <ClInclude Include="src\Violet\Platform\Windows\WindowsWindow.h" />
     <ClInclude Include="src\Violet\Renderer\Buffer.h" />
+    <ClInclude Include="src\Violet\Renderer\Camera.h" />
     <ClInclude Include="src\Violet\Renderer\FrameBuffer.h" />
     <ClInclude Include="src\Violet\Renderer\GraphicsAPI.h" />
     <ClInclude Include="src\Violet\Renderer\GraphicsContext.h" />
@@ -179,12 +174,14 @@
     <ClInclude Include="src\Violet\Renderer\Shader.h" />
     <ClInclude Include="src\Violet\Renderer\Texture.h" />
     <ClInclude Include="src\Violet\Renderer\VertexArray.h" />
+    <ClInclude Include="src\Violet\Scene\Components.h" />
+    <ClInclude Include="src\Violet\Scene\Entity.h" />
+    <ClInclude Include="src\Violet\Scene\Scene.h" />
+    <ClInclude Include="src\Violet\Scene\SceneCamera.h" />
+    <ClInclude Include="src\Violet\Scene\Script.h" />
     <ClInclude Include="vendor\stb_image\stb_image.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Violet\Scene\Entity.cpp" />
-    <ClCompile Include="src\Violet\Scene\Scene.cpp" />
-    <ClCompile Include="src\Violet\Scene\SceneCamera.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -214,6 +211,9 @@
     <ClCompile Include="src\Violet\Renderer\Shader.cpp" />
     <ClCompile Include="src\Violet\Renderer\Texture.cpp" />
     <ClCompile Include="src\Violet\Renderer\VertexArray.cpp" />
+    <ClCompile Include="src\Violet\Scene\Entity.cpp" />
+    <ClCompile Include="src\Violet\Scene\Scene.cpp" />
+    <ClCompile Include="src\Violet\Scene\SceneCamera.cpp" />
     <ClCompile Include="vendor\stb_image\stb_image.cpp" />
   </ItemGroup>
   <ItemGroup>

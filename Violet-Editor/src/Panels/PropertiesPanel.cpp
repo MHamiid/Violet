@@ -2,6 +2,7 @@
 #include <imgui.h>
 #include "Violet/Scene/Components.h"
 #include <glm/gtc/type_ptr.hpp>
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Violet {
 
@@ -33,15 +34,7 @@ namespace Violet {
 		if (entity.hasComponent<TagComponent>()) {
 			auto& tag = entity.getComponent<TagComponent>().tag;
 
-			char buffer[256];
-
-			memset(buffer, 0, sizeof(buffer));
-			std::strncpy(buffer, tag.c_str(), sizeof(buffer));
-
-			if (ImGui::InputText("Tag", buffer, sizeof(buffer)))  //If the text changed 
-			{
-				tag = std::string(buffer);
-			}
+			ImGui::InputText("Tag", &tag);
 		}
 
 		if (entity.hasComponent<TransformComponent>()) {

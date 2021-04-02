@@ -19,6 +19,12 @@
     <Filter Include="examples\libs\glfw\include\GLFW">
       <UniqueIdentifier>{4E69E5B0-BA4C-F4F0-C34F-222D2FB2BA41}</UniqueIdentifier>
     </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{B1A29A7C-9DD9-9B0D-46C6-811032DC170F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc\cpp">
+      <UniqueIdentifier>{030DBAB9-EFD9-14C5-18F3-026D041F4A53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Violet\vendor\imgui\backends\imgui_impl_glfw.h">
@@ -39,6 +45,9 @@
     <ClInclude Include="..\Violet\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="..\Violet\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="..\Violet\vendor\imgui\imstb_truetype.h" />
+    <ClInclude Include="..\Violet\vendor\imgui\misc\cpp\imgui_stdlib.h">
+      <Filter>misc\cpp</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Violet\vendor\imgui\backends\imgui_impl_glfw.cpp">
@@ -52,5 +61,8 @@
     <ClCompile Include="..\Violet\vendor\imgui\imgui_draw.cpp" />
     <ClCompile Include="..\Violet\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="..\Violet\vendor\imgui\imgui_widgets.cpp" />
+    <ClCompile Include="..\Violet\vendor\imgui\misc\cpp\imgui_stdlib.cpp">
+      <Filter>misc\cpp</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
