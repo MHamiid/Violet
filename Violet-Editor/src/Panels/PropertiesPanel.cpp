@@ -45,8 +45,8 @@ namespace Violet {
 			if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity
 				, ImGuiTreeNodeFlags_DefaultOpen, "Transform")) //If opened display the component
 			{
-				auto& transform = entity.getComponent<TransformComponent>();
-				ImGui::DragFloat3("Position", glm::value_ptr(transform.translation), 0.1f);
+				auto& transformComponent = entity.getComponent<TransformComponent>();
+				ImGui::DragFloat3("Position", glm::value_ptr(transformComponent.translation), 0.1f);
 				ImGui::TreePop();
 			}
 
@@ -155,6 +155,19 @@ namespace Violet {
 			}
 
 		}
+
+		/*Sprit Renderer Component*/
+		if (entity.hasComponent<SpriteRendererComponent>()) {
+			if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity
+				, ImGuiTreeNodeFlags_DefaultOpen, "Sprite")) //If opened display the component
+			{
+				auto& spritRendererComponent = entity.getComponent<SpriteRendererComponent>();
+				ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
+				ImGui::TreePop();
+			}
+
+		}
+
 	}
 
 }

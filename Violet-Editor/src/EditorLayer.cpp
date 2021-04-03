@@ -27,6 +27,9 @@ namespace Violet {
 		m_squareEntity = m_activeScene->createEntity("Square Entity");
 		m_squareEntity.addComponent<SpriteRendererComponent>();
 
+		Entity secondSquare = m_activeScene->createEntity("Second Square Entity");
+		secondSquare.addComponent<SpriteRendererComponent>();
+
 		m_cameraEntity = m_activeScene->createEntity("Camera Entity");
 		m_cameraEntity.addComponent<CameraComponent>();
 
@@ -144,7 +147,6 @@ namespace Violet {
 		squareTransformation.translation = m_objectPosition;
 		squareTransformation.rotation = { 0.0f, 0.0f, m_objectRotationZ };
 		squareTransformation.scale = m_objectScale;*/
-		m_squareEntity.getComponent<SpriteRendererComponent>().color = m_objectColor;
 
 		//Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
 		//Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
@@ -236,16 +238,11 @@ namespace Violet {
 		m_sceneHierarchyPanel.onImGuiRender();
 		m_propertiesPanel.onImGuiRender();
 
-		ImGui::Begin("Render2D Scene Statistics");
+		ImGui::Begin("Renderer2D Scene Statistics");
 		ImGui::Text("Draw Calls: %d", Renderer2D::GetSceneStatistics().getTotalDrawCallsCount());
 		ImGui::Text("Quads: %d", Renderer2D::GetSceneStatistics().getTotalQuadCount());
 		ImGui::Text("Vertices: %d", Renderer2D::GetSceneStatistics().getTotalVertexCount());
 		ImGui::Text("Indices: %d", Renderer2D::GetSceneStatistics().getTotalIndexCount());
-		ImGui::End();
-
-		ImGui::Begin("Object Properties");
-		ImGui::Separator();
-		ImGui::ColorEdit4("Object Color", glm::value_ptr(m_objectColor));
 		ImGui::End();
 
 		ImGui::Begin("FPS");

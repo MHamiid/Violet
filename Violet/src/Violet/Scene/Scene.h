@@ -14,7 +14,7 @@ namespace Violet {
 		Entity createEntity(const std::string& tagName = std::string("Unnamed Entity"));
 		//Using a pointer cause of forward declaration (Can't include Entity header here), Using Ref<Entity> to take ownership of the entity
 		void setPrimaryCameraEntity(const Ref<Entity>& cameraEntity) { m_primaryCameraEntity = cameraEntity; }
-		Entity& getPrimaryCameraEntity() { return *m_primaryCameraEntity.get(); }
+		Entity& getPrimaryCameraEntity() { return *m_primaryCameraEntity.get(); } //Can't return by value (Entity is forward declared)
 	private:
 		entt::registry m_registry; //A container for all the components and entities
 		Ref<Entity> m_primaryCameraEntity; //Using a pointer cause of forward declaration (Can't include Entity header here), Using Ref<Entity> to take ownership of the entity

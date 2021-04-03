@@ -18,14 +18,6 @@ namespace Violet {
 	private:
 		OrthographicCameraController m_cameraController;
 
-		glm::vec3 m_objectPosition{ 0.0f, 0.0f, 0.0f };
-		float m_objectRotationZ = 0.0f;
-		glm::vec3 m_objectScale{ 1.0f, 1.0f, 1.0f };
-		glm::vec4 m_objectColor = { 1.0f, 0.7f, 0.6f, 1.0f };
-
-		float m_translationSpeed = 0.1f;
-		float m_scaleSpeed = 0.3f;
-
 		Ref<Texture2D> m_LetterVTexture;
 		Ref<Texture2D> m_transparentTexture;
 		Ref<Texture2D> m_grassTexture;

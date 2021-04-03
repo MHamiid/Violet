@@ -45,6 +45,7 @@ namespace Violet {
 
 	struct VIOLET_API SpriteRendererComponent
 	{
+		/*TODO: Should Have A Material When Material System Is Added*/
 		glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 		SpriteRendererComponent() = default;
