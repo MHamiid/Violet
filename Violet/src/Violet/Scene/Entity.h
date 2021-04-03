@@ -62,6 +62,7 @@ namespace Violet {
 		}
 
 		Scene* getScene() { return m_scene; }  //TODO: Not final, think of better approach
+		bool isValidEntity() { return (m_enttID != entt::null) && (m_scene != nullptr); } //Check if the entity has been set and assigned to a scene
 
 	private:
 		entt::entity m_enttID{ entt::null }; //NOTE: ent::entity is a uint32_t ID

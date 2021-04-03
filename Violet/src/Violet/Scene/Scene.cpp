@@ -34,7 +34,9 @@ namespace Violet {
 		); 
 
 		/*Render 2D*/
-		if (m_primaryCameraEntity) {
+		//If entity not null, entity has been assigned to a scene and entity has a CameraComponent attached, Note the sequence of the checking of the conditions
+		if (m_primaryCameraEntity.get() && m_primaryCameraEntity->isValidEntity() && m_primaryCameraEntity->hasComponent<CameraComponent>())
+		{
 			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
 			if (primaryCameraComponent.sceneCamera.getProjectionMatrix() != glm::mat4(1.0f)) //If the projection matrix has been set and not equal to the default identity matrix glm::mat4(1.0f)
