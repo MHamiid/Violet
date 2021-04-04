@@ -54,6 +54,11 @@ namespace Violet {
 				Renderer2D::EndScene();
 			}
 		}
+		else 
+		{
+			//Reset the statistics from the last scene when there is no camera rendering the scene
+			Renderer2D::ResetSceneStatistics();
+		}
 
 	}
 

@@ -55,6 +55,7 @@ namespace Violet {
 		};
 
 		static SceneStatistics GetSceneStatistics();  //Return statistics for the last scene after calling BeginScene()
+		static void ResetSceneStatistics();
 
 	private:
 		static void StartNewBatch();

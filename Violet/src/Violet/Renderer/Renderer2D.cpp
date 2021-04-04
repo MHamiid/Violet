@@ -389,4 +389,9 @@ namespace Violet {
 	{
 		return Renderer2DData::sceneStatistics;
 	}
+	void Renderer2D::ResetSceneStatistics()
+	{
+		Renderer2DData::sceneStatistics.drawCallsCount = 0;
+		Renderer2DData::sceneStatistics.quadCount = 0;
+	}
 }
