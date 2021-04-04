@@ -160,7 +160,7 @@ namespace Violet {
 				
 				if (ImGui::Checkbox("Primary", &isThisCameraPrimary))
 				{
-					entity.getScene()->setPrimaryCameraEntity(CreateRef<Entity>(entity));
+					entity.getScene()->setPrimaryCameraEntity(entity);
 				}
 
 				if (checkBoxHidden)

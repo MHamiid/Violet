@@ -36,7 +36,7 @@ namespace Violet {
 		Entity secondCamera = m_activeScene->createEntity("Second Camera Entity");
 		secondCamera.addComponent<CameraComponent>();
 
-		m_activeScene->setPrimaryCameraEntity(CreateRef<Entity>(m_cameraEntity));
+		m_activeScene->setPrimaryCameraEntity(m_cameraEntity);
 
 
 		class CameraController : public Script {

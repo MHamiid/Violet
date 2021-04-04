@@ -8,10 +8,13 @@ namespace Violet {
 	/*TODO: Set the SceneCameras viewport on creation*/
 	Scene::Scene()
 	{
+		//Allocate space to copy the entity to when setPrimaryCameraEntity
+		m_primaryCameraEntity = new Entity();
 	}
 
 	Scene::~Scene()
 	{
+		delete m_primaryCameraEntity;
 	}
 
 	void Scene::onUpdate(DeltaTime deltaTime)
@@ -34,8 +37,8 @@ namespace Violet {
 		); 
 
 		/*Render 2D*/
-		//If entity not null, entity has been assigned to a scene and entity has a CameraComponent attached, Note the sequence of the checking of the conditions
-		if (m_primaryCameraEntity.get() && m_primaryCameraEntity->isValidEntity() && m_primaryCameraEntity->hasComponent<CameraComponent>())
+		//If entity has been assigned to a scene and entity has a CameraComponent attached, Note the sequence of the checking of the conditions
+		if (m_primaryCameraEntity->isValidEntity() && m_primaryCameraEntity->hasComponent<CameraComponent>())
 		{
 			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
@@ -82,6 +85,16 @@ namespace Violet {
 		entity.addComponent<TagComponent>(tagName);
 
 		return entity;
+	}
+
+	void Scene::setPrimaryCameraEntity(Entity cameraEntity)
+	{
+		*m_primaryCameraEntity = cameraEntity;
+	}
+
+	Entity Scene::getPrimaryCameraEntity()
+	{
+		return *m_primaryCameraEntity;
 	}
 
 }
