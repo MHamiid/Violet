@@ -16,6 +16,10 @@ namespace Violet {
 
 	private:
 		void drawComponents(Entity entity);
+		void drawAddComponentButton();
+	private:
+		template<typename ComponentType, typename UIFunction>
+		static void drawComponent(const std::string& name, Entity entity, UIFunction UIFUNC);
 	private:
 		Entity m_entityContext;
 	};

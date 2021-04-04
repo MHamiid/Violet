@@ -30,6 +30,11 @@ namespace Violet {
 		//io.ConfigViewportsNoAutoMerge = true;
 		//io.ConfigViewportsNoTaskBarIcon = true;
 
+		
+		io.Fonts->AddFontFromFileTTF("assets/fonts/SourceSansPro/SourceSansPro-Bold.ttf", 18.0f);  //Font at index 0
+		io.FontDefault = io.Fonts->AddFontFromFileTTF("assets/fonts/SourceSansPro/SourceSansPro-Regular.ttf", 18.0f);  //Font at index 1
+
+
 		// Setup Dear ImGui style
 		ImGui::StyleColorsDark();
 		//ImGui::StyleColorsClassic();

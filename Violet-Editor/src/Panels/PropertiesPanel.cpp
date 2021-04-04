@@ -24,35 +24,17 @@ namespace Violet {
 		if (m_entityContext) //If there is a context entity selected and it is a valid entity (@exmple: not deleted)
 		{
 			drawComponents(m_entityContext);
-
-			if (ImGui::Button("Add Component")) //If pressed open the pop-up
-			{
-				ImGui::OpenPopup("AddComponent-ID");
-			}
-
-			if (ImGui::BeginPopup("AddComponent-ID")) //Create the pop-up
-			{
-				if (!m_entityContext.hasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite"))  //Menu item will not be rendered if the entity already has the component, Note the sequence of the checking of the conditions
-				{
-					m_entityContext.addComponent<SpriteRendererComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-				if (!m_entityContext.hasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
-				{
-					m_entityContext.addComponent<CameraComponent>();
-					ImGui::CloseCurrentPopup();
-				}
-
-				ImGui::EndPopup();
-			}
 		}
 
 		ImGui::End();
 	}
 
 	/*TODO: Move It To A UI Library*/
-	static bool drawVec3ControlUI(const std::string& label, glm::vec3& values, float valueStepSize = 0.1f, float resetValue = 0.0f, float columnWidth = 100.0f) 
+	static bool DrawVec3ControlUI(const std::string& label, glm::vec3& values, float valueStepSize = 0.1f, float resetValue = 0.0f, float columnWidth = 100.0f) 
 	{
+		ImGuiIO& io = ImGui::GetIO();
+		auto boldFont = io.Fonts->Fonts[0];
+
 		bool isValueChanged = false;
 
 		//Set an ID for this Whole Component UI, So that this function can be used more than once without ImGui::DragFloat being related to each other, DragFloat ID is repeated (##X, ##Y, ##Z)
@@ -70,19 +52,24 @@ namespace Violet {
 
 		/*Set Second Column Style*/
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth()); //Set to have 3 items for the width of the second column
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0, 0 }); //Set spacing between the items to 0
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 0.0f }); //Set spacing between the items to 0
 
+		/*Button Size*/
+		float characterHeight = (GImGui->Font->FontSize) + (GImGui->Style.FramePadding.y * 2.0f);
+		ImVec2 buttonSize = { characterHeight + 3.0f, characterHeight };
 
 		/*First Item*/
 		/*Set Button Style Color*/
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.7f, 0.1f, 0.15f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.8f, 0.2f, 0.2f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.7f, 0.1f, 0.15f, 1.0f));
-		if (ImGui::Button("X")) //If Pressed 
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("X", buttonSize)) //If Pressed 
 		{
 			values.x = resetValue;
 			isValueChanged = true;
 		}
+		ImGui::PopFont();
 		ImGui::PopStyleColor(3); //Pop the three defined style colors for the button
 
 		ImGui::SameLine();
@@ -95,11 +82,13 @@ namespace Violet {
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.3f, 0.7f, 0.3f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.2f, 0.6f, 0.2f, 1.0f));
-		if (ImGui::Button("Y")) //If Pressed 
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Y", buttonSize)) //If Pressed 
 		{
 			values.y = resetValue;
 			isValueChanged = true;
 		}
+		ImGui::PopFont();
 		ImGui::PopStyleColor(3); //Pop the three defined style colors for the button
 
 		ImGui::SameLine();
@@ -112,11 +101,13 @@ namespace Violet {
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.1f, 0.25f, 0.7f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonHovered, ImVec4(0.2f, 0.35f, 0.8f, 1.0f));
 		ImGui::PushStyleColor(ImGuiCol_ButtonActive, ImVec4(0.1f, 0.25f, 0.7f, 1.0f));
-		if (ImGui::Button("Z")) //If Pressed 
+		ImGui::PushFont(boldFont);
+		if (ImGui::Button("Z", buttonSize)) //If Pressed 
 		{
 			values.z = resetValue;
 			isValueChanged = true;
 		}
+		ImGui::PopFont();
 		ImGui::PopStyleColor(3); //Pop the three defined style colors for the button
 
 		ImGui::SameLine();
@@ -132,41 +123,50 @@ namespace Violet {
 		return isValueChanged;
 	}
 
-	/*TODO: Set a better way for creating a unique ID for ImGui::TreeNodeEx rather than typeid(class).hash_code()*/
-	void PropertiesPanel::drawComponents(Entity entity)
+	/*TODO: Move It To A UI Library*/
+	template<typename UIFunction>
+	static void DrawWithHiddenStyle(bool hide, UIFunction UIFUNC)
 	{
-		/*Search for all the possible components if they exist*/
-		
-		/*Tag Component*/
-		if (entity.hasComponent<TagComponent>()) {
-			auto& tag = entity.getComponent<TagComponent>().tag;
-
-			ImGui::InputText("Tag", &tag);
+		bool itemHidden = false;
+		if (hide)
+		{
+			/*Draw With Hidden Style*/
+			itemHidden = true;
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
 
-		/*Transform Component*/
-		if (entity.hasComponent<TransformComponent>()) {
-			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code()
-				, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Transform")) //If opened display the component
-			{
-				auto& transformComponent = entity.getComponent<TransformComponent>();
-				drawVec3ControlUI("Position", transformComponent.translation, 0.1f);
-				glm::vec3 rotation = glm::degrees(transformComponent.rotation); //Convert it degrees to show in the UI
-				if (drawVec3ControlUI("Rotation", rotation, 0.2f)) //If any of the values changed
-				{
-					transformComponent.rotation = glm::radians(rotation);  //Get the rotation in degrees value form the UI and set it
-				}
-				drawVec3ControlUI("Scale", transformComponent.scale, 0.1f, 1.0f);
-				ImGui::TreePop();
-			}
+			UIFUNC();
 
+		if (itemHidden)
+		{
+			/*Pop Drawing With Hidden Style*/
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
 		}
+	}
 
-		/*Camera Component*/
-		if (entity.hasComponent<CameraComponent>()) {
-			bool treeNodeOpened = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Camera"); //Render the node
-			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 10.0f);
-			if (ImGui::Button("+", ImVec2{ 15, 20 })) {
+	/*TODO: Set a better way for creating a unique ID for ImGui::TreeNodeEx rather than typeid(class).hash_code()*/
+	template<typename ComponentType, typename UIFunction>
+	void PropertiesPanel::drawComponent(const std::string& name, Entity entity, UIFunction UIFUNC)
+	{
+		if (entity.hasComponent<ComponentType>()) {
+			ComponentType& component = entity.getComponent<ComponentType>();
+
+			ImVec2 fullContentRegionAvailable = ImGui::GetContentRegionAvail();
+			const ImGuiTreeNodeFlags treeNodeFlags = ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_Framed 
+				| ImGuiTreeNodeFlags_SpanAvailWidth | ImGuiTreeNodeFlags_AllowItemOverlap | ImGuiTreeNodeFlags_FramePadding;
+
+			ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2{ 3.0f, 3.0f });
+
+			float characterHeight = (GImGui->Font->FontSize) + (GImGui->Style.FramePadding.y * 2.0f);
+			ImGui::Separator();
+			bool treeNodeOpened = ImGui::TreeNodeEx((void*)typeid(ComponentType).hash_code(), treeNodeFlags, name.c_str()); //Render the node
+
+			ImGui::PopStyleVar();
+
+			ImGui::SameLine(fullContentRegionAvailable.x - characterHeight * 0.5f);
+			if (ImGui::Button("...", ImVec2{ characterHeight, characterHeight })) {
 				ImGui::OpenPopup("ComponentSetting-ID");
 			}
 
@@ -180,31 +180,65 @@ namespace Violet {
 
 			if (treeNodeOpened) //If opened display the component
 			{
-				auto& cameraComponent = entity.getComponent<CameraComponent>();
+				UIFUNC(component);
+				ImGui::TreePop();
+			}
+			if (setComponentToBeRemoved) 
+			{
+				entity.removeComponent<ComponentType>(); 
+			}
+
+		}
+
+	}
+
+
+	void PropertiesPanel::drawComponents(Entity entity)
+	{
+		/*Search for all the possible components if they exist*/
+		
+		/*Tag Component*/
+		if (entity.hasComponent<TagComponent>()) {
+			auto& tag = entity.getComponent<TagComponent>().tag;
+
+			ImGui::InputText("##Tag-ID", &tag);
+		}
+
+		/*Add Component Button*/
+		ImGui::SameLine();
+		ImGui::PushItemWidth(-1); //Set the width to be the remaining available width on the line
+		drawAddComponentButton();
+		ImGui::PopItemWidth();
+
+		/*Transform Component*/
+		drawComponent<TransformComponent>("Transform", entity, [](TransformComponent& transformComponent)
+		{
+				DrawVec3ControlUI("Position", transformComponent.translation, 0.1f);
+				glm::vec3 rotation = glm::degrees(transformComponent.rotation); //Convert it degrees to show in the UI
+				if (DrawVec3ControlUI("Rotation", rotation, 0.2f)) //If any of the values changed
+				{
+					transformComponent.rotation = glm::radians(rotation);  //Get the rotation in degrees value form the UI and set it
+				}
+				DrawVec3ControlUI("Scale", transformComponent.scale, 0.1f, 1.0f);
+		});
+
+		/*Camera Component*/
+		drawComponent<CameraComponent>("Camera", entity, [&](CameraComponent& cameraComponent)
+			{
 				auto& camera = cameraComponent.sceneCamera;
 
 				bool isThisCameraPrimary = entity.getScene()->getPrimaryCameraEntity() == entity;
-				bool checkBoxHidden = false;
-				if (isThisCameraPrimary)
-				{
-					/*Draw With Hidden Style*/
-					checkBoxHidden = true;
-					ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-					ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-				}
 				
+				DrawWithHiddenStyle(isThisCameraPrimary, [&]() 
+				{
+
 				if (ImGui::Checkbox("Primary", &isThisCameraPrimary))
 				{
 					entity.getScene()->setPrimaryCameraEntity(entity);
 				}
 
-				if (checkBoxHidden)
-				{
-					/*Pop Drawing With Hidden Style*/
-					ImGui::PopItemFlag();
-					ImGui::PopStyleVar();
-				}
-
+				});
+				
 				const char* projectionTypeStrings[2] = { "Perspective", "Orthographic" };  //NOTE: Arrange this array the same as the SceneCamera::ProjectionType enum class
 				const char* currentProjectionTypeString = projectionTypeStrings[(int)camera.getProjectionType()];  //Get the current sceneCamera projection
 
@@ -221,7 +255,7 @@ namespace Violet {
 							 */
 							camera.setProjectionType((SceneCamera::ProjectionType)i);
 						}
-						if(showItemAsSelected)
+						if (showItemAsSelected)
 						{
 							ImGui::SetItemDefaultFocus();
 						}
@@ -231,7 +265,7 @@ namespace Violet {
 
 				/*Show The Properties For The Current Selected Projection*/
 
-				if(camera.getProjectionType() == SceneCamera::ProjectionType::Perspective)
+				if (camera.getProjectionType() == SceneCamera::ProjectionType::Perspective)
 				{
 					float perspectiveVertivalFOV = glm::degrees(camera.getPerspectiveVerticalFOV());
 					if (ImGui::DragFloat("VFOV", &perspectiveVertivalFOV, 0.05f)) //If Dragfloat changed the value 
@@ -251,14 +285,14 @@ namespace Violet {
 						camera.setPerspectiveFarClip(perspectiveFar);
 					}
 				}
-				else if (camera.getProjectionType() == SceneCamera::ProjectionType::Orthographic) 
+				else if (camera.getProjectionType() == SceneCamera::ProjectionType::Orthographic)
 				{
 					float orthoSize = camera.getOrthographicSize();
 					if (ImGui::DragFloat("Size", &orthoSize, 0.05f)) //If Dragfloat changed the value 
 					{
 						camera.setOrthographicSize(orthoSize);
 					}
-					
+
 					float orthoNear = camera.getOrthographicNearClip();
 					if (ImGui::DragFloat("Near", &orthoNear, 0.01f)) //If Dragfloat changed the value 
 					{
@@ -273,42 +307,50 @@ namespace Violet {
 					ImGui::Checkbox("Fixed Aspect Ratio", &cameraComponent.fixedAspectRatio);
 				}
 
-
-				ImGui::TreePop();
-			}
-			if (setComponentToBeRemoved) 
-			{
-				entity.getScene()->setPrimaryCameraEntity({});
-				entity.removeComponent<CameraComponent>(); 
-			}
-		}
+			});
 
 		/*Sprit Renderer Component*/
-		if (entity.hasComponent<SpriteRendererComponent>()) {
-			bool treeNodeOpened = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Sprite"); //Render the node
-			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 10.0f);
-			if (ImGui::Button("+", ImVec2{ 15, 20 })) {
-				ImGui::OpenPopup("ComponentSetting-ID");
-			}
+		drawComponent<SpriteRendererComponent>("Sprite", entity, [](SpriteRendererComponent& spritRendererComponent)
+		{
+			ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
+		});
 
-			bool setComponentToBeRemoved = false;
-			if (ImGui::BeginPopup("ComponentSetting-ID")) {
-				if (ImGui::MenuItem("Remove Component")) {
-					setComponentToBeRemoved = true;
-				}
-				ImGui::EndPopup();
-			}
+	}
 
-			if (treeNodeOpened) //If opened display the component
+	void PropertiesPanel::drawAddComponentButton()
+	{
+		/*Check If The Entity Has All The Possible Components*/
+		bool entityHasAllComponents = m_entityContext.hasComponent<TransformComponent>() && m_entityContext.hasComponent<SpriteRendererComponent>()
+			&& m_entityContext.hasComponent<CameraComponent>();
+		
+		DrawWithHiddenStyle(entityHasAllComponents, []() 
+		{
+			if (ImGui::Button("Add Component")) //If pressed open the pop-up
 			{
-				auto& spritRendererComponent = entity.getComponent<SpriteRendererComponent>();
-				ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
-				ImGui::TreePop();
+				ImGui::OpenPopup("AddComponent-ID");
 			}
-			if (setComponentToBeRemoved) { entity.removeComponent<SpriteRendererComponent>(); }
+		});
 
+		if (ImGui::BeginPopup("AddComponent-ID")) //Create the pop-up
+		{
+			if (!m_entityContext.hasComponent<TransformComponent>() && ImGui::MenuItem("Transform"))  //Menu item will not be rendered if the entity already has the component, Note the sequence of the checking of the conditions
+			{
+				m_entityContext.addComponent<TransformComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (!m_entityContext.hasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite"))
+			{
+				m_entityContext.addComponent<SpriteRendererComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (!m_entityContext.hasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
+			{
+				m_entityContext.addComponent<CameraComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+
+			ImGui::EndPopup();
 		}
-
 	}
 
 }

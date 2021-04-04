@@ -53,6 +53,7 @@ namespace Violet {
 
 		ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_OpenOnArrow; //Make it expandable when clicking the arrow rather than the whole text
 		flags |= (m_selectedEntity == entity) ? ImGuiTreeNodeFlags_Selected : 0;  //Make entity as the selected entity if it matches with m_selectEntity
+		flags |= ImGuiTreeNodeFlags_SpanAvailWidth;  //Make the whole node selectable rather than the text area of the node
 		//Take the entity unique ID and serve it as an ID for the TreeNode UI component
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity, flags, tag.c_str());
 
