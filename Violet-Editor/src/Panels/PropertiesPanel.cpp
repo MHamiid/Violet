@@ -132,6 +132,7 @@ namespace Violet {
 		return isValueChanged;
 	}
 
+	/*TODO: Set a better way for creating a unique ID for ImGui::TreeNodeEx rather than typeid(class).hash_code()*/
 	void PropertiesPanel::drawComponents(Entity entity)
 	{
 		/*Search for all the possible components if they exist*/
@@ -145,7 +146,7 @@ namespace Violet {
 
 		/*Transform Component*/
 		if (entity.hasComponent<TransformComponent>()) {
-			if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity
+			if (ImGui::TreeNodeEx((void*)typeid(TransformComponent).hash_code()
 				, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Transform")) //If opened display the component
 			{
 				auto& transformComponent = entity.getComponent<TransformComponent>();
@@ -163,7 +164,7 @@ namespace Violet {
 
 		/*Camera Component*/
 		if (entity.hasComponent<CameraComponent>()) {
-			bool treeNodeOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Camera"); //Render the node
+			bool treeNodeOpened = ImGui::TreeNodeEx((void*)typeid(CameraComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Camera"); //Render the node
 			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 10.0f);
 			if (ImGui::Button("+", ImVec2{ 15, 20 })) {
 				ImGui::OpenPopup("ComponentSetting-ID");
@@ -284,7 +285,7 @@ namespace Violet {
 
 		/*Sprit Renderer Component*/
 		if (entity.hasComponent<SpriteRendererComponent>()) {
-			bool treeNodeOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Sprite"); //Render the node
+			bool treeNodeOpened = ImGui::TreeNodeEx((void*)typeid(SpriteRendererComponent).hash_code(), ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Sprite"); //Render the node
 			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 10.0f);
 			if (ImGui::Button("+", ImVec2{ 15, 20 })) {
 				ImGui::OpenPopup("ComponentSetting-ID");
