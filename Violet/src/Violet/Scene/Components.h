@@ -20,7 +20,7 @@ namespace Violet {
 	struct VIOLET_API TransformComponent
 	{
 		glm::vec3 translation = { 0.0f, 0.0f, 0.0f };
-		glm::vec3 rotation = { 0.0f, 0.0f, 0.0f };
+		glm::vec3 rotation = { 0.0f, 0.0f, 0.0f };  //In radians
 		glm::vec3 scale = { 1.0f, 1.0f, 1.0f };
 
 		TransformComponent() = default;
@@ -30,12 +30,11 @@ namespace Violet {
 
 		glm::mat4 getTransform() const {
 			/*
-			 * TODO: Check if this rotationMatrix works correctly for 3D
 			 * TODO: Find more optimized matrix multiplication for the rotationMatrix for performance
 			 */
-			glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), glm::radians(rotation.x), { 1.0f, 0.0f, 0.0f });
-			rotationMatrix *= glm::rotate(glm::mat4(1.0f), glm::radians(rotation.y), { 0.0f, 1.0f, 0.0f });
-			rotationMatrix *= glm::rotate(glm::mat4(1.0f), glm::radians(rotation.z), { 0.0f, 0.0f, 1.0f });
+			glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), rotation.x, { 1.0f, 0.0f, 0.0f })
+			 * glm::rotate(glm::mat4(1.0f), rotation.y, { 0.0f, 1.0f, 0.0f })
+			 * glm::rotate(glm::mat4(1.0f), rotation.z, { 0.0f, 0.0f, 1.0f });
 			
 			return glm::translate(glm::mat4(1.0f), translation)
 				* rotationMatrix

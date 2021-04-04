@@ -42,7 +42,7 @@ namespace Violet {
 		class CameraController : public Script {
 		public:
 			float m_translationSpeed = 5.0f;
-			float m_rotationSpeed = 90.0f;
+			float m_rotationSpeed = 3.0f;
 
 			glm::vec3* m_translation = nullptr;
 			glm::vec3* m_rotation = nullptr;
