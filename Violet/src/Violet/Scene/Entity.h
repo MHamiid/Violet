@@ -11,7 +11,7 @@ namespace Violet {
 		Entity(const Entity& other) = default;
 
 		/*For Casting*/
-		operator bool() const { return (m_enttID != entt::null); }
+		operator bool() const { return(m_enttID != entt::null) && (m_scene != nullptr); }  //Check if the entity has been set and assigned to a scene
 		operator entt::entity() const { return m_enttID; }  //To use Entity as entt::entity
 
 		/*Comparison*/
@@ -31,7 +31,10 @@ namespace Violet {
 			*/
 			VIO_CORE_ASSERT(!hasComponent<T>(), "[Entity] Component Already Exists!");
 
-			return m_scene->m_registry.emplace<T>(m_enttID, std::forward<Args>(args)...);
+			T& component = m_scene->m_registry.emplace<T>(m_enttID, std::forward<Args>(args)...);
+			m_scene->onComponentAdded<T>(*this, component);
+
+			return component;
 		}
 
 		template<typename T>
@@ -62,7 +65,6 @@ namespace Violet {
 		}
 
 		Scene* getScene() { return m_scene; }  //TODO: Not final, think of better approach
-		bool isValidEntity() { return (m_enttID != entt::null) && (m_scene != nullptr); } //Check if the entity has been set and assigned to a scene
 
 	private:
 		entt::entity m_enttID{ entt::null }; //NOTE: ent::entity is a uint32_t ID

@@ -21,9 +21,30 @@ namespace Violet {
 	{
 		/*Properties Panel*/
 		ImGui::Begin("Properties");
-		if (m_entityContext) //If there is a context entity selected
+		if (m_entityContext) //If there is a context entity selected and it is a valid entity (@exmple: not deleted)
 		{
 			drawComponents(m_entityContext);
+
+			if (ImGui::Button("Add Component")) //If pressed open the pop-up
+			{
+				ImGui::OpenPopup("AddComponent-ID");
+			}
+
+			if (ImGui::BeginPopup("AddComponent-ID")) //Create the pop-up
+			{
+				if (!m_entityContext.hasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite"))  //Menu item will not be rendered if the entity already has the component, Note the sequence of the checking of the conditions
+				{
+					m_entityContext.addComponent<SpriteRendererComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+				if (!m_entityContext.hasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
+				{
+					m_entityContext.addComponent<CameraComponent>();
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::EndPopup();
+			}
 		}
 
 		ImGui::End();
@@ -65,7 +86,7 @@ namespace Violet {
 		ImGui::PopStyleColor(3); //Pop the three defined style colors for the button
 
 		ImGui::SameLine();
-		if (ImGui::DragFloat("##X", &values.x, valueStepSize, 0.0f, 0.0f, "%.2f")) { isValueChanged = true; }  //## in ##X ====> Don't show the label, %.2f ====> Show two decimal values
+		if (ImGui::DragFloat("##X-ID", &values.x, valueStepSize, 0.0f, 0.0f, "%.2f")) { isValueChanged = true; }  //## in ##X ====> Don't show the label, %.2f ====> Show two decimal values
 		ImGui::PopItemWidth();
 
 		/*Second Item*/
@@ -82,7 +103,7 @@ namespace Violet {
 		ImGui::PopStyleColor(3); //Pop the three defined style colors for the button
 
 		ImGui::SameLine();
-		if(ImGui::DragFloat("##Y", &values.y, valueStepSize, 0.0f, 0.0f, "%.2f")) { isValueChanged = true; }  //## in ##Y ====> Don't show the label, %.2f ====> Show two decimal values
+		if(ImGui::DragFloat("##Y-ID", &values.y, valueStepSize, 0.0f, 0.0f, "%.2f")) { isValueChanged = true; }  //## in ##Y ====> Don't show the label, %.2f ====> Show two decimal values
 		ImGui::PopItemWidth();
 
 		/*Third Item*/
@@ -99,7 +120,7 @@ namespace Violet {
 		ImGui::PopStyleColor(3); //Pop the three defined style colors for the button
 
 		ImGui::SameLine();
-		if(ImGui::DragFloat("##Z", &values.z, valueStepSize, 0.0f, 0.0f, "%.2f")) { isValueChanged = true; }  //## in ##Z ====> Don't show the label, %.2f ====> Show two decimal values
+		if(ImGui::DragFloat("##Z-ID", &values.z, valueStepSize, 0.0f, 0.0f, "%.2f")) { isValueChanged = true; }  //## in ##Z ====> Don't show the label, %.2f ====> Show two decimal values
 		ImGui::PopItemWidth();
 
 		ImGui::PopStyleVar();
@@ -125,7 +146,7 @@ namespace Violet {
 		/*Transform Component*/
 		if (entity.hasComponent<TransformComponent>()) {
 			if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity
-				, ImGuiTreeNodeFlags_DefaultOpen, "Transform")) //If opened display the component
+				, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Transform")) //If opened display the component
 			{
 				auto& transformComponent = entity.getComponent<TransformComponent>();
 				drawVec3ControlUI("Position", transformComponent.translation, 0.1f);
@@ -142,8 +163,21 @@ namespace Violet {
 
 		/*Camera Component*/
 		if (entity.hasComponent<CameraComponent>()) {
-			if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity
-				, ImGuiTreeNodeFlags_DefaultOpen, "Camera")) //If opened display the component
+			bool treeNodeOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Camera"); //Render the node
+			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 10.0f);
+			if (ImGui::Button("+", ImVec2{ 15, 20 })) {
+				ImGui::OpenPopup("ComponentSetting-ID");
+			}
+
+			bool setComponentToBeRemoved = false;
+			if (ImGui::BeginPopup("ComponentSetting-ID")) {
+				if (ImGui::MenuItem("Remove Component")) {
+					setComponentToBeRemoved = true;
+				}
+				ImGui::EndPopup();
+			}
+
+			if (treeNodeOpened) //If opened display the component
 			{
 				auto& cameraComponent = entity.getComponent<CameraComponent>();
 				auto& camera = cameraComponent.sceneCamera;
@@ -241,18 +275,36 @@ namespace Violet {
 
 				ImGui::TreePop();
 			}
-
+			if (setComponentToBeRemoved) 
+			{
+				entity.getScene()->setPrimaryCameraEntity({});
+				entity.removeComponent<CameraComponent>(); 
+			}
 		}
 
 		/*Sprit Renderer Component*/
 		if (entity.hasComponent<SpriteRendererComponent>()) {
-			if (ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity
-				, ImGuiTreeNodeFlags_DefaultOpen, "Sprite")) //If opened display the component
+			bool treeNodeOpened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity, ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_AllowItemOverlap, "Sprite"); //Render the node
+			ImGui::SameLine(ImGui::GetContentRegionAvail().x - 10.0f);
+			if (ImGui::Button("+", ImVec2{ 15, 20 })) {
+				ImGui::OpenPopup("ComponentSetting-ID");
+			}
+
+			bool setComponentToBeRemoved = false;
+			if (ImGui::BeginPopup("ComponentSetting-ID")) {
+				if (ImGui::MenuItem("Remove Component")) {
+					setComponentToBeRemoved = true;
+				}
+				ImGui::EndPopup();
+			}
+
+			if (treeNodeOpened) //If opened display the component
 			{
 				auto& spritRendererComponent = entity.getComponent<SpriteRendererComponent>();
 				ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
 				ImGui::TreePop();
 			}
+			if (setComponentToBeRemoved) { entity.removeComponent<SpriteRendererComponent>(); }
 
 		}
 

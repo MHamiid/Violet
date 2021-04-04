@@ -34,6 +34,17 @@ namespace Violet {
 			m_propertiesPanelContext->setEntityContext({ });
 		}
 
+		/*Right-Click Pop-Up Menu*/
+		if (ImGui::BeginPopupContextWindow(0, 1, false)) //If right-clicked in the Scene Hierarchy panel but not on an item (the entities) ====> clicking on a blank space in the panel
+		{
+			if (ImGui::MenuItem("Create Empty Entity")) //If pressed
+			{
+				m_sceneContext->createEntity("Empty Entity");
+			}
+			ImGui::EndPopup();
+		}
+
+
 		ImGui::End();
 	}
 	void SceneHierarchyPanel::drawEntityNode(Entity entity)
@@ -50,6 +61,17 @@ namespace Violet {
 
 			//Update the properties panel entity context
 			m_propertiesPanelContext->setEntityContext(entity);
+		}
+
+		/*Right-Click Pop-Up Item*/
+		if (ImGui::BeginPopupContextItem()) //If right-clicked on the item
+		{
+			if (ImGui::MenuItem("Delete Entity")) //If pressed
+			{
+				m_propertiesPanelContext->setEntityContext({});  //Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
+				m_sceneContext->destroyEntity(entity);
+			}
+			ImGui::EndPopup();
 		}
 
 		if (opened) {

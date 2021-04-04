@@ -5,16 +5,14 @@
 #include "Components.h"
 
 namespace Violet {
-	/*TODO: Set the SceneCameras viewport on creation*/
 	Scene::Scene()
 	{
 		//Allocate space to copy the entity to when setPrimaryCameraEntity
-		m_primaryCameraEntity = new Entity();
+		m_primaryCameraEntity = CreateScope<Entity>();
 	}
 
 	Scene::~Scene()
 	{
-		delete m_primaryCameraEntity;
 	}
 
 	void Scene::onUpdate(DeltaTime deltaTime)
@@ -37,8 +35,8 @@ namespace Violet {
 		); 
 
 		/*Render 2D*/
-		//If entity has been assigned to a scene and entity has a CameraComponent attached, Note the sequence of the checking of the conditions
-		if (m_primaryCameraEntity->isValidEntity() && m_primaryCameraEntity->hasComponent<CameraComponent>())
+		//Check if the entity is valid and has been assigned to a scene and the entity has a CameraComponent attached, Note the sequence of the checking of the conditions
+		if ((*m_primaryCameraEntity) && m_primaryCameraEntity->hasComponent<CameraComponent>())
 		{
 			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
@@ -87,6 +85,16 @@ namespace Violet {
 		return entity;
 	}
 
+	void Scene::destroyEntity(Entity entity)
+	{
+		//Check if the entity is the primary camera entity
+		if (*m_primaryCameraEntity == entity) 
+		{
+			*m_primaryCameraEntity = Entity(); //Reset the primary camera to a non-valid entity (default entity: m_enttID = null and m_scene = nullptr) ====> stop scene rendering with the deleted entity
+		}
+		m_registry.destroy(entity);
+	}
+
 	void Scene::setPrimaryCameraEntity(Entity cameraEntity)
 	{
 		*m_primaryCameraEntity = cameraEntity;
@@ -97,4 +105,32 @@ namespace Violet {
 		return *m_primaryCameraEntity;
 	}
 
+	/*Specialized Templates*/
+	/*Must Add A Definition For Every Possible Component*/
+	template<>
+	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& tagComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<TransformComponent>(Entity entity, TransformComponent& transformComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& spriteRendererComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& cameraComponent)
+	{
+		//Sets the correct projection matrix for the new camera rather than creating a projection matrix with SceneCamera default member values
+		cameraComponent.sceneCamera.setViewPortSize(m_viewPortWidth, m_viewPortHeight);
+	}
+
+	template<>
+	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& nativeScriptComponent)
+	{
+	}
 }
