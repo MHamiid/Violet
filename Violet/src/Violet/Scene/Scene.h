@@ -7,7 +7,7 @@ namespace Violet {
 
 	class VIOLET_API Scene {
 	public:
-		Scene();
+		Scene(const std::string& sceneName = "Untitled");
 		~Scene();
 		void onUpdate(DeltaTime deltaTime);
 		void onViewPortResize(uint32_t width, uint32_t height);
@@ -17,6 +17,8 @@ namespace Violet {
 	
 		void setPrimaryCameraEntity(Entity cameraEntity);
 		Entity getPrimaryCameraEntity();
+
+		const std::string& getSceneName() { return m_sceneName; }
 	private:
 		template<typename T>
 		void onComponentAdded(Entity entity, T& component);
@@ -24,8 +26,10 @@ namespace Violet {
 		entt::registry m_registry; //A container for all the components and entities
 		Scoped<Entity> m_primaryCameraEntity; //Using a pointer cause of forward declaration (Can't include Entity header here)
 		uint32_t m_viewPortWidth = 0, m_viewPortHeight = 0;
+		std::string m_sceneName;
 	private:
 		friend class Entity;
-		friend class SceneHierarchyPanel;
+		friend class SceneSerializer;
+		friend class SceneHierarchyPanel;  //Violet-Editor
 	};
 }

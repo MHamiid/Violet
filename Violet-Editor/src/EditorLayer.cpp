@@ -1,4 +1,5 @@
 #include "EditorLayer.h"
+#include "Violet/Scene/SceneSerializer.h"
 
 namespace Violet {
 
@@ -19,7 +20,7 @@ namespace Violet {
 
 		m_frameBuffer = FrameBuffer::Create(specs);
 
-		m_activeScene = CreateRef<Scene>();
+		m_activeScene = CreateRef<Scene>("TestScene");
 
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
@@ -89,6 +90,10 @@ namespace Violet {
 		};
 
 		m_cameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
+
+
+		SceneSerializer sceneSerializer(m_activeScene);
+		sceneSerializer.serializeToText("assets/scenes/" + m_activeScene->getSceneName() + ".violet");
 
 	}
 
@@ -255,6 +260,9 @@ namespace Violet {
 			}
 			ImGui::EndMenuBar();
 		}
+		/*TODO: Added Drag And Drop For Loading Scenes*/
+
+
 		/*Ending ImGui DockSpace Code*/
 
 		/*Start ImGui Code*/

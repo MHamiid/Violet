@@ -5,7 +5,7 @@
 #include "Components.h"
 
 namespace Violet {
-	Scene::Scene()
+	Scene::Scene(const std::string& sceneName) : m_sceneName(sceneName)
 	{
 		//Allocate space to copy the entity to when setPrimaryCameraEntity
 		m_primaryCameraEntity = CreateScope<Entity>();
@@ -131,7 +131,10 @@ namespace Violet {
 	void Scene::onComponentAdded<CameraComponent>(Entity entity, CameraComponent& cameraComponent)
 	{
 		//Sets the correct projection matrix for the new camera rather than creating a projection matrix with SceneCamera default member values
-		cameraComponent.sceneCamera.setViewPortSize(m_viewPortWidth, m_viewPortHeight);
+		if (m_viewPortWidth != 0 && m_viewPortHeight != 0)
+		{
+			cameraComponent.sceneCamera.setViewPortSize(m_viewPortWidth, m_viewPortHeight);
+		}
 	}
 
 	template<>
