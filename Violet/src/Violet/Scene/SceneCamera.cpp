@@ -15,8 +15,9 @@ namespace Violet {
 		calculateProjectionMatrix();
 	}
 
-	void SceneCamera::setPerspective(float verticalFOV, float nearClip, float farClip)
+	void SceneCamera::setPerspectiveProjection(float verticalFOV, float nearClip, float farClip)
 	{
+		/*NOTE: Changes the projection type to Perspective*/
 		m_projectionType = ProjectionType::Perspective; //Make sure the projection type is set correctly
 		m_perspectiveFOV = verticalFOV;
 		m_perspectiveNear = nearClip;
@@ -24,8 +25,9 @@ namespace Violet {
 		calculateProjectionMatrix();
 	}
 
-	void SceneCamera::setOrthographic(float size, float nearClip, float farClip)
+	void SceneCamera::setOrthographicProjection(float size, float nearClip, float farClip)
 	{
+		/*NOTE: Changes the projection type to Orthographic*/
 		m_projectionType = ProjectionType::Orthographic; //Make sure the projection type is set correctly
 		m_orthographicSize = size;
 		m_orthographicNear = nearClip;

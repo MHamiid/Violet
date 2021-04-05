@@ -175,6 +175,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Scene\SceneSerializer.h" />
+    <ClInclude Include="src\Violet\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -271,5 +272,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Scene\SceneSerializer.cpp" />
+    <ClCompile Include="src\Violet\Platform\Windows\WindowsPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

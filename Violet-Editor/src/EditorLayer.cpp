@@ -1,5 +1,6 @@
 #include "EditorLayer.h"
 #include "Violet/Scene/SceneSerializer.h"
+#include "Violet/Utils/PlatformUtils.h"
 
 namespace Violet {
 
@@ -20,25 +21,10 @@ namespace Violet {
 
 		m_frameBuffer = FrameBuffer::Create(specs);
 
-		m_activeScene = CreateRef<Scene>("TestScene");
-
+		/*Scene And Context Initialization*/
+		m_activeScene = CreateRef<Scene>("Uninitialized Scene"); //Initialization
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
-
-		m_squareEntity = m_activeScene->createEntity("Square Entity");
-		m_squareEntity.addComponent<SpriteRendererComponent>();
-
-		Entity secondSquare = m_activeScene->createEntity("Second Square Entity");
-		secondSquare.addComponent<SpriteRendererComponent>();
-
-		m_cameraEntity = m_activeScene->createEntity("Camera Entity");
-		m_cameraEntity.addComponent<CameraComponent>();
-
-		Entity secondCamera = m_activeScene->createEntity("Second Camera Entity");
-		secondCamera.addComponent<CameraComponent>();
-
-		m_activeScene->setPrimaryCameraEntity(m_cameraEntity);
-
 
 		class CameraController : public Script {
 		public:
@@ -88,12 +74,6 @@ namespace Violet {
 				//Not callable yet
 			}
 		};
-
-		m_cameraEntity.addComponent<NativeScriptComponent>().bind<CameraController>();
-
-
-		SceneSerializer sceneSerializer(m_activeScene);
-		sceneSerializer.serializeToText("assets/scenes/" + m_activeScene->getSceneName() + ".violet");
 
 	}
 
@@ -233,21 +213,49 @@ namespace Violet {
 
 		if (ImGui::BeginMenuBar())
 		{
-			if (ImGui::BeginMenu("Violet"))
+			if (ImGui::BeginMenu("File"))
 			{
 				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
+				if (ImGui::MenuItem("New", "Ctrl+N")) 
+				{
+					newScene();
+				}
+				if (ImGui::MenuItem("Open", "Ctrl+O"))
+				{
+					openScene();
+				}
+				if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
+				{
+					saveSceneAs();
+				}
 
-				if (ImGui::MenuItem("VSync On")) Application::GetApplicationInstance().getWindow().setVSync(true);
-				if (ImGui::MenuItem("VSync Off")) Application::GetApplicationInstance().getWindow().setVSync(false);
-				if (ImGui::MenuItem("Exit")) Application::GetApplicationInstance().close();
+				ImGui::Separator();
+				if (ImGui::MenuItem("Exit"))
+				{
+					Application::GetApplicationInstance().close();
+				}
 				ImGui::EndMenu();
 			}
 
 			ImGui::EndMenuBar();
 
 		}
+
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("Violet"))
+			{
+				if (ImGui::MenuItem("VSync On")) Application::GetApplicationInstance().getWindow().setVSync(true);
+				if (ImGui::MenuItem("VSync Off")) Application::GetApplicationInstance().getWindow().setVSync(false);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
+
+
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("Theme"))
@@ -307,5 +315,80 @@ namespace Violet {
 	{
 		m_cameraController.onEvent(e);
 
+		EventDispatcher dispatcher(e);
+		dispatcher.dispatch<KeyPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onKeyPressed));
+	}
+
+	bool EditorLayer::onKeyPressed(KeyPressedEvent& event)
+	{
+		/*Shortcuts*/
+		/*Note Currently ImGui Is Set To Block The Events Unless IF The ViewPort Is Active*/
+		if (event.getRepeatCount() > 0) 
+		{
+			return false;
+		}
+
+		bool controlKeyIsPressed = Input::IsKeyPressed(Key::LEFT_CONTROL) || Input::IsKeyPressed(Key::RIGHT_CONTROL);
+		bool shiftKeyIsPressed = Input::IsKeyPressed(Key::LEFT_SHIFT) || Input::IsKeyPressed(Key::RIGHT_SHIFT);
+
+		switch (event.getKeyCode())
+		{
+		case Key::N:
+		{
+			if (controlKeyIsPressed) 
+			{
+				newScene();
+			}
+			return true;
+		}
+		case Key::O:
+		{
+			if (controlKeyIsPressed) 
+			{
+				openScene();
+			}
+			return true;
+		}
+		case Key::S:
+		{
+			if (controlKeyIsPressed && shiftKeyIsPressed) 
+			{
+				saveSceneAs();
+			}
+			return true;
+		}
+		default:
+			return false;
+		}
+	}
+	void EditorLayer::newScene()
+	{
+		m_activeScene = CreateRef<Scene>(); //Reset the current active scene
+		m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
+		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+	}
+	void EditorLayer::openScene()
+	{
+		std::optional<std::string> filePath = FileDialogs::OpenFile("Violet Scene (*.violet)\0*.violet\0");
+
+		if (filePath)  //If the string is not empty 
+		{
+			m_activeScene = CreateRef<Scene>(); //Reset the current active scene
+			m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
+			m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+
+			SceneSerializer sceneSerializer(m_activeScene);
+			sceneSerializer.deserializeText(*filePath);
+		}
+	}
+	void EditorLayer::saveSceneAs()
+	{
+		std::optional<std::string> filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", "Scene.violet");
+
+		if (filePath)  //If the string is not empty 
+		{
+			SceneSerializer sceneSerializer(m_activeScene);
+			sceneSerializer.serializeToText(*filePath);
+		}
 	}
 }

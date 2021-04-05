@@ -135,6 +135,11 @@ namespace Violet {
 		{
 			cameraComponent.sceneCamera.setViewPortSize(m_viewPortWidth, m_viewPortHeight);
 		}
+		/*Set The First Entity In Our Scene With A Camera Component Attached To It As The PrimaryCameraEntity*/
+		if (!(*m_primaryCameraEntity)) //If it is null 
+		{
+			*m_primaryCameraEntity = entity;
+		}
 	}
 
 	template<>

@@ -10,6 +10,11 @@ namespace Violet {
 	void SceneHierarchyPanel::setSceneContext(const Ref<Scene>& scene)
 	{
 		m_sceneContext = scene;
+		m_selectedEntity = {};  //Reset the selected entity
+		if (m_propertiesPanelContext) //If there is a properties panel attached
+		{
+			m_propertiesPanelContext->setEntityContext({ });  //Update the selected entity to the PropertiesPanel
+		}
 	}
 	void SceneHierarchyPanel::setPropertiesPanelContext(PropertiesPanel* propertiesPanel)
 	{
@@ -30,8 +35,11 @@ namespace Violet {
 		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
 			m_selectedEntity = {};
 
-			//Update the properties panel entity context
-			m_propertiesPanelContext->setEntityContext({ });
+			if (m_propertiesPanelContext) //If there is a properties panel attached
+			{
+				//Update the properties panel entity context
+				m_propertiesPanelContext->setEntityContext({ });
+			}
 		}
 
 		/*Right-Click Pop-Up Menu*/
@@ -60,8 +68,11 @@ namespace Violet {
 		if (ImGui::IsItemClicked()) {
 			m_selectedEntity = entity;
 
-			//Update the properties panel entity context
-			m_propertiesPanelContext->setEntityContext(entity);
+			if (m_propertiesPanelContext) //If there is a properties panel attached
+			{
+				//Update the properties panel entity context
+				m_propertiesPanelContext->setEntityContext(entity);
+			}
 		}
 
 		/*Right-Click Pop-Up Item*/
@@ -69,8 +80,11 @@ namespace Violet {
 		{
 			if (ImGui::MenuItem("Delete Entity")) //If pressed
 			{
-				m_propertiesPanelContext->setEntityContext({});  //Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
-				m_sceneContext->destroyEntity(entity);
+				if (m_propertiesPanelContext) //If there is a properties panel attached
+				{
+					m_propertiesPanelContext->setEntityContext({});  //Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
+					m_sceneContext->destroyEntity(entity);
+				}
 			}
 			ImGui::EndPopup();
 		}

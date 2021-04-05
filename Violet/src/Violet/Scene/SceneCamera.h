@@ -12,8 +12,8 @@ namespace Violet {
 		
 		void setViewPortSize(uint32_t width, uint32_t height);
 
-		void setPerspective(float verticalFOV, float nearClip, float farClip);
-		void setOrthographic(float size, float nearClip, float farClip);
+		void setPerspectiveProjection(float verticalFOV, float nearClip, float farClip);
+		void setOrthographicProjection(float size, float nearClip, float farClip);
 
 		void setPerspectiveVerticalFOV(float verticalFov) { if (m_perspectiveFOV == verticalFov) return; m_perspectiveFOV = verticalFov; calculateProjectionMatrix(); }
 		float getPerspectiveVerticalFOV() const { return m_perspectiveFOV; }

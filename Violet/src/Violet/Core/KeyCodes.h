@@ -3,7 +3,7 @@
 
 namespace Violet {
 
-	enum class Key : int{
+	enum Key : int{
 
 		/*GLFW3.h Codes*/
 
