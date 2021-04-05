@@ -241,6 +241,19 @@ namespace Violet {
 			}
 
 			ImGui::EndMenuBar();
+
+		}
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("Theme"))
+			{
+				if (ImGui::MenuItem("Violet")) Application::GetApplicationInstance().getImGuiLayer()->SetVioletThemeColors();
+				if (ImGui::MenuItem("Gold")) Application::GetApplicationInstance().getImGuiLayer()->SetGoldThemeColors();
+				if (ImGui::MenuItem("Dark")) Application::GetApplicationInstance().getImGuiLayer()->SetDarkThemeColors();
+				if (ImGui::MenuItem("Dark Red")) Application::GetApplicationInstance().getImGuiLayer()->SetDarkRedThemeColors();
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
 		}
 		/*Ending ImGui DockSpace Code*/
 

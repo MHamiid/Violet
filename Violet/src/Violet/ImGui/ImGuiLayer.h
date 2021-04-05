@@ -13,6 +13,10 @@ namespace Violet {
 	public:
 		static void BeginImGuiFrame();
 		static void EndImGuiFrame();
+		static void SetVioletThemeColors();
+		static void SetGoldThemeColors();
+		static void SetDarkThemeColors();
+		static void SetDarkRedThemeColors();
 	public:
 		void setImGuiToBlockEvents(bool block) { m_blockImGuiEvents = block; }
 	private:
