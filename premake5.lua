@@ -49,13 +49,16 @@ project "Violet"
 		"%{prj.name}/vendor/imgui",							--Include dir for ImGui
 		"%{prj.name}/vendor/glm",							--Include dir for glm
 		"%{prj.name}/vendor/stb_image",						--Include dir for stb_image
-		"%{prj.name}/vendor/entt/single_include/entt"	    --Include dir for entt
+		"%{prj.name}/vendor/entt/single_include/entt",	    --Include dir for entt
+		"%{prj.name}/vendor/yaml-cpp/include"				--Include dir for yaml-cpp
+
 	}
 
 	links{
 		"GLFW",
 		"Glad",
-		"ImGui"
+		"ImGui",
+		"yaml-cpp"
 	
 	}
 
@@ -222,7 +225,6 @@ group "Dependencies"
 --Include Glad premake file
 include "Violet/vendor/Glad"
 
---Include Project for GLFW
 project "GLFW"
 	location "GLFW"
 	kind "StaticLib"
@@ -301,7 +303,6 @@ project "GLFW"
 
 
 
---Include Project for GLFW
 project "ImGui"
 	location "ImGui"
 	kind "StaticLib"
@@ -346,6 +347,47 @@ project "ImGui"
 	}
 
 	filter "system:windows"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
+
+
+
+project "yaml-cpp"
+	location "yaml-cpp"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
+	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")
+
+	YamlCppSrcDir = "Violet/vendor/yaml-cpp/"
+
+	files
+	{
+		YamlCppSrcDir .."src/**.h",
+        YamlCppSrcDir .."src/**.cpp",
+        YamlCppSrcDir .."include/**.h"
+	}
+	
+	includedirs{
+		
+		YamlCppSrcDir .."include"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "system:linux"
+		pic "on"
 		systemversion "latest"
 
 	filter "configurations:Debug"
