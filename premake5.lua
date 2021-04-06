@@ -31,13 +31,15 @@ project "Violet"
 	--Pre-Compiled Header
 	pchheader "VIOPCH.h"
 	pchsource "%{prj.name}/src/VIOPCH.cpp"
-
+	
 	files{
 	
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
-		"%{prj.name}/vendor/stb_image/**.h",  
-		"%{prj.name}/vendor/stb_image/**.cpp"  --Include stb_image to be included and compiled by the project
+		"%{prj.name}/vendor/stb_image/**.h",				--Include stb_image to be included and compiled by the project
+		"%{prj.name}/vendor/stb_image/**.cpp",		
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.h",			--Include ImGuizmo to be included and compiled by the project
+		"%{prj.name}/vendor/ImGuizmo/ImGuizmo.cpp"
 	}
 
 	includedirs{
@@ -50,8 +52,8 @@ project "Violet"
 		"%{prj.name}/vendor/glm",							--Include dir for glm
 		"%{prj.name}/vendor/stb_image",						--Include dir for stb_image
 		"%{prj.name}/vendor/entt/single_include/entt",	    --Include dir for entt
-		"%{prj.name}/vendor/yaml-cpp/include"				--Include dir for yaml-cpp
-
+		"%{prj.name}/vendor/yaml-cpp/include",				--Include dir for yaml-cpp
+		"%{prj.name}/vendor/ImGuizmo"						--Include dir for yaml-cpp
 	}
 
 	links{
@@ -61,6 +63,10 @@ project "Violet"
 		"yaml-cpp"
 	
 	}
+
+
+	filter "files:Violet/vendor/ImGuizmo/**.cpp"
+		flags { "NoPCH" }
 
 	filter "system:windows"
 		systemversion "latest"

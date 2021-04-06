@@ -31,8 +31,14 @@
     <Filter Include="src\Violet\Scene">
       <UniqueIdentifier>{4CACB400-38A5-D352-61D7-B8D74D2FB35E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Violet\Utils">
+      <UniqueIdentifier>{8F40E200-7B39-0153-A46B-E6D790C3E05E}</UniqueIdentifier>
+    </Filter>
     <Filter Include="vendor">
       <UniqueIdentifier>{B3738122-9F15-ACF8-88D0-BF4C74113349}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="vendor\ImGuizmo">
+      <UniqueIdentifier>{73BF7F4C-DF4A-ED10-E85B-700554664911}</UniqueIdentifier>
     </Filter>
     <Filter Include="vendor\stb_image">
       <UniqueIdentifier>{0DA0BA59-F998-D9AB-22CB-BE300E23B9B7}</UniqueIdentifier>
@@ -168,14 +174,21 @@
     <ClInclude Include="src\Violet\Scene\SceneCamera.h">
       <Filter>src\Violet\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Scene\SceneSerializer.h">
+      <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Scene\Script.h">
       <Filter>src\Violet\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Utils\PlatformUtils.h">
+      <Filter>src\Violet\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\ImGuizmo\ImGuizmo.h">
+      <Filter>vendor\ImGuizmo</Filter>
     </ClInclude>
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Scene\SceneSerializer.h" />
-    <ClInclude Include="src\Violet\Utils\PlatformUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -218,6 +231,9 @@
       <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsInput.cpp">
+      <Filter>src\Violet\Platform\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Platform\Windows\WindowsPlatformUtils.cpp">
       <Filter>src\Violet\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\Windows\WindowsWindow.cpp">
@@ -268,10 +284,14 @@
     <ClCompile Include="src\Violet\Scene\SceneCamera.cpp">
       <Filter>src\Violet\Scene</Filter>
     </ClCompile>
+    <ClCompile Include="src\Violet\Scene\SceneSerializer.cpp">
+      <Filter>src\Violet\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\ImGuizmo\ImGuizmo.cpp">
+      <Filter>vendor\ImGuizmo</Filter>
+    </ClCompile>
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Scene\SceneSerializer.cpp" />
-    <ClCompile Include="src\Violet\Platform\Windows\WindowsPlatformUtils.cpp" />
   </ItemGroup>
 </Project>

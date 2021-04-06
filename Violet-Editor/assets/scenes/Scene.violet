@@ -1,16 +1,16 @@
 Scene: TestScene
-PrimaryCameraEntityID: 1
+PrimaryCameraEntityID: 2
 Entities:
-  - EntityID: 3
+  - EntityID: 4
     TagComponent:
-      Tag: Another Square
+      Tag: Top
     TransformComponent:
-      Translation: [-11, 0, -27]
-      Rotation: [0, 0.324631244, 0]
-      Scale: [3, 2.5999999, 1]
+      Translation: [0, 0.5, 0]
+      Rotation: [1.57079637, 0, -0.785398185]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.0324734561, 0.962025344, 0.432533622, 1]
-  - EntityID: 2
+      Color: [0.848101258, 0.791975975, 0.214709163, 1]
+  - EntityID: 3
     TagComponent:
       Tag: Camera
     TransformComponent:
@@ -27,12 +27,12 @@ Entities:
         OrthographicNear: -1
         OrthographicFar: 1
       FixedAspectRatio: false
-  - EntityID: 1
+  - EntityID: 2
     TagComponent:
       Tag: Perspective Camera
     TransformComponent:
-      Translation: [6.4000001, 0.800000012, 12.5]
-      Rotation: [0, 0.310668588, 0]
+      Translation: [0, 1.70000005, 4]
+      Rotation: [-0.404916406, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       SceneCamera:
@@ -44,12 +44,21 @@ Entities:
         OrthographicNear: -1
         OrthographicFar: 1
       FixedAspectRatio: false
+  - EntityID: 1
+    TagComponent:
+      Tag: Right
+    TransformComponent:
+      Translation: [0.351999998, 0, 0.349999994]
+      Rotation: [0, 0.785398185, 0]
+      Scale: [1, 1, 1]
+    SpriteRendererComponent:
+      Color: [0.585195363, 0.590717316, 0.154533625, 1]
   - EntityID: 0
     TagComponent:
-      Tag: Square
+      Tag: Left
     TransformComponent:
-      Translation: [3.5999999, 0, -4.5999999]
-      Rotation: [0, 0, 0]
-      Scale: [5.30000019, 4.80000019, 1]
+      Translation: [-0.354999989, 0, 0.349999994]
+      Rotation: [0, -0.785398185, 0]
+      Scale: [1, 1, 1]
     SpriteRendererComponent:
-      Color: [0.957805932, 0.396054775, 0.396054775, 1]
+      Color: [0.783391774, 0.924050629, 0.339208454, 1]
