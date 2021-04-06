@@ -16,3 +16,6 @@
 [submodule "Violet/vendor/yaml-cpp"]
 	path = Violet/vendor/yaml-cpp
 	url = https://github.com/jbeder/yaml-cpp
+[submodule "Violet/vendor/ImGuizmo"]
+	path = Violet/vendor/ImGuizmo
+	url = https://github.com/MHamiid/ImGuizmo
