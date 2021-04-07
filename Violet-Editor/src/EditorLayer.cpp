@@ -285,10 +285,9 @@ namespace Violet {
 			}
 			ImGui::EndMenuBar();
 		}
-		/*TODO: Added Drag And Drop For Loading Scenes*/
-
 
 		/*Ending ImGui DockSpace Code*/
+
 
 		/*Start ImGui Code*/
 		m_sceneHierarchyPanel.onImGuiRender();

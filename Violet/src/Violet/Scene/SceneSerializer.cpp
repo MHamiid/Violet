@@ -204,6 +204,7 @@ namespace Violet {
 
 	bool SceneSerializer::deserializeText(const std::string& filePath)
 	{
+		/*Fix Program Crashing When The File Is Invalid (not a scene file, a random file)*/
 		std::ifstream stream(filePath);
 		std::stringstream stringStream;
 		stringStream << stream.rdbuf();
