@@ -25,7 +25,7 @@ namespace Violet {
 		m_frameBuffer = FrameBuffer::Create(specs);
 
 		/*Scene And Context Initialization*/
-		m_activeScene = CreateRef<Scene>("Uninitialized Scene"); //Initialization
+		m_activeScene = CreateRef<Scene>("Untitled Scene");
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
 
@@ -231,6 +231,17 @@ namespace Violet {
 				if (ImGui::MenuItem("Open", "Ctrl+O"))
 				{
 					openScene();
+				}
+				if (ImGui::MenuItem("Save", "Ctrl+S"))
+				{
+					if (!m_activeScenePath.empty())
+					{
+						saveScene();
+					}
+					else
+					{
+						saveSceneAs();
+					}
 				}
 				if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
 				{
@@ -464,7 +475,17 @@ namespace Violet {
 			if (controlKeyIsPressed && shiftKeyIsPressed) 
 			{
 				saveSceneAs();
-				return true;
+			}
+			if (controlKeyIsPressed)
+			{
+				if (!m_activeScenePath.empty())
+				{
+					saveScene();
+				}
+				else
+				{
+					saveSceneAs();
+				}
 			}
 			/*Gizmos*/
 			if (!ImGuizmo::IsUsing() && m_sceneHierarchyPanel.getSelectedEntity()) { m_gizmoType = ImGuizmo::OPERATION::SCALE; }
@@ -492,6 +513,7 @@ namespace Violet {
 		m_activeScene = CreateRef<Scene>(sceneName); //Reset the current active scene
 		m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+		
 	}
 	void EditorLayer::openScene()
 	{
@@ -505,7 +527,23 @@ namespace Violet {
 
 			SceneSerializer sceneSerializer(m_activeScene);
 			sceneSerializer.deserializeText(*filePath);
+
+			m_activeScenePath = *filePath;
 		}
+	}
+	void EditorLayer::saveScene()
+	{
+		//Extra check that the m_activeScenePath is not empty, this function shouldn't be called anyway if the m_activeScenePath is empty
+		if (!m_activeScenePath.empty())
+		{
+			SceneSerializer sceneSerializer(m_activeScene);
+			sceneSerializer.serializeToText(m_activeScenePath);
+		}
+		else 
+		{
+			VIO_CORE_ERROR("Attempting To Save With An Empty Scene Name!");
+		}
+
 	}
 	void EditorLayer::saveSceneAs()
 	{
@@ -515,6 +553,8 @@ namespace Violet {
 		{
 			SceneSerializer sceneSerializer(m_activeScene);
 			sceneSerializer.serializeToText(*filePath);
+
+			m_activeScenePath = *filePath;
 		}
 	}
 }

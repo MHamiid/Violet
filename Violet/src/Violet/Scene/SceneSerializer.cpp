@@ -169,8 +169,10 @@ namespace Violet {
 		out << YAML::BeginMap;  //Scene
 
 		out << YAML::Key << "Scene" << YAML::Value << m_scene->getSceneName().c_str();
-		out << YAML::Key << "PrimaryCameraEntityID" << YAML::Value << (uint32_t)(entt::entity)m_scene->getPrimaryCameraEntity();
-
+		if (m_scene->getPrimaryCameraEntity())  //If there is a primary camera entity in the scene
+		{
+			out << YAML::Key << "PrimaryCameraEntityID" << YAML::Value << (uint32_t)(entt::entity)m_scene->getPrimaryCameraEntity();
+		}
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;  //Array of values
 
 		/*Iterate Over All Entities*/

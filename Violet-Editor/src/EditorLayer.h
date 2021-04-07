@@ -20,6 +20,7 @@ namespace Violet {
 	private:
 		void newScene(const std::string& sceneName);
 		void openScene();
+		void saveScene();
 		void saveSceneAs();
 	private:
 		OrthographicCameraController m_cameraController;
@@ -44,6 +45,8 @@ namespace Violet {
 		/*New Scene Dialogue Popup*/
 		bool m_showNewScenePopupModal = false;
 		std::string m_newSceneNameBuffer;
+		//Caching the current active scene path
+		std::string m_activeScenePath;
 
 	};
 
