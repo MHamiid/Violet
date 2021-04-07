@@ -184,8 +184,16 @@ namespace Violet {
 			windowProps->m_FUNCEventCallback(event);
 		});
 
+		glfwSetDropCallback(m_window, [](GLFWwindow* GlfwWindow, int count, const char** paths) {
+			//Getting the data pointer that was set to be passed by glfwSetWindowUserPointer()
+			WindowProperties* windowProps = (WindowProperties*)glfwGetWindowUserPointer(GlfwWindow);
 
+			//Set the appropriate event
+			ItemsDroppedEvent event(count, paths);
 
+			//Call the Event Callback function with the event
+			windowProps->m_FUNCEventCallback(event);
+		});
 
 	}
 

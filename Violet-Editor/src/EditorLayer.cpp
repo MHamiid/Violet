@@ -437,6 +437,7 @@ namespace Violet {
 
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<KeyPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onKeyPressed));
+		dispatcher.dispatch<ItemsDroppedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onItemsDropped));
 	}
 
 	bool EditorLayer::onKeyPressed(KeyPressedEvent& event)
@@ -508,6 +509,20 @@ namespace Violet {
 			return false;
 		}
 	}
+	bool EditorLayer::onItemsDropped(ItemsDroppedEvent& event)
+	{
+		if (event.getItemsCount() > 1) 
+		{
+			VIO_CORE_ERROR("More Than One Scene Dropped!");
+		}
+		else
+		{
+			openScene(event.getItemsPaths()[0]);
+		}
+
+
+		return true;
+	}
 	void EditorLayer::newScene(const std::string& sceneName)
 	{
 		m_activeScene = CreateRef<Scene>(sceneName); //Reset the current active scene
@@ -519,16 +534,26 @@ namespace Violet {
 	{
 		std::optional<std::string> filePath = FileDialogs::OpenFile("Violet Scene (*.violet)\0*.violet\0");
 
-		if (filePath)  //If the string is not empty 
+		openScene(*filePath);
+	}
+	void EditorLayer::openScene(const std::string& filePath)
+	{
+		//TODO: Check the extension of the file
+		if (!filePath.empty())  //If the string is not empty 
 		{
 			m_activeScene = CreateRef<Scene>(); //Reset the current active scene
 			m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 			m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 
 			SceneSerializer sceneSerializer(m_activeScene);
-			sceneSerializer.deserializeText(*filePath);
-
-			m_activeScenePath = *filePath;
+			if (sceneSerializer.deserializeText(filePath))
+			{
+				m_activeScenePath = filePath;
+			}
+			else 
+			{
+				VIO_CORE_ERROR("Couldn't Open '{0}'", filePath);
+			}
 		}
 	}
 	void EditorLayer::saveScene()

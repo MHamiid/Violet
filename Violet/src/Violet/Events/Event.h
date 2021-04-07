@@ -10,7 +10,9 @@ namespace Violet{
 		AppTick, AppUpdate, AppRender,
 
 		KeyPressed, KeyReleased, //Keyboard Events.
-		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled //Mouse Events.
+		MouseButtonPressed, MouseButtonReleased, MouseMoved, MouseScrolled, //Mouse Events.
+
+		ItemsDropped
 	};
 
 	enum class EventCategory

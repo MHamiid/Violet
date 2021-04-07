@@ -38,6 +38,22 @@ namespace Violet {
 
 	};
 
+	class VIOLET_API ItemsDroppedEvent : public Event {
 
+	public:
+		ItemsDroppedEvent(int count, const char** itemsPaths) : m_count(count), m_itemspaths(itemsPaths){};
+
+		int getItemsCount() { return m_count; }
+		const char** getItemsPaths() const { return m_itemspaths; }
+
+		static EventType GetClassType() { return EventType::ItemsDropped; }
+		//pure virtual functions implementation.
+		virtual int getCategoryFlags() const override { return (int)EventCategory::Application; } //Assigning event to one category.
+		virtual EventType getEventType() const override { return EventType::ItemsDropped; }
+		virtual const char* getName() const override { return "ItemsDropped"; }
+	private:
+		int m_count;
+		const char** m_itemspaths;
+	};
 
 }

@@ -17,9 +17,11 @@ namespace Violet {
 		void onEvent(Event& e) override;
 	private:
 		bool onKeyPressed(KeyPressedEvent& event);
+		bool onItemsDropped(ItemsDroppedEvent& event);
 	private:
 		void newScene(const std::string& sceneName);
 		void openScene();
+		void openScene(const std::string& filePath);
 		void saveScene();
 		void saveSceneAs();
 	private:
