@@ -18,7 +18,7 @@ namespace Violet {
 	private:
 		bool onKeyPressed(KeyPressedEvent& event);
 	private:
-		void newScene();
+		void newScene(const std::string& sceneName);
 		void openScene();
 		void saveSceneAs();
 	private:
@@ -40,6 +40,10 @@ namespace Violet {
 
 		int m_gizmoType = -1;  // -1 ====> No gizmo selected
 		float m_snapValues[3] = { 0.5f , 45.0f, 0.5f}; //Translation, Rotation, Scale  //Snap to 0.5m for translation and scale, snap to 45 degrees for rotation
+
+		/*New Scene Dialogue Popup*/
+		bool m_showNewScenePopupModal = false;
+		std::string m_newSceneNameBuffer;
 
 	};
 

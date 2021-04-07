@@ -3,6 +3,7 @@
 #include "Violet/Utils/PlatformUtils.h"
 #include <ImGuizmo.h>
 #include "Violet/Math/Math.h"
+#include <misc/cpp/imgui_stdlib.h>
 
 namespace Violet {
 
@@ -225,7 +226,7 @@ namespace Violet {
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
 				if (ImGui::MenuItem("New", "Ctrl+N")) 
 				{
-					newScene();
+					m_showNewScenePopupModal = true;
 				}
 				if (ImGui::MenuItem("Open", "Ctrl+O"))
 				{
@@ -381,9 +382,38 @@ namespace Violet {
 			}
 
 		}
-
-
 		ImGui::End();  //ViewPort
+	
+		/*New Scene Popup Modal Dialogue*/
+		if (m_showNewScenePopupModal) {
+			ImGui::OpenPopup("New Scene"); //This name(ID) should be the same as BeginPopupModal
+
+		    // Always center this window when appearing
+			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+			if (ImGui::BeginPopupModal("New Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+			{
+				ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
+				ImGui::Separator();
+
+				if (ImGui::Button("OK", ImVec2(120, 0)))
+				{
+					m_showNewScenePopupModal = false;
+					newScene(m_newSceneNameBuffer);
+					ImGui::CloseCurrentPopup();
+				}
+
+				ImGui::SetItemDefaultFocus();
+				ImGui::SameLine();
+				if (ImGui::Button("Cancel", ImVec2(120, 0)))
+				{
+					m_showNewScenePopupModal = false;
+					ImGui::CloseCurrentPopup();
+				}
+				ImGui::EndPopup();
+			}
+		}
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 		/*End ImGui Code*/
 
@@ -417,7 +447,7 @@ namespace Violet {
 		{
 			if (controlKeyIsPressed) 
 			{
-				newScene();
+				m_showNewScenePopupModal = true;
 			}
 			return true;
 		}
@@ -457,9 +487,9 @@ namespace Violet {
 			return false;
 		}
 	}
-	void EditorLayer::newScene()
+	void EditorLayer::newScene(const std::string& sceneName)
 	{
-		m_activeScene = CreateRef<Scene>(); //Reset the current active scene
+		m_activeScene = CreateRef<Scene>(sceneName); //Reset the current active scene
 		m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 	}
@@ -479,7 +509,7 @@ namespace Violet {
 	}
 	void EditorLayer::saveSceneAs()
 	{
-		std::optional<std::string> filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", "Scene.violet");
+		std::optional<std::string> filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", std::string(m_activeScene->getSceneName() + ".violet").c_str());
 
 		if (filePath)  //If the string is not empty 
 		{
