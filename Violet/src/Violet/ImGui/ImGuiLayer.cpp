@@ -7,6 +7,7 @@
 #include <backends/imgui_impl_opengl3.h>
 
 #include <GLFW/glfw3.h>
+#include <ImGuizmo.h>
 
 namespace Violet {
 	ImGuiLayer* ImGuiLayer::s_ImGuiLayer = nullptr;
@@ -103,6 +104,9 @@ namespace Violet {
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplGlfw_NewFrame();
 		ImGui::NewFrame();
+		
+		//ImGuizmo
+		ImGuizmo::BeginFrame();
 
 	}
 	void ImGuiLayer::EndImGuiFrame()

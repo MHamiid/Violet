@@ -17,6 +17,8 @@ namespace Violet {
 
 		void onImGuiRender();
 		
+		Entity getSelectedEntity() const { return m_selectedEntity; }
+
 	private:
 		void drawEntityNode(Entity entity);
 

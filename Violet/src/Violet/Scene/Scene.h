@@ -18,7 +18,7 @@ namespace Violet {
 		void setPrimaryCameraEntity(Entity cameraEntity);
 		Entity getPrimaryCameraEntity();
 
-		const std::string& getSceneName() { return m_sceneName; }
+		const std::string& getSceneName() const { return m_sceneName; }
 	private:
 		template<typename T>
 		void onComponentAdded(Entity entity, T& component);

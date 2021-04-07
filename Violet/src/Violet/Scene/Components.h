@@ -3,6 +3,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "SceneCamera.h"
 #include "Script.h"
+#define GLM_ENABLE_EXPERIMENTAL
+#include <glm/gtx/quaternion.hpp>
 
 namespace Violet {
 
@@ -30,11 +32,9 @@ namespace Violet {
 
 		glm::mat4 getTransform() const {
 			/*
-			 * TODO: Find more optimized matrix multiplication for the rotationMatrix for performance
+			 * NOTE: The rotation matrix order must match with ImGuizmos rotation order in Violet-Editor (ImGuizmos takes a mat4 and writes to it the new transformation for the object)
 			 */
-			glm::mat4 rotationMatrix = glm::rotate(glm::mat4(1.0f), rotation.x, { 1.0f, 0.0f, 0.0f })
-			 * glm::rotate(glm::mat4(1.0f), rotation.y, { 0.0f, 1.0f, 0.0f })
-			 * glm::rotate(glm::mat4(1.0f), rotation.z, { 0.0f, 0.0f, 1.0f });
+			glm::mat4 rotationMatrix = glm::toMat4(glm::quat(rotation));
 			
 			return glm::translate(glm::mat4(1.0f), translation)
 				* rotationMatrix

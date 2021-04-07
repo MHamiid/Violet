@@ -6,7 +6,7 @@ Entities:
       Tag: Top
     TransformComponent:
       Translation: [0, 0.5, 0]
-      Rotation: [1.57079637, 0, -0.785398185]
+      Rotation: [1.57079637, 0.785398185, 0]
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.848101258, 0.791975975, 0.214709163, 1]
@@ -15,7 +15,7 @@ Entities:
       Tag: Camera
     TransformComponent:
       Translation: [0, 0, 0]
-      Rotation: [0, 0, 0]
+      Rotation: [-0.404916406, 0, 0]
       Scale: [1, 1, 1]
     CameraComponent:
       SceneCamera:

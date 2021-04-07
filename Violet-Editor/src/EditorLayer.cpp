@@ -1,6 +1,8 @@
 #include "EditorLayer.h"
 #include "Violet/Scene/SceneSerializer.h"
 #include "Violet/Utils/PlatformUtils.h"
+#include <ImGuizmo.h>
+#include "Violet/Math/Math.h"
 
 namespace Violet {
 
@@ -25,6 +27,9 @@ namespace Violet {
 		m_activeScene = CreateRef<Scene>("Uninitialized Scene"); //Initialization
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
+
+		//Initialize Gizmos to be in translation mode
+		m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
 		class CameraController : public Script {
 		public:
@@ -295,8 +300,14 @@ namespace Violet {
 		m_viewPortFocused = ImGui::IsWindowFocused();  //Get the ViewPort focus status from ImGui and update the status
 		m_viewPortHovered = ImGui::IsWindowHovered();  //Get the ViewPort hover status from ImGui and update the status
 
-		Application::GetApplicationInstance().getImGuiLayer()->setImGuiToBlockEvents(!(m_viewPortFocused && m_viewPortHovered));
-	
+		if (!ImGui::IsAnyItemActive())
+		{
+			Application::GetApplicationInstance().getImGuiLayer()->setImGuiToBlockEvents(!m_viewPortFocused && !m_viewPortHovered);
+		}
+		else
+		{
+			Application::GetApplicationInstance().getImGuiLayer()->setImGuiToBlockEvents(!(m_viewPortFocused && m_viewPortHovered));
+		}
 
 		//Get the size of the panel
 		ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
@@ -304,7 +315,75 @@ namespace Violet {
 		
 		uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void* pointer when casting
 		ImGui::Image((void*)textureID, ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
-		ImGui::End();
+
+		//TODO: Set UI buttons for selecting the gizmo type
+		//ImGizmos
+		Entity selectedEntity =  m_sceneHierarchyPanel.getSelectedEntity();
+		if (selectedEntity && m_gizmoType!= -1 && m_activeScene->getPrimaryCameraEntity()) //If the selected entity and the primary camera entity are valid entities and a we have a gizmo to use
+		{
+			ImGuizmo::SetDrawlist();  //Draw to the current window
+			
+			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port
+
+			/*Get Camera Info From The Primary Camera*/
+			Entity primaryCameraEntity = m_activeScene->getPrimaryCameraEntity();
+			const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
+
+			const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
+			glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
+
+
+			/*Get The Selected Entity Info*/
+			TransformComponent& selectedEntityTransformComponent = selectedEntity.getComponent<TransformComponent>();
+			glm::mat4 selectedEntityGizmosTransform = selectedEntityTransformComponent.getTransform();
+	
+			/*Get The Correct Snapping Value*/
+			float snapValue = 0.0f;
+			bool snapEnabled = Input::IsKeyPressed(Key::LEFT_CONTROL);
+			//TODO: Create A UI For Setting m_snapValue
+			if (snapEnabled)
+			{
+				if (m_gizmoType == ImGuizmo::OPERATION::TRANSLATE) 
+				{
+					snapValue = m_snapValues[0];
+				}
+				else if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+				{
+					snapValue = m_snapValues[1];
+				}
+				else if (m_gizmoType == ImGuizmo::OPERATION::SCALE)
+				{
+					snapValue = m_snapValues[2];
+				}
+			}
+			float snapValuesAxes[3] = { snapValue, snapValue, snapValue };
+
+
+			//Pass the parameters to ImGuizmo to draw the gizmos and write the new transformation to the selectedEntityGizmosTransform matrix
+			ImGuizmo::Manipulate(glm::value_ptr(primaryCameraViewMatrix), glm::value_ptr(primaryCameraProjectionMatrix)
+			, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
+			, nullptr, snapEnabled ? snapValuesAxes : nullptr);
+
+			if (ImGuizmo::IsUsing()) //Return true if mouse IsOver or if the gizmo is in moving state
+			{	
+				/*Apply the gizmo transformation changes to the selected entity*/
+
+				glm::vec3 selectedEntityTranslation, selectedEntityRotation, selectedEntityScale;  //Note that these are not initialized
+
+				//Get the translation, rotation, scale from the transformation matrix
+				Math::decomposeTransformationMatrix(selectedEntityGizmosTransform, selectedEntityTranslation, selectedEntityRotation, selectedEntityScale);
+
+				//Set the transformations
+				selectedEntityTransformComponent.translation = selectedEntityTranslation;
+				selectedEntityTransformComponent.rotation = selectedEntityRotation;
+				selectedEntityTransformComponent.scale = selectedEntityScale;
+			
+			}
+
+		}
+
+
+		ImGui::End();  //ViewPort
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 		/*End ImGui Code*/
 
@@ -322,7 +401,7 @@ namespace Violet {
 	bool EditorLayer::onKeyPressed(KeyPressedEvent& event)
 	{
 		/*Shortcuts*/
-		/*Note Currently ImGui Is Set To Block The Events Unless IF The ViewPort Is Active*/
+		/*Note Currently ImGui Is Set To Block The Events Unless IF The ViewPort Is Fucosed Or Hovered*/
 		if (event.getRepeatCount() > 0) 
 		{
 			return false;
@@ -333,6 +412,7 @@ namespace Violet {
 
 		switch (event.getKeyCode())
 		{
+		/*File Menu*/
 		case Key::N:
 		{
 			if (controlKeyIsPressed) 
@@ -354,9 +434,25 @@ namespace Violet {
 			if (controlKeyIsPressed && shiftKeyIsPressed) 
 			{
 				saveSceneAs();
+				return true;
 			}
+			/*Gizmos*/
+			if (!ImGuizmo::IsUsing() && m_sceneHierarchyPanel.getSelectedEntity()) { m_gizmoType = ImGuizmo::OPERATION::SCALE; }
 			return true;
 		}
+		/*Gizmos*/
+		case Key::ESCAPE:
+			m_gizmoType = -1;
+			return true;
+
+		case Key::G:
+			if (!ImGuizmo::IsUsing() && m_sceneHierarchyPanel.getSelectedEntity()) { m_gizmoType = ImGuizmo::OPERATION::TRANSLATE; }
+			return true;
+
+		case Key::R:
+			if (!ImGuizmo::IsUsing() && m_sceneHierarchyPanel.getSelectedEntity()) { m_gizmoType = ImGuizmo::OPERATION::ROTATE; }
+			return true;
+
 		default:
 			return false;
 		}

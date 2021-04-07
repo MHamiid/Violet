@@ -53,7 +53,7 @@ project "Violet"
 		"%{prj.name}/vendor/stb_image",						--Include dir for stb_image
 		"%{prj.name}/vendor/entt/single_include/entt",	    --Include dir for entt
 		"%{prj.name}/vendor/yaml-cpp/include",				--Include dir for yaml-cpp
-		"%{prj.name}/vendor/ImGuizmo"						--Include dir for yaml-cpp
+		"%{prj.name}/vendor/ImGuizmo"						--Include dir for ImGuizmo
 	}
 
 	links{
@@ -186,7 +186,8 @@ project "Violet-Editor"
 		"Violet/src",
 		"Violet/vendor/glm",								--Include dir for glm
 		"Violet/vendor/imgui",								--Include dir for ImGui
-		"Violet/vendor/entt/single_include/entt"			--Include dir for entt
+		"Violet/vendor/entt/single_include/entt",			--Include dir for entt
+		"Violet/vendor/ImGuizmo"							--Include dir for ImGuizmo
 
 	}
 
