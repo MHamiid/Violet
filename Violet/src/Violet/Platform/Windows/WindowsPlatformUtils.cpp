@@ -34,7 +34,7 @@ namespace Violet {
 		{
 			return openFileName.lpstrFile; //Return the file path
 		}
-		return std::nullopt;  //Return empty string
+		return std::nullopt;  //Return null string
 	}
 	std::optional<std::string> FileDialogs::SaveFile(const char* filter, const char* defaultFileName)
 	{
@@ -63,7 +63,7 @@ namespace Violet {
 		{
 			return openFileName.lpstrFile; //Return the file path
 		}
-		return std::nullopt;  //Return empty string
+		return std::nullopt;  //Return null string
 	}
 
 }

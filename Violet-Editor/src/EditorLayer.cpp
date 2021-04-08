@@ -218,7 +218,7 @@ namespace Violet {
 				}
 				if (ImGui::MenuItem("Open", "Ctrl+O"))
 				{
-					openScene();
+					openSceneDialog();
 				}
 				if (ImGui::MenuItem("Save", "Ctrl+S"))
 				{
@@ -228,12 +228,12 @@ namespace Violet {
 					}
 					else
 					{
-						saveSceneAs();
+						saveSceneAsDialog();
 					}
 				}
 				if (ImGui::MenuItem("Save As", "Ctrl+Shift+S"))
 				{
-					saveSceneAs();
+					saveSceneAsDialog();
 				}
 
 				ImGui::Separator();
@@ -461,7 +461,7 @@ namespace Violet {
 		{
 			if (controlKeyIsPressed) 
 			{
-				openScene();
+				openSceneDialog();
 			}
 			return true;
 		}
@@ -469,7 +469,7 @@ namespace Violet {
 		{
 			if (controlKeyIsPressed && shiftKeyIsPressed) 
 			{
-				saveSceneAs();
+				saveSceneAsDialog();
 			}
 			if (controlKeyIsPressed)
 			{
@@ -479,7 +479,7 @@ namespace Violet {
 				}
 				else
 				{
-					saveSceneAs();
+					saveSceneAsDialog();
 				}
 			}
 			/*Gizmos*/
@@ -524,11 +524,13 @@ namespace Violet {
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		
 	}
-	void EditorLayer::openScene()
+	void EditorLayer::openSceneDialog()
 	{
 		std::optional<std::string> filePath = FileDialogs::OpenFile("Violet Scene (*.violet)\0*.violet\0");
-
-		openScene(*filePath);
+		if (filePath.has_value())
+		{
+			openScene(*filePath);
+		}
 	}
 	void EditorLayer::openScene(const std::string& filePath)
 	{
@@ -564,7 +566,7 @@ namespace Violet {
 		}
 
 	}
-	void EditorLayer::saveSceneAs()
+	void EditorLayer::saveSceneAsDialog()
 	{
 		std::optional<std::string> filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", std::string(m_activeScene->getSceneName() + ".violet").c_str());
 

@@ -20,10 +20,10 @@ namespace Violet {
 		bool onItemsDropped(ItemsDroppedEvent& event);
 	private:
 		void newScene(const std::string& sceneName);
-		void openScene();
+		void openSceneDialog();
 		void openScene(const std::string& filePath);
 		void saveScene();
-		void saveSceneAs();
+		void saveSceneAsDialog();
 	private:
 
 		Ref<Texture2D> m_LetterVTexture;
