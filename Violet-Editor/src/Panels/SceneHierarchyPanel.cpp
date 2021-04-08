@@ -80,6 +80,7 @@ namespace Violet {
 		{
 			if (ImGui::MenuItem("Delete Entity")) //If pressed
 			{
+				m_selectedEntity = {};
 				if (m_propertiesPanelContext) //If there is a properties panel attached
 				{
 					m_propertiesPanelContext->setEntityContext({});  //Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
