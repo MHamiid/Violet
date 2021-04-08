@@ -136,6 +136,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Violet\Math\Math.h" />
+    <ClInclude Include="src\Violet\Renderer\EditorCamera.h" />
     <ClInclude Include="src\VIOPCH.h" />
     <ClInclude Include="src\Violet.h" />
     <ClInclude Include="src\Violet\Core\Application.h" />
@@ -187,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Violet\Math\Math.cpp" />
+    <ClCompile Include="src\Violet\Renderer\EditorCamera.cpp" />
     <ClCompile Include="src\VIOPCH.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>

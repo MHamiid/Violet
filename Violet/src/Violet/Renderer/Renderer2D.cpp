@@ -132,8 +132,19 @@ namespace Violet {
 		s_data->textureShader->setMat4("u_viewProjection", camera.getProjectionMatrix() * glm::inverse(transform)); //Set the uniform
 
 		/*Reset Scene Statistics*/
-		s_data->sceneStatistics.drawCallsCount = 0;
-		s_data->sceneStatistics.quadCount = 0;
+		ResetSceneStatistics();
+
+		/*Reset Scene*/
+		StartNewBatch();
+	}
+
+	void Renderer2D::BeginScene(const EditorCamera& editorCamera)
+	{
+		s_data->textureShader->bind();
+		s_data->textureShader->setMat4("u_viewProjection", editorCamera.getViewProjection()); //Set the uniform
+
+		/*Reset Scene Statistics*/
+		ResetSceneStatistics();
 
 		/*Reset Scene*/
 		StartNewBatch();
@@ -145,8 +156,7 @@ namespace Violet {
 		s_data->textureShader->setMat4("u_viewProjection", camera.getViewProjectionMatrix()); //Set the uniform
 
 		/*Reset Scene Statistics*/
-		s_data->sceneStatistics.drawCallsCount = 0;
-		s_data->sceneStatistics.quadCount = 0;
+		ResetSceneStatistics();
 
 		/*Reset Scene*/
 		StartNewBatch();

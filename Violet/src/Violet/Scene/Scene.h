@@ -1,6 +1,7 @@
 #pragma once
 #include <entt.hpp>
 #include "Violet/Core/DeltaTime.h"
+#include "Violet/Renderer/EditorCamera.h"
 
 namespace Violet {
 	class Entity;  //NOTE: Can't include Entity header, cause the entity includes Scene header, which result is infinite recursive include loop
@@ -9,7 +10,8 @@ namespace Violet {
 	public:
 		Scene(const std::string& sceneName = "Untitled");
 		~Scene();
-		void onUpdate(DeltaTime deltaTime);
+		void onUpdateRuntime(DeltaTime deltaTime);
+		void onUpdateEditor(DeltaTime deltaTime, EditorCamera& editorCamera);
 		void onViewPortResize(uint32_t width, uint32_t height);
 
 		Entity createEntity(const std::string& tagName = std::string("Unnamed Entity"));

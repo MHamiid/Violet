@@ -25,7 +25,6 @@ namespace Violet {
 		void saveScene();
 		void saveSceneAs();
 	private:
-		OrthographicCameraController m_cameraController;
 
 		Ref<Texture2D> m_LetterVTexture;
 		Ref<Texture2D> m_transparentTexture;
@@ -36,6 +35,7 @@ namespace Violet {
 		glm::vec2 m_viewPortSize = { 0.0f, 0.0f };
 
 		Ref<Scene> m_activeScene;
+		EditorCamera m_editorCamera;
 
 		/*Panels*/
 		SceneHierarchyPanel m_sceneHierarchyPanel;

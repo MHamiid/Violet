@@ -15,7 +15,7 @@ namespace Violet {
 	{
 	}
 
-	void Scene::onUpdate(DeltaTime deltaTime)
+	void Scene::onUpdateRuntime(DeltaTime deltaTime)
 	{
 		/*Update Scripts*/
 		//Get all script components
@@ -60,6 +60,20 @@ namespace Violet {
 			Renderer2D::ResetSceneStatistics();
 		}
 
+	}
+
+	void Scene::onUpdateEditor(DeltaTime deltaTime, EditorCamera& editorCamera)
+	{
+		/*Render 2D*/
+		Renderer2D::BeginScene(editorCamera);
+		entt::basic_group spriteGroup = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
+
+		for (auto entity : spriteGroup) {
+			auto [transform, sprite] = spriteGroup.get<TransformComponent, SpriteRendererComponent>(entity);
+
+			Renderer2D::DrawQuad(transform.getTransform(), sprite.color);
+		}
+		Renderer2D::EndScene();
 	}
 
 	void Scene::onViewPortResize(uint32_t width, uint32_t height)

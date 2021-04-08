@@ -190,6 +190,7 @@
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Math\Math.h" />
+    <ClInclude Include="src\Violet\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -295,5 +296,6 @@
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Math\Math.cpp" />
+    <ClCompile Include="src\Violet\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>

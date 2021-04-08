@@ -7,7 +7,7 @@
 
 namespace Violet {
 
-	EditorLayer::EditorLayer() : Layer("EditorLayer"), m_cameraController(1280.0f / 720.0f, true)
+	EditorLayer::EditorLayer() : Layer("EditorLayer")
 	{
 	}
 
@@ -19,6 +19,7 @@ namespace Violet {
 
 		//Create specs for the frame buffer
 		FrameBufferSpecification specs;
+		/*TODO: Should be automated*/
 		specs.width = 1280; //Window width
 		specs.height = 720; //Window height
 
@@ -28,6 +29,9 @@ namespace Violet {
 		m_activeScene = CreateRef<Scene>("Untitled Scene");
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
+
+		/*Editor Camera Initialization*/
+		m_editorCamera = EditorCamera(45.0f, 0.0f, 0.1f, 1000.0f);
 
 		//Initialize Gizmos to be in translation mode
 		m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
@@ -99,15 +103,18 @@ namespace Violet {
 			//Update the framebuffer and the viewport in FrameBuffer.onBind function
 			m_frameBuffer->resize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 
-			//Update the camera
-			//m_cameraController.onResize(m_viewPortSize.x, m_viewPortSize.y);
+			//Update the editor camera viewport
+			m_editorCamera.setViewPortSize(m_viewPortSize.x, m_viewPortSize.y);
 
 			m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 		}
-		if (m_viewPortFocused) //Update the camera movement only when the viewport is focused 
-		{
-			//m_cameraController.onUpdate(deltaTime);
-		}
+		//if (m_viewPortFocused)
+		//{
+		//}
+
+
+		//Update the editor camera movement 
+		m_editorCamera.onUpdate(deltaTime);
 
 
 		/*Animation*/
@@ -132,28 +139,9 @@ namespace Violet {
 
 		//Renderer2D::BeginScene(m_cameraController.getCamera());
 
-		//Update/Render the scene
-		m_activeScene->onUpdate(deltaTime);
-		/*TransformComponent& squareTransformation = m_squareEntity.getComponent<TransformComponent>();
-		squareTransformation.translation = m_objectPosition;
-		squareTransformation.rotation = { 0.0f, 0.0f, m_objectRotationZ };
-		squareTransformation.scale = m_objectScale;*/
+		//Render the scene
+		m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
 
-		//Renderer2D::DrawQuad(m_objectPosition, { 0.2f, 0.5f }, m_objectColor);
-		//Renderer2D::DrawQuad({ -1.5f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		//Renderer2D::DrawQuad({ -1.2f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		//Renderer2D::DrawQuad({ -0.9f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		//Renderer2D::DrawQuad({ -0.6f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		//Renderer2D::DrawQuad({ -0.3f, 0.0f }, { 0.2f, 0.2f }, m_objectColor);
-		//Renderer2D::DrawRotatedQuad({ 0.6f, 0.2f }, { 0.5f, 0.5f }, -m_objectRotation, { 1.0f, 0.93f, 0.24f, 1.0f });
-		//Renderer2D::DrawRotatedQuad({ -0.6f, 0.2f }, { 0.5f, 0.5f }, m_objectRotation, { 0.18f, 0.6f, 0.96f, 1.0f });
-		////Background
-		//Renderer2D::DrawRotatedQuad({ m_cameraController.getCamera().getPosition().x, m_cameraController.getCamera().getPosition().y, -0.1f },
-		//	{ m_cameraController.getWidth(), m_cameraController.getHeight() }, m_cameraController.getCamera().getRotationZ(), m_transparentTexture, 2.0f);
-		//Renderer2D::DrawRotatedQuad({ 0.5f, -0.5f }, { 0.5f, 0.5f }, -45.0f, m_LetterVTexture);
-		//Renderer2D::DrawRotatedQuad({ -0.5f, -0.5f }, { 0.5f, 0.5f }, 45.0f, m_grassTexture);
-
-		//Renderer2D::EndScene();
 
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 
@@ -330,18 +318,25 @@ namespace Violet {
 		//TODO: Set UI buttons for selecting the gizmo type
 		//ImGizmos
 		Entity selectedEntity =  m_sceneHierarchyPanel.getSelectedEntity();
-		if (selectedEntity && m_gizmoType!= -1 && m_activeScene->getPrimaryCameraEntity()) //If the selected entity and the primary camera entity are valid entities and a we have a gizmo to use
+		//If the selected entity is a valid entity and a we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
+		if (selectedEntity && m_gizmoType!= -1)
 		{
 			ImGuizmo::SetDrawlist();  //Draw to the current window
 			
 			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port
 
-			/*Get Camera Info From The Primary Camera*/
-			Entity primaryCameraEntity = m_activeScene->getPrimaryCameraEntity();
-			const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
+			/*Runtime Camera Gizmos*/
+			///*Get Camera Info From The Primary Camera*/
+			//Entity primaryCameraEntity = m_activeScene->getPrimaryCameraEntity();
+			//const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
 
-			const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
-			glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
+			//const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
+			//glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
+
+			/*Editor Camera Gizmos*/
+			const glm::mat4& editorCameraProjectionMatrix = m_editorCamera.getProjectionMatrix();
+			glm::mat4 editorCameraViewMatrix = m_editorCamera.getViewMatrix();
+
 
 
 			/*Get The Selected Entity Info*/
@@ -371,7 +366,7 @@ namespace Violet {
 
 
 			//Pass the parameters to ImGuizmo to draw the gizmos and write the new transformation to the selectedEntityGizmosTransform matrix
-			ImGuizmo::Manipulate(glm::value_ptr(primaryCameraViewMatrix), glm::value_ptr(primaryCameraProjectionMatrix)
+			ImGuizmo::Manipulate(glm::value_ptr(editorCameraViewMatrix), glm::value_ptr(editorCameraProjectionMatrix)
 			, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
 			, nullptr, snapEnabled ? snapValuesAxes : nullptr);
 
@@ -432,7 +427,7 @@ namespace Violet {
 
 	void EditorLayer::onEvent(Event& e)
 	{
-		m_cameraController.onEvent(e);
+		m_editorCamera.onEvent(e);
 
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<KeyPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onKeyPressed));

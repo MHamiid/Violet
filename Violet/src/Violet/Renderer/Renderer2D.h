@@ -2,6 +2,7 @@
 #include "Violet/Renderer/OrthographicCamera.h"
 #include "Violet/Renderer/Texture.h"
 #include "Violet/Renderer/Camera.h"
+#include "Violet/Renderer/EditorCamera.h"
 
 namespace Violet {
 
@@ -10,6 +11,7 @@ namespace Violet {
 		static void Init();
 		static void Shutdown();
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
+		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const OrthographicCamera& camera);  //TODO: Remove
 		static void EndScene();
 		static void Flush();
@@ -41,6 +43,7 @@ namespace Violet {
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
 
+	public:
 		/*
 		* Statistics
 		*/
