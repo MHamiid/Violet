@@ -522,7 +522,11 @@ namespace Violet {
 		m_activeScene = CreateRef<Scene>(sceneName); //Reset the current active scene
 		m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
-		
+
+		//Reset editor camera
+		m_editorCamera = EditorCamera(45.0f, 0.0f, 0.1f, 1000.0f);
+		//set the editor camera viewport
+		m_editorCamera.setViewPortSize(m_viewPortSize.x, m_viewPortSize.y);
 	}
 	void EditorLayer::openSceneDialog()
 	{
@@ -537,9 +541,7 @@ namespace Violet {
 		//TODO: Check the extension of the file
 		if (!filePath.empty())  //If the string is not empty 
 		{
-			m_activeScene = CreateRef<Scene>(); //Reset the current active scene
-			m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
-			m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set it
 
 			SceneSerializer sceneSerializer(m_activeScene);
 			if (sceneSerializer.deserializeText(filePath))
