@@ -4,6 +4,7 @@
 #include "Violet/Events/Event.h"
 #include "Violet/Events/MouseEvent.h"
 #include <glm/glm.hpp>
+#include "Violet/Core/KeyCodes.h"
 
 namespace Violet {
 
@@ -28,6 +29,8 @@ namespace Violet {
 
 		float getPitch() const { return m_pitch; }
 		float getYaw() const { return m_yaw; }
+	public:
+		 Key getCameraControlKey() const { return Key::LEFT_ALT; }
 	private:
 		void calculateProjectionMatrix();
 		void calculateViewMatrix();
@@ -58,5 +61,7 @@ namespace Violet {
 		float m_pitch = 0.0f, m_yaw = 0.0f;
 
 		float m_viewportWidth = 0.0f, m_viewportHeight = 0.0f;
+	private:
+		Key m_cameraControlKey = Key::LEFT_ALT;
 	};
 }

@@ -278,7 +278,8 @@ namespace Violet {
 
 
 		/*Start ImGui Code*/
-		m_sceneHierarchyPanel.onImGuiRender();
+		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
+		m_sceneHierarchyPanel.onImGuiRender(Input::IsKeyPressed(m_editorCamera.getCameraControlKey()));
 		m_propertiesPanel.onImGuiRender();
 
 		ImGui::Begin("Renderer2D Scene Statistics");

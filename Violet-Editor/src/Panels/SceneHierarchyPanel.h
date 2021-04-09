@@ -15,12 +15,12 @@ namespace Violet {
 		void setSceneContext(const Ref<Scene>& scene);
 		void setPropertiesPanelContext(PropertiesPanel* propertiesPanel);
 
-		void onImGuiRender();
+		void onImGuiRender(bool disableInteraction);
 		
 		Entity getSelectedEntity() const { return m_selectedEntity; }
 
 	private:
-		void drawEntityNode(Entity entity);
+		void drawEntityNode(Entity entity, bool disableInteraction);
 
 	private:
 		Ref<Scene> m_sceneContext;

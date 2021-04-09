@@ -25,7 +25,7 @@ namespace Violet {
 
 	void EditorCamera::onUpdate(DeltaTime deltaTime)
 	{
-		if (Input::IsKeyPressed(Key::LEFT_ALT))
+		if (Input::IsKeyPressed(m_cameraControlKey))
 		{
 			const glm::vec2& mousePosition{ Input::GetMouseX(), Input::GetMouseY() };
 			glm::vec2 deltaMousePosition = (mousePosition - m_initialMousePosition) * 0.003f;

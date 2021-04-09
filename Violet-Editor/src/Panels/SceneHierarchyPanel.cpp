@@ -20,7 +20,7 @@ namespace Violet {
 	{
 		m_propertiesPanelContext = propertiesPanel;
 	}
-	void SceneHierarchyPanel::onImGuiRender()
+	void SceneHierarchyPanel::onImGuiRender(bool disableInteraction)
 	{
 		ImGui::Begin("Scene Hierarchy");
 
@@ -28,7 +28,7 @@ namespace Violet {
 		m_sceneContext->m_registry.each([&](entt::entity entityID)
 		{
 				Entity entity{ entityID, m_sceneContext.get() };
-				drawEntityNode(entity);
+				drawEntityNode(entity, disableInteraction);
 		});
 
 		//If a blank space in the window pressed unselect the selected entity
@@ -43,7 +43,8 @@ namespace Violet {
 		}
 
 		/*Right-Click Pop-Up Menu*/
-		if (ImGui::BeginPopupContextWindow(0, 1, false)) //If right-clicked in the Scene Hierarchy panel but not on an item (the entities) ====> clicking on a blank space in the panel
+		//If the interaction is not disabled and right-clicked in the Scene Hierarchy panel but not on an item (the entities) ====> clicking on a blank space in the panel, Note the checking sequence of the conditions (Pop-up will not render if the first condition failed) 
+		if (!disableInteraction && ImGui::BeginPopupContextWindow(0, 1, false))
 		{
 			if (ImGui::MenuItem("Create Empty Entity")) //If pressed
 			{
@@ -55,7 +56,7 @@ namespace Violet {
 
 		ImGui::End();
 	}
-	void SceneHierarchyPanel::drawEntityNode(Entity entity)
+	void SceneHierarchyPanel::drawEntityNode(Entity entity, bool disableInteraction)
 	{
 		const auto& tag = entity.getComponent<TagComponent>().tag;
 
@@ -76,7 +77,8 @@ namespace Violet {
 		}
 
 		/*Right-Click Pop-Up Item*/
-		if (ImGui::BeginPopupContextItem()) //If right-clicked on the item
+		//If the interaction is not disabled and right-clicked on the item, Note the checking sequence of the conditions (Pop-up will not render if the first condition failed) 
+		if (!disableInteraction && ImGui::BeginPopupContextItem())
 		{
 			if (ImGui::MenuItem("Delete Entity")) //If pressed
 			{
