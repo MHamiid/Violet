@@ -24,7 +24,8 @@ void main(){
 #type fragment
 #version 330 core
 
-layout(location = 0) out vec4 o_color;	
+layout(location = 0) out vec4 o_color;
+layout(location = 1) out int o_int;
 
 uniform sampler2D u_textures[32];
 
@@ -34,5 +35,5 @@ in float v_texIndex;
 
 void main(){
 	o_color =  texture(u_textures[int(v_texIndex)], v_texCoord) * v_color;
-	
+	o_int = 60;  //Output a constant value of 60 on every pixel
 }

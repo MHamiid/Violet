@@ -10,6 +10,7 @@ namespace Violet {
 		virtual void bind() const override;
 		virtual void unBind() const override;
 		virtual void resize(uint32_t width, uint32_t height) override;
+		virtual void readColorAttachmentPixel(uint32_t colorAttachmentIndex, int xCoordinate, int yCoordinate, void* const outPixel) const override;
 		virtual uint32_t getColorAttachmentID(uint32_t index = 0) const override { VIO_CORE_ASSERT(index < m_colorAttachmentsID.size(), "[Frame Buffer] Index Out Of Bounds!"); return m_colorAttachmentsID[index]; }
 		virtual const FrameBufferSpecification& getSpecification() const override { return m_specification; }
 	private:

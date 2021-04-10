@@ -19,7 +19,7 @@ namespace Violet {
 
 		//Create specs for the frame buffer
 		FrameBufferSpecification specs;
-		specs.textureAttachmentsSpecification = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::DEPTH };
+		specs.textureAttachmentsSpecification = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::RED_INTEGER, FrameBufferTextureFormat::DEPTH };
 		/*TODO: Should be automated*/
 		specs.width = 1280; //Window width
 		specs.height = 720; //Window height
@@ -126,14 +126,14 @@ namespace Violet {
 		//m_objectScale += (m_scaleSpeed * deltaTime);
 		/*Render*/
 
-		//Clears the window screen
-		RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
-		RenderCommand::Clear();
+		/*Clear the window screen, NOTE: No need to clear when using ImGui Dock Space*/
+		//RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
+		//RenderCommand::Clear();
 
 		//Render FrameBuffer
 		m_frameBuffer->bind();
 
-		//Clears the frame buffer screen
+		/*Clear all of the frame buffer attachments*/
 		RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RenderCommand::Clear();
 
@@ -143,6 +143,13 @@ namespace Violet {
 		//Render the scene
 		m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
 
+		/*Read Pixels From FrameBuffer Color Attachments*/
+		float pixelsRGBA[4];
+		int pixelInt;
+		m_frameBuffer->readColorAttachmentPixel(0, 100, 100, pixelsRGBA);
+		VIO_CORE_DEBUG("Reading RGBA color attachment at index 0 at Coordinates(100, 100): ({0}, {1}, {2}, {3})", pixelsRGBA[0], pixelsRGBA[1], pixelsRGBA[2], pixelsRGBA[3]);
+		m_frameBuffer->readColorAttachmentPixel(1, 100, 100, &pixelInt);
+		VIO_CORE_DEBUG("Reading Int color attachment at index 1 at Coordinates(100, 100): ({0})", pixelInt);
 
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 

@@ -59,6 +59,31 @@ namespace Violet {
 		validateSize();
 	}
 
+	/*Assumes that the FrameBuffer is bound (bind())*/
+	void OpenGLFrameBuffer::readColorAttachmentPixel(uint32_t colorAttachmentIndex, int xCoordinate, int yCoordinate, void* const outPixel) const
+	{
+		VIO_CORE_ASSERT(colorAttachmentIndex < m_colorAttachmentsID.size(), "[Frame Buffer] Index Out Of Bounds!");
+		glReadBuffer(GL_COLOR_ATTACHMENT0 + colorAttachmentIndex);
+	
+		GLenum format;
+		GLenum type; //Should match with outPixel type
+		switch (m_colorAttachmentSpecifications[colorAttachmentIndex].textureFormat)
+		{
+		case FrameBufferTextureFormat::RGBA8:
+			format = GL_RGBA;
+			type = GL_FLOAT;
+			break;
+		case FrameBufferTextureFormat::RED_INTEGER:
+			format = GL_RED_INTEGER;
+			type = GL_INT;
+			break;
+		default:
+			VIO_CORE_ASSERT(false, "[Frame Buffer] Color Attachment Format Selection Failed!");
+			break;
+		}
+		glReadPixels(xCoordinate, yCoordinate, 1, 1, format, type, outPixel);
+	}
+
 	/*Recreate the FrameBuffer and it's attachments with the new size (m_specification.width, m_specification.height)*/
 	void OpenGLFrameBuffer::validateSize()
 	{
