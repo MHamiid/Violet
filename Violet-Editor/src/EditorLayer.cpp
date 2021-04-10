@@ -19,6 +19,7 @@ namespace Violet {
 
 		//Create specs for the frame buffer
 		FrameBufferSpecification specs;
+		specs.textureAttachmentsSpecification = { FrameBufferTextureFormat::RGBA8, FrameBufferTextureFormat::DEPTH };
 		/*TODO: Should be automated*/
 		specs.width = 1280; //Window width
 		specs.height = 720; //Window height
@@ -205,6 +206,10 @@ namespace Violet {
 		//Set back the original value
 		style.WindowMinSize.x = originalMinWindowSizeX;
 
+		/*Ending ImGui DockSpace Code*/
+
+
+		/*Start ImGui Code*/
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
@@ -274,10 +279,7 @@ namespace Violet {
 			ImGui::EndMenuBar();
 		}
 
-		/*Ending ImGui DockSpace Code*/
-
-
-		/*Start ImGui Code*/
+		
 		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
 		m_sceneHierarchyPanel.onImGuiRender(Input::IsKeyPressed(m_editorCamera.getCameraControlKey()));
 		m_propertiesPanel.onImGuiRender();
