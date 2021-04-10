@@ -39,8 +39,8 @@ namespace Violet {
 			case VertexAttributeDataType::Float2:   return 2;
 			case VertexAttributeDataType::Float3:   return 3;
 			case VertexAttributeDataType::Float4:   return 4;
-			case VertexAttributeDataType::Mat3:     return 4 * 3 * 3;;
-			case VertexAttributeDataType::Mat4:     return 4 * 4 * 4;
+			case VertexAttributeDataType::Mat3:     return 3; // 3 * Float3
+			case VertexAttributeDataType::Mat4:     return 4; // 4 * Float4
 			case VertexAttributeDataType::Int:      return 1;
 			case VertexAttributeDataType::Int2:     return 2;
 			case VertexAttributeDataType::Int3:     return 3;

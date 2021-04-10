@@ -56,7 +56,7 @@ namespace Violet {
 	{
 		const std::vector<VertexAttribute>& attributes = vertexBuffer->getLayout().getLayoutAttributes();
 		//Check if the attributes vector is not equal to zero
-		VIO_CORE_ASSERT(attributes.size(), "No Layout Has Been Set For Vertex Buffer!");
+		VIO_CORE_ASSERT(attributes.size(), "[Buffer] No Layout Has Been Set For Vertex Buffer!");
 
 
 		//Bind the vertex array
@@ -65,14 +65,69 @@ namespace Violet {
 
 		//Set the layout for the buffer
 		for (int i = 0; i < attributes.size(); i++) {
-			glEnableVertexAttribArray(m_lastEnabledVertexAttribute);
-			glVertexAttribPointer(m_lastEnabledVertexAttribute, attributes[i].getDataTypeCount(),
-				VertexAttributeDataTypeToOpenGLType(attributes[i].dataType),
-				attributes[i].normalized ? GL_TRUE : GL_FALSE,
-				vertexBuffer->getLayout().getStride(),
-				(const void*)attributes[i].offset);
-			//Update the last enabled attribute
-			m_lastEnabledVertexAttribute++;
+
+			switch (attributes[i].dataType)
+			{
+				case VertexAttributeDataType::Float:
+				case VertexAttributeDataType::Float2:
+				case VertexAttributeDataType::Float3:
+				case VertexAttributeDataType::Float4:
+				{
+					/*Run This For Any Of The Float Types*/
+					glEnableVertexAttribArray(m_lastEnabledVertexAttribute);
+					glVertexAttribPointer(m_lastEnabledVertexAttribute, attributes[i].getDataTypeCount(),
+						VertexAttributeDataTypeToOpenGLType(attributes[i].dataType),
+						attributes[i].normalized ? GL_TRUE : GL_FALSE,
+						vertexBuffer->getLayout().getStride(),
+						(const void*)attributes[i].offset);
+					//Update the last enabled attribute
+					m_lastEnabledVertexAttribute++;
+					break;
+				}
+				case VertexAttributeDataType::Int:
+				case VertexAttributeDataType::Int2:
+				case VertexAttributeDataType::Int3:
+				case VertexAttributeDataType::Int4:
+				case VertexAttributeDataType::Bool:
+				{
+					/*Run This For Any Of The Int/Bool Types*/
+					glEnableVertexAttribArray(m_lastEnabledVertexAttribute);
+					glVertexAttribIPointer(m_lastEnabledVertexAttribute, attributes[i].getDataTypeCount(),
+						VertexAttributeDataTypeToOpenGLType(attributes[i].dataType),
+						vertexBuffer->getLayout().getStride(),
+						(const void*)attributes[i].offset);
+					//Update the last enabled attribute
+					m_lastEnabledVertexAttribute++;
+					break;
+				}
+				case VertexAttributeDataType::Mat3:
+				case VertexAttributeDataType::Mat4:
+				{
+					/*TODO: Test This If It Works Properly*/
+					/* 
+					* Run This For Any Of The Mat Float Types
+					* NOTE: The size argument of glVertexAttribPointer function can at most be 4, but for mat3 and mat4 attributes
+					* , the size is 9 and 16 respectively.
+					*/
+					uint8_t count = attributes[i].getDataTypeCount();
+					for (uint8_t i = 0; i < count; i++)
+					{
+						glEnableVertexAttribArray(m_lastEnabledVertexAttribute);
+						glVertexAttribPointer(m_lastEnabledVertexAttribute, count,
+							VertexAttributeDataTypeToOpenGLType(attributes[i].dataType),
+							attributes[i].normalized ? GL_TRUE : GL_FALSE,
+							vertexBuffer->getLayout().getStride(),
+							(const void*)(attributes[i].offset + sizeof(float) * count * i));
+						glVertexAttribDivisor(m_lastEnabledVertexAttribute, 1);
+						//Update the last enabled attribute
+						m_lastEnabledVertexAttribute++;
+					}
+					break;
+				}
+				default:
+					VIO_CORE_ASSERT(false, "[Buffer] VertexAttributeDataType Selection Failed!");
+					break;
+			}
 		}
 		
 		//Store the vertex buffer into the vertex buffers vector

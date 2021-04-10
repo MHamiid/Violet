@@ -3,6 +3,7 @@
 #include "Violet/Renderer/Texture.h"
 #include "Violet/Renderer/Camera.h"
 #include "Violet/Renderer/EditorCamera.h"
+#include "Violet/Scene/Components.h"
 
 namespace Violet {
 
@@ -22,13 +23,13 @@ namespace Violet {
 		*/
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
-		static void DrawQuad(const glm::mat4& transfromationMatrix, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
+		static void DrawQuad(const glm::mat4& transfromationMatrix, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, int entityID = -1);
 		/*
 		* Default color is white means use the texture with no tented colors
 		*/
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
-		static void DrawQuad(const glm::mat4& transfromationMatrix, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
+		static void DrawQuad(const glm::mat4& transfromationMatrix, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f }, int entityID = -1);
 		/*
 		* 
 		* ROTATED QUADS
@@ -42,6 +43,11 @@ namespace Violet {
 		*/
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const Ref<Texture2D>& texture, float textureSizeFactor = 1.0f, const glm::vec4& tintColor = { 1.0f, 1.0f, 1.0f, 1.0f });
+
+		/*
+		* Draw quad that is registered in the Entity Component System
+		*/
+		static void DrawSprit(const glm::mat4& transformationMatrix, SpriteRendererComponent& spriteRendererComponent, int entityID);
 
 	public:
 		/*
@@ -64,7 +70,7 @@ namespace Violet {
 		static void StartNewBatch();
 		static bool IsBatchBufferFull();
 		static bool IsTextureSlotsFull();
-		static void AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor);
+		static void AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor, int entityID);
 
 	};
 }

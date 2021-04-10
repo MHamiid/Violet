@@ -8,12 +8,15 @@
 namespace Violet {
 
 	struct QuadVertex {
-		//TODO: Add textureID
+
 		glm::vec3 position;
 		glm::vec4 color;
 		glm::vec2 textureCoordinates;
 		float textureIndex;
 		float textureSizeFactor;
+
+		/*Editor-Only*/
+		int entityID;
 	};
 
 	struct Renderer2DData {
@@ -56,11 +59,13 @@ namespace Violet {
 
 		Ref<VertexBuffer> quadVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(QuadVertex));
 
-		quadVertexBuffer->setLayout({ {VertexAttributeDataType::Float3, "Position"},
-									  {VertexAttributeDataType::Float4, "Color"},
-									  {VertexAttributeDataType::Float2, "TextureCoordinates"},
-									  {VertexAttributeDataType::Float, "TextureIndex"},
-									  {VertexAttributeDataType::Float, "TextureSizeFactor"} });
+		quadVertexBuffer->setLayout({ {VertexAttributeDataType::Float3, "Position"           },
+									  {VertexAttributeDataType::Float4, "Color"				 },
+									  {VertexAttributeDataType::Float2, "TextureCoordinates" },
+									  {VertexAttributeDataType::Float,  "TextureIndex"		 },
+									  {VertexAttributeDataType::Float,  "TextureSizeFactor"	 },
+									  {VertexAttributeDataType::Int,    "EntityID"			 } 
+			});
 
 		s_data->quadVertexArray->addVertexBufferAndLinkLayout(quadVertexBuffer);
 
@@ -215,7 +220,7 @@ namespace Violet {
 	}
 
 	//Main DrawQuad function for colored quads
-	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const glm::vec4& color)
+	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const glm::vec4& color, int entityID)
 	{
 		/*
 		* Quad vertices goes counter clock-wise.
@@ -235,7 +240,7 @@ namespace Violet {
 
 
 		for (size_t i = 0; i < QuadVertexCount; i++) {
-			AddVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i], color, TextureCoordinates[i], TextureIndex, TextureSizeFactor);
+			AddVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i], color, TextureCoordinates[i], TextureIndex, TextureSizeFactor, entityID);
 		}
 
 		s_data->indicesToBeDrawnCount += 6;   //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
@@ -262,7 +267,7 @@ namespace Violet {
 
 	}
 	//Main DrawQuad function for textured quads
-	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor)
+	void Renderer2D::DrawQuad(const glm::mat4& transfromationMatrix, const Ref<Texture2D>& texture, float textureSizeFactor, const glm::vec4& tintColor, int entityID)
 	{
 		/*
 		* Quad vertices goes counter clock-wise.
@@ -303,7 +308,7 @@ namespace Violet {
 		}
 
 		for (size_t i = 0; i < QuadVertexCount; i++) {
-			AddVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i], tintColor, TextureCoordinates[i], textureIndex, textureSizeFactor);
+			AddVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i], tintColor, TextureCoordinates[i], textureIndex, textureSizeFactor, entityID);
 		}
 
 		s_data->indicesToBeDrawnCount += 6;   //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
@@ -349,7 +354,10 @@ namespace Violet {
 		DrawQuad(transfromationMatrix, texture, textureSizeFactor, tintColor);
 	}
 
-
+	void Renderer2D::DrawSprit(const glm::mat4& transformationMatrix, SpriteRendererComponent& spriteRendererComponent, int entityID)
+	{
+		DrawQuad(transformationMatrix, spriteRendererComponent.color, entityID);
+	}
 
 	void Renderer2D::StartNewBatch()
 	{
@@ -381,7 +389,7 @@ namespace Violet {
 		return false;
 	}
 
-	void Renderer2D::AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color,const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor)
+	void Renderer2D::AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color,const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor, int entityID)
 	{
 		//quadVertexBufferDataPtr points to the first empty space in the buffer
 		s_data->quadVertexBufferDataPtr->position = position;
@@ -389,6 +397,7 @@ namespace Violet {
 		s_data->quadVertexBufferDataPtr->textureCoordinates = textureCoordinates;
 		s_data->quadVertexBufferDataPtr->textureIndex = textureIndex;
 		s_data->quadVertexBufferDataPtr->textureSizeFactor = textureSizeFactor;
+		s_data->quadVertexBufferDataPtr->entityID = entityID;
 		s_data->quadVertexBufferDataPtr++; //Increment pointer to the next vertex
 	}
 

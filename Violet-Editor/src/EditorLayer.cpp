@@ -138,10 +138,10 @@ namespace Violet {
 		RenderCommand::Clear();
 
 		/*Clear the attachments*/
-		float clearValueRGBA[4] = { 1.0f, 1.0f, 0.5f, 1.0f };
+		float clearValueRGBA[4] = { 0.2f, 0.2f, 0.1f, 1.0f };
 		m_frameBuffer->clearColorAttachment(0, &clearValueRGBA);
 
-		int clearValueInt = 77;
+		int clearValueInt = -1;
 		m_frameBuffer->clearColorAttachment(1, &clearValueInt);
 
 		//Render the scene
