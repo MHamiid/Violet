@@ -12,6 +12,7 @@ namespace Violet {
 		virtual void resize(uint32_t width, uint32_t height) override;
 		virtual void readColorAttachmentPixel(uint32_t colorAttachmentIndex, int xCoordinate, int yCoordinate, void* const outPixel) const override;
 		virtual uint32_t getColorAttachmentID(uint32_t index = 0) const override { VIO_CORE_ASSERT(index < m_colorAttachmentsID.size(), "[Frame Buffer] Index Out Of Bounds!"); return m_colorAttachmentsID[index]; }
+		virtual void clearColorAttachment(uint32_t colorAttachmentIndex, const void* clearValue) const override;
 		virtual const FrameBufferSpecification& getSpecification() const override { return m_specification; }
 	private:
 		void validateSize();  //Recreate the FrameBuffer and it's attachments with the new size (m_specification.width, m_specification.height)

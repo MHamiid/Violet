@@ -66,7 +66,7 @@ namespace Violet {
 		glReadBuffer(GL_COLOR_ATTACHMENT0 + colorAttachmentIndex);
 	
 		GLenum format;
-		GLenum type; //Should match with outPixel type
+		GLenum type; //The type that is provided for outPixel type, how should outPixel be accessed
 		switch (m_colorAttachmentSpecifications[colorAttachmentIndex].textureFormat)
 		{
 		case FrameBufferTextureFormat::RGBA8:
@@ -82,6 +82,34 @@ namespace Violet {
 			break;
 		}
 		glReadPixels(xCoordinate, yCoordinate, 1, 1, format, type, outPixel);
+	}
+
+	void OpenGLFrameBuffer::clearColorAttachment(uint32_t colorAttachmentIndex, const void* clearValue) const
+	{
+		VIO_CORE_ASSERT(colorAttachmentIndex < m_colorAttachmentsID.size(), "[Frame Buffer] Index Out Of Bounds!");
+
+		GLenum format;
+		GLenum type; //The type that is provided for outPixel type, how should outPixel be accessed
+		switch (m_colorAttachmentSpecifications[colorAttachmentIndex].textureFormat)
+		{
+		case FrameBufferTextureFormat::RGBA8:
+			format = GL_RGBA;
+			type = GL_FLOAT;
+			glClearBufferfv(GL_COLOR, colorAttachmentIndex, (GLfloat*)clearValue);
+			break;
+		case FrameBufferTextureFormat::RED_INTEGER:
+			format = GL_RED_INTEGER;
+			type = GL_INT;
+			glClearBufferiv(GL_COLOR, colorAttachmentIndex, (GLint*)clearValue);
+			break;
+		default:
+			VIO_CORE_ASSERT(false, "[Frame Buffer] Color Attachment Format Selection Failed!");
+			break;
+		}
+		
+		//glClearTexImage(m_colorAttachmentsID[colorAttachmentIndex], 0, format, type, clearValue);  //For OpenGL 4.5
+
+
 	}
 
 	/*Recreate the FrameBuffer and it's attachments with the new size (m_specification.width, m_specification.height)*/
@@ -200,7 +228,7 @@ namespace Violet {
 		if (m_colorAttachmentsID.size() > 1)
 		{
 			VIO_CORE_ASSERT(m_colorAttachmentsID.size() <= 4, "[Frame Buffer] Can't Have More Than Four Color Buffers");
-			GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+			const GLenum buffers[4] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
 			glDrawBuffers((GLsizei)m_colorAttachmentsID.size(), buffers);
 		}
 		else if (m_colorAttachmentsID.empty())

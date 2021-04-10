@@ -60,6 +60,7 @@ namespace Violet {
 		virtual void resize(uint32_t width, uint32_t height) = 0;
 		virtual void readColorAttachmentPixel(uint32_t colorAttachmentIndex, int xCoordinate, int yCoordinate, void* const outPixel) const = 0;
 		virtual uint32_t getColorAttachmentID(uint32_t index = 0) const = 0;   //To retrieve the frame buffer texture and use it to render and sample from
+		virtual void clearColorAttachment(uint32_t colorAttachmentIndex, const void* clearValue) const= 0;
 		virtual const FrameBufferSpecification& getSpecification() const = 0;
 	public:
 		static Ref<FrameBuffer> Create(const FrameBufferSpecification& specification);

@@ -137,8 +137,12 @@ namespace Violet {
 		RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RenderCommand::Clear();
 
+		/*Clear the attachments*/
+		float clearValueRGBA[4] = { 1.0f, 1.0f, 0.5f, 1.0f };
+		m_frameBuffer->clearColorAttachment(0, &clearValueRGBA);
 
-		//Renderer2D::BeginScene(m_cameraController.getCamera());
+		int clearValueInt = 77;
+		m_frameBuffer->clearColorAttachment(1, &clearValueInt);
 
 		//Render the scene
 		m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
