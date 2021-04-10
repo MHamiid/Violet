@@ -9,6 +9,7 @@ namespace Violet {
 
 		/*Color*/
 		RGBA8,
+		RED_INTEGER,  //Just one channel as an integer
 
 		/*Depth/Stencil*/
 		DEPTH24STENCIL8,

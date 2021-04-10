@@ -94,17 +94,23 @@ namespace Violet {
 			{
 				glBindTexture(GL_TEXTURE_2D, m_colorAttachmentsID[i]);
 				GLuint internalFormat;
+				GLuint format; //How data is accessed and read format
 				switch (m_colorAttachmentSpecifications[i].textureFormat)
 				{
 				case FrameBufferTextureFormat::RGBA8:
 					internalFormat = GL_RGBA8;
+					format = GL_RGBA;
+					break;
+				case FrameBufferTextureFormat::RED_INTEGER:
+					internalFormat = GL_R32I;
+					format = GL_RED_INTEGER;
 					break;
 				default:
 					VIO_CORE_ASSERT(false, "[Frame Buffer] Color Attachment Format Selection Failed!");
 					break;
 				}
 
-				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_specification.width, m_specification.height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+				glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, m_specification.width, m_specification.height, 0, format, GL_UNSIGNED_BYTE, nullptr);
 
 				/*TODO: Should get the filtering and wrapping parameters from FrameBufferTextureSpecification when it's added*/
 
