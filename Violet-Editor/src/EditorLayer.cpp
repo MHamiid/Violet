@@ -37,54 +37,54 @@ namespace Violet {
 		//Initialize Gizmos to be in translation mode
 		m_gizmoType = ImGuizmo::OPERATION::TRANSLATE;
 
-		class CameraController : public Script {
-		public:
-			float m_translationSpeed = 5.0f;
-			float m_rotationSpeed = 3.0f;
+		//class CameraController : public Script {
+		//public:
+		//	float m_translationSpeed = 5.0f;
+		//	float m_rotationSpeed = 3.0f;
 
-			glm::vec3* m_translation = nullptr;
-			glm::vec3* m_rotation = nullptr;
+		//	glm::vec3* m_translation = nullptr;
+		//	glm::vec3* m_rotation = nullptr;
 
-			void onCreate() override 
-			{
-				VIO_CORE_INFO("[Script] CameraController::onCreate");
-				m_translation = &getComponent<TransformComponent>().translation;
-				m_rotation = &getComponent<TransformComponent>().rotation;
-			}
-			void onUpdate(DeltaTime deltaTime) override
-			{
+		//	void onCreate() override 
+		//	{
+		//		VIO_CORE_INFO("[Script] CameraController::onCreate");
+		//		m_translation = &getComponent<TransformComponent>().translation;
+		//		m_rotation = &getComponent<TransformComponent>().rotation;
+		//	}
+		//	void onUpdate(DeltaTime deltaTime) override
+		//	{
 
-				/*Camera Controls*/
-				if (Input::IsKeyPressed(Violet::Key::A)) {
-					m_translation->x -= m_translationSpeed * deltaTime;
-				}
-				else if (Input::IsKeyPressed(Violet::Key::D)) {
-					m_translation->x += m_translationSpeed * deltaTime;
-				}
+		//		/*Camera Controls*/
+		//		if (Input::IsKeyPressed(Violet::Key::A)) {
+		//			m_translation->x -= m_translationSpeed * deltaTime;
+		//		}
+		//		else if (Input::IsKeyPressed(Violet::Key::D)) {
+		//			m_translation->x += m_translationSpeed * deltaTime;
+		//		}
 
-				if (Input::IsKeyPressed(Violet::Key::W)) {
-					m_translation->y += m_translationSpeed * deltaTime;
-				}
-				else if (Input::IsKeyPressed(Violet::Key::S)) {
-					m_translation->y -= m_translationSpeed * deltaTime;
-				}
+		//		if (Input::IsKeyPressed(Violet::Key::W)) {
+		//			m_translation->y += m_translationSpeed * deltaTime;
+		//		}
+		//		else if (Input::IsKeyPressed(Violet::Key::S)) {
+		//			m_translation->y -= m_translationSpeed * deltaTime;
+		//		}
 
-				//Rotation
-				if (Input::IsKeyPressed(Violet::Key::E)) {
-					m_rotation->z -= m_rotationSpeed * deltaTime;
-				}
-				else if (Input::IsKeyPressed(Violet::Key::Q)) {
-					m_rotation->z += m_rotationSpeed * deltaTime;
-				}
+		//		//Rotation
+		//		if (Input::IsKeyPressed(Violet::Key::E)) {
+		//			m_rotation->z -= m_rotationSpeed * deltaTime;
+		//		}
+		//		else if (Input::IsKeyPressed(Violet::Key::Q)) {
+		//			m_rotation->z += m_rotationSpeed * deltaTime;
+		//		}
 
-				
-			}
-			void onDestroy() override
-			{
-				//TODO
-				//Not callable yet
-			}
-		};
+		//		
+		//	}
+		//	void onDestroy() override
+		//	{
+		//		//TODO
+		//		//Not callable yet
+		//	}
+		//};
 
 	}
 
@@ -281,7 +281,7 @@ namespace Violet {
 
 		
 		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
-		m_sceneHierarchyPanel.onImGuiRender(Input::IsKeyPressed(m_editorCamera.getCameraControlKey()));
+		m_sceneHierarchyPanel.onImGuiRender(m_editorCamera.isUsing());
 		m_propertiesPanel.onImGuiRender();
 
 		ImGui::Begin("Renderer2D Scene Statistics");
@@ -321,7 +321,7 @@ namespace Violet {
 		//TODO: Set UI buttons for selecting the gizmo type
 		//ImGizmos
 		Entity selectedEntity =  m_sceneHierarchyPanel.getSelectedEntity();
-		//If the selected entity is a valid entity and a we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
+		//If the selected entity is a valid entity and we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
 		if (selectedEntity && m_gizmoType!= -1)
 		{
 			ImGuizmo::SetDrawlist();  //Draw to the current window
@@ -373,7 +373,7 @@ namespace Violet {
 			, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
 			, nullptr, snapEnabled ? snapValuesAxes : nullptr);
 
-			if (ImGuizmo::IsUsing()) //Return true if mouse IsOver or if the gizmo is in moving state
+			if (ImGuizmo::IsUsing() && !m_editorCamera.isUsing()) //If mouse IsOver or if the gizmo is in moving state and the editor camera is not in use
 			{	
 				/*Apply the gizmo transformation changes to the selected entity*/
 
