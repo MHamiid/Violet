@@ -163,6 +163,7 @@ namespace Violet {
 			{
 				/*Read a pixel at the mouse coordinates from the FrameBuffer's color attachment (1) that has entity IDs stored at*/
 				int pixelValue;
+				//Must be called before m_frameBuffer->unBind()
 				m_frameBuffer->readColorAttachmentPixel(1, (int)mousePosition.x, (int)mousePosition.y, &pixelValue);
 	
 				if (pixelValue == -1)  //If not valid entity, no entities in that pixel

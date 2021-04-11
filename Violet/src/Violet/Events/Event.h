@@ -51,8 +51,9 @@ namespace Violet{
 	public:
 		EventDispatcher(Event& event) :m_event(event) {}
 		
-		template<typename T>
-		bool dispatch(std::function<bool (T&)> FUNCEvent) {
+		//FUNC will be deduced by the compiler
+		template<typename T, typename FUNC>
+		bool dispatch(const FUNC& FUNCEvent) {
 
 			//If the event and function type matches.
 			if (m_event.getEventType() == T::GetClassType()) {

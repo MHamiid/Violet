@@ -32,6 +32,7 @@ namespace Violet {
 	/*TODO: Move It To A UI Library*/
 	static bool DrawVec3ControlUI(const std::string& label, glm::vec3& values, float valueStepSize = 0.1f, float resetValue = 0.0f, float columnWidth = 100.0f) 
 	{
+		/*TODO: Set ImGui::DragFloat to show the full value (no number rounding) when hovered*/
 		ImGuiIO& io = ImGui::GetIO();
 		auto boldFont = io.Fonts->Fonts[0];
 
