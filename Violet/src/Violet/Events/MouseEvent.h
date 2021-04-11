@@ -1,5 +1,6 @@
 #pragma once
 #include "Event.h"
+#include "Violet/Core/MouseCodes.h"
 
 namespace Violet {
 
@@ -43,21 +44,21 @@ namespace Violet {
 	//Base class for mouse buttons events.
 	class VIOLET_API MouseButtonEvent :public Event {
 	public:
-		int getMouseButton() const { return m_button; }
+		MouseCode getMouseButton() const { return m_button; }
 
 		//pure virtual functions implementation.
 		virtual int getCategoryFlags() const override { return (int)EventCategory::Input | (int)EventCategory::Mouse | (int)EventCategory::MouseButton; } //Assigning event to three categories.
 
 	protected:
-		MouseButtonEvent(int button) :m_button(button) {}
-		int m_button;
+		MouseButtonEvent(MouseCode button) :m_button(button) {}
+		MouseCode m_button;
 	};
 
 
 	class VIOLET_API MouseButtonPressedEvent : public MouseButtonEvent {
 
 	public:
-		MouseButtonPressedEvent(int button) : MouseButtonEvent(button){}
+		MouseButtonPressedEvent(MouseCode button) : MouseButtonEvent(button){}
 
 		static EventType GetClassType() { return EventType::MouseButtonPressed; }
 		//pure virtual functions implementation.
@@ -72,7 +73,7 @@ namespace Violet {
 	class VIOLET_API MouseButtonReleasedEvent : public MouseButtonEvent {
 
 	public:
-		MouseButtonReleasedEvent(int button) : MouseButtonEvent(button) {}
+		MouseButtonReleasedEvent(MouseCode button) : MouseButtonEvent(button) {}
 
 		static EventType GetClassType() { return EventType::MouseButtonReleased; }
 		//pure virtual functions implementation.

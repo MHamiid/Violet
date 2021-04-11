@@ -114,20 +114,20 @@ namespace Violet {
 			switch (action) {
 			case GLFW_PRESS:
 			{
-				KeyPressedEvent event(key, 0);
+				KeyPressedEvent event(static_cast<KeyCode>(key), 0);
 				//Call the Event Callback function with the event
 				windowProps->m_FUNCEventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
-				KeyReleasedEvent event(key);
+				KeyReleasedEvent event(static_cast<KeyCode>(key));
 				windowProps->m_FUNCEventCallback(event);
 				break;
 			}
 			case GLFW_REPEAT:
 			{
-				KeyPressedEvent event(key, 1);
+				KeyPressedEvent event(static_cast<KeyCode>(key), 1);
 				windowProps->m_FUNCEventCallback(event);
 
 				break;
@@ -146,14 +146,14 @@ namespace Violet {
 			switch (action) {
 			case GLFW_PRESS:
 			{
-				MouseButtonPressedEvent event(key);
+				MouseButtonPressedEvent event(static_cast<MouseCode>(key));
 				//Call the Event Callback function with the event
 				windowProps->m_FUNCEventCallback(event);
 				break;
 			}
 			case GLFW_RELEASE:
 			{
-				MouseButtonReleasedEvent event(key);
+				MouseButtonReleasedEvent event(static_cast<MouseCode>(key));
 				windowProps->m_FUNCEventCallback(event);
 				break;
 			}

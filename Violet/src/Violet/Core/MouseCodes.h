@@ -2,7 +2,9 @@
 
 namespace Violet {
 
-	enum Mouse : int {
+	using MouseCode = uint16_t;
+
+	enum Mouse : MouseCode {
 
 		/*GLFW3.h Codes*/
 		BUTTON_1       =  0		   ,

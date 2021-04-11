@@ -1,26 +1,27 @@
 #pragma once
 #include "Event.h"
+#include "Violet/Core/KeyCodes.h"
 
 namespace Violet {
 
 	//Base class for key buttons events.
 	class VIOLET_API KeyEvent : public Event {
 	public:
-		int getKeyCode() const { return m_keyCode; }
+		KeyCode getKeyCode() const { return m_keyCode; }
 
 		//pure virtual functions implementation.
 		virtual int getCategoryFlags() const override { return (int)EventCategory::Input | (int)EventCategory::Keyboard; } //Assigning event to two categories.
 
 	protected:
-		KeyEvent(int keyCode) : m_keyCode(keyCode) {}
-		int m_keyCode;
+		KeyEvent(KeyCode keyCode) : m_keyCode(keyCode) {}
+		KeyCode m_keyCode;
 
 	};
 
 	class VIOLET_API KeyPressedEvent : public KeyEvent {
 
 	public:
-		KeyPressedEvent(int keyCode , int repeatCount) :KeyEvent(keyCode), m_repeatCount(repeatCount) {}
+		KeyPressedEvent(KeyCode keyCode , int repeatCount) :KeyEvent(keyCode), m_repeatCount(repeatCount) {}
 
 		int getRepeatCount() const { return m_repeatCount; }
 
@@ -37,7 +38,7 @@ namespace Violet {
 	class VIOLET_API KeyReleasedEvent : public KeyEvent {
 
 	public:
-		KeyReleasedEvent(int keyCode) : KeyEvent(keyCode) {}
+		KeyReleasedEvent(KeyCode keyCode) : KeyEvent(keyCode) {}
 		
 		static EventType GetClassType() { return EventType::KeyReleased; }
 		//pure virtual functions implementation.

@@ -10,20 +10,20 @@
 
 namespace Violet {
 
-	bool Input::IsKeyPressed(const Key keyCode)
+	bool Input::IsKeyPressed(const KeyCode keyCode)
 	{
 		GLFWwindow*  glfwWindow = static_cast<GLFWwindow*>(Application::GetApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
-		int state = glfwGetKey(glfwWindow, (int)keyCode); //Get the last reported state of a key
+		int state = glfwGetKey(glfwWindow, static_cast<int>(keyCode)); //Get the last reported state of a key
 
 		return (state == GLFW_PRESS || state == GLFW_REPEAT);
 	}
 
-	bool Input::IsMouseButtonPressed(const Mouse button)
+	bool Input::IsMouseButtonPressed(const MouseCode button)
 	{
 		GLFWwindow* glfwWindow = static_cast<GLFWwindow*>(Application::GetApplicationInstance().getWindow().getNativeWindow()); //Get out window pointer
 
-		int state = glfwGetMouseButton(glfwWindow, (int)button); //Get the last reported state of a mouse button
+		int state = glfwGetMouseButton(glfwWindow, static_cast<int>(button)); //Get the last reported state of a mouse button
 
 		return (state == GLFW_PRESS);
 	}

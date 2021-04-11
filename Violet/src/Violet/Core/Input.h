@@ -6,9 +6,9 @@ namespace Violet {
 	
 	class VIOLET_API Input {
 	public:
-		static bool IsKeyPressed(Key keyCode);
+		static bool IsKeyPressed(KeyCode keyCode);
 
-		static bool IsMouseButtonPressed(Mouse button);
+		static bool IsMouseButtonPressed(MouseCode button);
 		static glm::vec2 GetMousePosition();
 		static float GetMouseX();
 		static float GetMouseY();

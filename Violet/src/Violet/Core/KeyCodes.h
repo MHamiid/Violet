@@ -2,8 +2,10 @@
 
 
 namespace Violet {
+	
+	using KeyCode = uint16_t;
 
-	enum Key : int{
+	enum Key : KeyCode {
 
 		/*GLFW3.h Codes*/
 
