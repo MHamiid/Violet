@@ -10,11 +10,7 @@ namespace Violet {
 	void SceneHierarchyPanel::setSceneContext(const Ref<Scene>& scene)
 	{
 		m_sceneContext = scene;
-		m_selectedEntity = {};  //Reset the selected entity
-		if (m_propertiesPanelContext) //If there is a properties panel attached
-		{
-			m_propertiesPanelContext->setEntityContext({ });  //Update the selected entity to the PropertiesPanel
-		}
+		setSelectedEntity({});  //Reset the selected entity, Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
 	}
 	void SceneHierarchyPanel::setPropertiesPanelContext(PropertiesPanel* propertiesPanel)
 	{
@@ -32,14 +28,9 @@ namespace Violet {
 		});
 
 		//If a blank space in the window pressed unselect the selected entity
-		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) {
-			m_selectedEntity = {};
-
-			if (m_propertiesPanelContext) //If there is a properties panel attached
-			{
-				//Update the properties panel entity context
-				m_propertiesPanelContext->setEntityContext({ });
-			}
+		if (ImGui::IsMouseDown(0) && ImGui::IsWindowHovered()) 
+		{
+			setSelectedEntity({});  //Reset the selected entity, Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
 		}
 
 		/*Right-Click Pop-Up Menu*/
@@ -56,6 +47,16 @@ namespace Violet {
 
 		ImGui::End();
 	}
+	void SceneHierarchyPanel::setSelectedEntity(Entity entity)
+	{
+		m_selectedEntity = entity;
+
+		if (m_propertiesPanelContext) //If there is a properties panel attached
+		{
+			//Update the properties panel entity context
+			m_propertiesPanelContext->setEntityContext(entity);
+		}
+	}
 	void SceneHierarchyPanel::drawEntityNode(Entity entity, bool disableInteraction)
 	{
 		const auto& tag = entity.getComponent<TagComponent>().tag;
@@ -66,14 +67,9 @@ namespace Violet {
 		//Take the entity unique ID and serve it as an ID for the TreeNode UI component
 		bool opened = ImGui::TreeNodeEx((void*)(uint64_t)(uint32_t)(entt::entity)entity, flags, tag.c_str());
 
-		if (ImGui::IsItemClicked()) {
-			m_selectedEntity = entity;
-
-			if (m_propertiesPanelContext) //If there is a properties panel attached
-			{
-				//Update the properties panel entity context
-				m_propertiesPanelContext->setEntityContext(entity);
-			}
+		if (ImGui::IsItemClicked()) 
+		{
+			setSelectedEntity(entity);
 		}
 
 		/*Right-Click Pop-Up Item*/
@@ -82,12 +78,10 @@ namespace Violet {
 		{
 			if (ImGui::MenuItem("Delete Entity")) //If pressed
 			{
-				m_selectedEntity = {};
-				if (m_propertiesPanelContext) //If there is a properties panel attached
-				{
-					m_propertiesPanelContext->setEntityContext({});  //Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
-					m_sceneContext->destroyEntity(entity);
-				}
+				setSelectedEntity({}); //Reset the selected entity, Set an empty (non-valid) entity for the properties panel ====> stop the propeties panel from rendering the entity's components
+				
+				m_sceneContext->destroyEntity(entity);
+				
 			}
 			ImGui::EndPopup();
 		}

@@ -17,6 +17,7 @@ namespace Violet {
 
 		void onImGuiRender(bool disableInteraction);
 		
+		void setSelectedEntity(Entity entity);
 		Entity getSelectedEntity() const { return m_selectedEntity; }
 
 	private:

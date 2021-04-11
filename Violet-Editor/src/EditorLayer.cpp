@@ -138,22 +138,45 @@ namespace Violet {
 		RenderCommand::Clear();
 
 		/*Clear the attachments*/
-		float clearValueRGBA[4] = { 0.2f, 0.2f, 0.1f, 1.0f };
-		m_frameBuffer->clearColorAttachment(0, &clearValueRGBA);
-
+	
+		/*Clear the entityID attachment to -1 ====> no entity*/
 		int clearValueInt = -1;
 		m_frameBuffer->clearColorAttachment(1, &clearValueInt);
 
 		//Render the scene
 		m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
 
-		/*Read Pixels From FrameBuffer Color Attachments*/
-		float pixelsRGBA[4];
-		int pixelInt;
-		m_frameBuffer->readColorAttachmentPixel(0, 100, 100, pixelsRGBA);
-		VIO_CORE_DEBUG("Reading RGBA color attachment at index 0 at Coordinates(100, 100): ({0}, {1}, {2}, {3})", pixelsRGBA[0], pixelsRGBA[1], pixelsRGBA[2], pixelsRGBA[3]);
-		m_frameBuffer->readColorAttachmentPixel(1, 100, 100, &pixelInt);
-		VIO_CORE_DEBUG("Reading Int color attachment at index 1 at Coordinates(100, 100): ({0})", pixelInt);
+		/*Entity Mouse Selection*/
+		if (m_updateMouseSelectedEntityID)
+		{
+			//Global mouse position
+			ImVec2 mousePosition = ImGui::GetMousePos();
+			/*Set the top left to (0, 0)*/
+			mousePosition.x -= m_viewPortBounds[0].x;  //  m_viewPortBounds[0].x ====> Min bound X
+			mousePosition.y -= m_viewPortBounds[0].y;  //  m_viewPortBounds[0].y ====> Min bound Y
+
+			//Flip the coordinates to match with ImGui texture layout, set the bottom left to be (0, 0)
+			mousePosition.y = m_viewPortSize.y - mousePosition.y;
+
+			/*If the mouse is in the view port bounds*/
+			if (mousePosition.x >= 0 && mousePosition.y >= 0 && mousePosition.x < m_viewPortSize.x && mousePosition.y < m_viewPortSize.y)
+			{
+				/*Read a pixel at the mouse coordinates from the FrameBuffer's color attachment (1) that has entity IDs stored at*/
+				int pixelValue;
+				m_frameBuffer->readColorAttachmentPixel(1, (int)mousePosition.x, (int)mousePosition.y, &pixelValue);
+	
+				if (pixelValue == -1)  //If not valid entity, no entities in that pixel
+				{
+					m_sceneHierarchyPanel.setSelectedEntity({}); //Set a non-valid entity
+				}
+				else 
+				{
+					m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_activeScene.get() });
+				}
+			}
+			m_updateMouseSelectedEntityID = false;
+		}
+
 
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 
@@ -326,6 +349,12 @@ namespace Violet {
 		ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
 		m_viewPortSize = { viewPortPanelSize.x, viewPortPanelSize.y };  //Update the size
 		
+		/*set the bounds of the view port panel*/
+		ImVec2 viewportOffset = ImGui::GetCursorScreenPos();
+		m_viewPortBounds[0] = { viewportOffset.x, viewportOffset.y };
+		m_viewPortBounds[1] = { viewPortPanelSize.x + viewportOffset.x, viewPortPanelSize.y + viewportOffset.y };
+
+		
 		uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void* pointer when casting
 		ImGui::Image((void*)textureID, ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 
@@ -445,6 +474,7 @@ namespace Violet {
 
 		EventDispatcher dispatcher(e);
 		dispatcher.dispatch<KeyPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onKeyPressed));
+		dispatcher.dispatch<MouseButtonPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onMouseButtonPressed));
 		dispatcher.dispatch<ItemsDroppedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onItemsDropped));
 	}
 
@@ -516,6 +546,15 @@ namespace Violet {
 		default:
 			return false;
 		}
+	}
+	bool EditorLayer::onMouseButtonPressed(MouseButtonPressedEvent& event)
+	{
+		/*Entity Mouse Selection*/
+		if (event.getMouseButton() == Mouse::BUTTON_LEFT && !m_editorCamera.isUsing() && m_viewPortHovered && !ImGuizmo::IsOver())
+		{
+			m_updateMouseSelectedEntityID = true;
+		}
+		return true;
 	}
 	bool EditorLayer::onItemsDropped(ItemsDroppedEvent& event)
 	{

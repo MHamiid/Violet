@@ -17,6 +17,7 @@ namespace Violet {
 		void onEvent(Event& e) override;
 	private:
 		bool onKeyPressed(KeyPressedEvent& event);
+		bool onMouseButtonPressed(MouseButtonPressedEvent& event);
 		bool onItemsDropped(ItemsDroppedEvent& event);
 	private:
 		void newScene(const std::string& sceneName);
@@ -33,6 +34,7 @@ namespace Violet {
 
 		bool m_viewPortFocused = false, m_viewPortHovered = false;
 		glm::vec2 m_viewPortSize = { 0.0f, 0.0f };
+		glm::vec2 m_viewPortBounds[2];  //Min and max bounds, In screen space
 
 		Ref<Scene> m_activeScene;
 		EditorCamera m_editorCamera;
@@ -50,6 +52,7 @@ namespace Violet {
 		//Caching the current active scene path
 		std::string m_activeScenePath;
 
+		bool m_updateMouseSelectedEntityID = false;
 	};
 
 }
