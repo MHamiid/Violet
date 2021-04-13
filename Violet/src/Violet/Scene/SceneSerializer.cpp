@@ -219,7 +219,7 @@ namespace Violet {
 		m_scene->m_sceneName = sceneData["Scene"].as<std::string>().c_str();
 
 		YAML::Node primaryCameraEntityIDNode = sceneData["PrimaryCameraEntityID"];
-		uint32_t primaryCameraEntityID;
+		uint32_t primaryCameraEntityID = -1;  //Initialize with a non-valid entity ID
 
 		if (primaryCameraEntityIDNode) 
 		{
@@ -247,7 +247,8 @@ namespace Violet {
 				/*Entity(entt::entity) ID*/
 				YAML::Node entityIDNode = entity["EntityID"];
 
-				if (entityIDNode)
+				/*Check is this entity is the primaryCameraEntity*/
+				if (entityIDNode && primaryCameraEntityID != -1)
 				{
 					uint32_t entityID = entityIDNode.as<uint32_t>();
 					if (entityID == primaryCameraEntityID) //If this entity is the primary camera entity
