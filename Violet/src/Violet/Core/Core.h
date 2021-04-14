@@ -40,7 +40,7 @@
 #endif //VIO_ENABLE_ASSERTS
 
 //Defines
-#define VIO_BIND_EVENT_FUNCTION(functionName) std::bind(&functionName, this, std::placeholders::_1)
+#define VIO_BIND_EVENT_MEMBER_FUNCTION(functionName) [this](auto&&... args) -> bool { return this->functionName(std::forward<decltype(args)>(args)...); }  //Called inside a class to bind a member function
 
 #include <memory> //Make sure memory is included first
 namespace Violet {

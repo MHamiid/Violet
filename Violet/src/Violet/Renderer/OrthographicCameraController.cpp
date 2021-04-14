@@ -49,8 +49,8 @@ namespace Violet {
 	void OrthographicCameraController::onEvent(Event& e)
 	{
 		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<MouseScrolledEvent>(VIO_BIND_EVENT_FUNCTION(OrthographicCameraController::onMouseScrolled));
-		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_FUNCTION(OrthographicCameraController::onWindowResized));
+		dispatcher.dispatch<MouseScrolledEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(OrthographicCameraController::onMouseScrolled));
+		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(OrthographicCameraController::onWindowResized));
 	}
 
 	void OrthographicCameraController::onResize(float width, float height)

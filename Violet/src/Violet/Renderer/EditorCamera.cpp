@@ -49,7 +49,7 @@ namespace Violet {
 	void EditorCamera::onEvent(Event& event)
 	{
 		EventDispatcher dispatcher(event);
-		dispatcher.dispatch<MouseScrolledEvent>(VIO_BIND_EVENT_FUNCTION(EditorCamera::onMouseScrolled));
+		dispatcher.dispatch<MouseScrolledEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(EditorCamera::onMouseScrolled));
 	}
 
 	glm::vec3 EditorCamera::getUpDirection() const

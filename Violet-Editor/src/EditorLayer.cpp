@@ -474,9 +474,9 @@ namespace Violet {
 		m_editorCamera.onEvent(e);
 
 		EventDispatcher dispatcher(e);
-		dispatcher.dispatch<KeyPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onKeyPressed));
-		dispatcher.dispatch<MouseButtonPressedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onMouseButtonPressed));
-		dispatcher.dispatch<ItemsDroppedEvent>(VIO_BIND_EVENT_FUNCTION(EditorLayer::onItemsDropped));
+		dispatcher.dispatch<KeyPressedEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(EditorLayer::onKeyPressed));
+		dispatcher.dispatch<MouseButtonPressedEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(EditorLayer::onMouseButtonPressed));
+		dispatcher.dispatch<ItemsDroppedEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(EditorLayer::onItemsDropped));
 	}
 
 	bool EditorLayer::onKeyPressed(KeyPressedEvent& event)

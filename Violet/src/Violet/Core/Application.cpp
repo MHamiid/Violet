@@ -13,7 +13,7 @@ namespace Violet {
 		VIO_CORE_ASSERT(!s_ApplicationInstance, "Application Already Created!!!");
 		s_ApplicationInstance = this; //Our single instance of application
 		
-		m_window = Window::Create(WindowProperties(applicationName, 1280, 720 , true , VIO_BIND_EVENT_FUNCTION(Application::onEvent)));
+		m_window = Window::Create(WindowProperties(applicationName, 1280, 720 , true , [this](auto&&... args) { this->onEvent(std::forward<decltype(args)>(args)...); }));
 		m_ImGuiLayer = new ImGuiLayer();
 		m_layerStack.pushOverlay(m_ImGuiLayer);
 		
@@ -33,8 +33,8 @@ namespace Violet {
 
 		//VIO_DEBUG(event.getName());
 		EventDispatcher dispatcher(event);	
-		dispatcher.dispatch<WindowCloseEvent>(VIO_BIND_EVENT_FUNCTION(Application::onWindowClose)); //Dispatch all window close events to onWindowClose function
-		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_FUNCTION(Application::onWindowResize));
+		dispatcher.dispatch<WindowCloseEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(Application::onWindowClose)); //Dispatch all window close events to onWindowClose function
+		dispatcher.dispatch<WindowResizeEvent>(VIO_BIND_EVENT_MEMBER_FUNCTION(Application::onWindowResize));
 
 		//Events that are handled by layers
 
