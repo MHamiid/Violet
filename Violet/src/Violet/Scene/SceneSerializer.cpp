@@ -205,11 +205,7 @@ namespace Violet {
 	bool SceneSerializer::deserializeText(const std::string& filePath)
 	{
 		/*Fix Program Crashing When The File Is Invalid (not a scene file, a random file)*/
-		std::ifstream stream(filePath);
-		std::stringstream stringStream;
-		stringStream << stream.rdbuf();
-
-		YAML::Node sceneData = YAML::Load(stringStream.str());
+		YAML::Node sceneData = YAML::LoadFile(filePath);
 		if (!sceneData["Scene"]) //The file data doesn't contain the Scene node 
 		{
 			return false;
