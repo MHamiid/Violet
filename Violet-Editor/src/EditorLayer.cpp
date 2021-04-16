@@ -4,6 +4,7 @@
 #include <ImGuizmo.h>
 #include "Violet/Math/Math.h"
 #include <misc/cpp/imgui_stdlib.h>
+#include <filesystem>
 
 namespace Violet {
 
@@ -565,7 +566,15 @@ namespace Violet {
 		}
 		else
 		{
-			openScene(event.getItemsPaths()[0]);
+			std::filesystem::path filePath = event.getItemsPaths()[0];
+			if (filePath.extension() == ".violet")
+			{
+				openScene(filePath.string());
+			}
+			else 
+			{
+				VIO_CORE_ERROR("Attempting To Open An Invalid Scene File Type '{0}', try '.violet' File Type", filePath.filename().string().c_str());
+			}
 		}
 
 
