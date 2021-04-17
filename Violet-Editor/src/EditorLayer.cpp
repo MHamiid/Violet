@@ -363,8 +363,8 @@ namespace Violet {
 		//TODO: Set UI buttons for selecting the gizmo type
 		//ImGizmos
 		Entity selectedEntity =  m_sceneHierarchyPanel.getSelectedEntity();
-		//If the selected entity is a valid entity and we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
-		if (selectedEntity && m_gizmoType!= -1)
+		//If the selected entity is a valid entity which has a transform component attached to it and we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
+		if (selectedEntity && selectedEntity.hasComponent<TransformComponent>() && m_gizmoType!= -1)
 		{
 			ImGuizmo::SetDrawlist();  //Draw to the current window
 			
