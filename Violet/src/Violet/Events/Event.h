@@ -58,7 +58,7 @@ namespace Violet{
 			//If the event and function type matches.
 			if (m_event.getEventType() == T::GetClassType()) {
 	
-				m_event.setEventHandleStatus(FUNCEvent(*(T*)&m_event)); //Call the appropriate function, Casting Event type to passed template type, Set m_handled.
+				m_event.setEventHandleStatus(FUNCEvent(static_cast<T&>(m_event))); //Call the appropriate function, Casting Event type to passed template type, Set m_handled.
 				return true;
 			}
 			return false;
