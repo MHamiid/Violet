@@ -63,7 +63,7 @@ namespace Violet {
 	class VIOLET_API VertexLayout {
 	public:
 		VertexLayout() = default;
-		VertexLayout(const std::initializer_list<VertexAttribute>& layoutAttributes) : m_vertexAttributes(layoutAttributes), m_stride(0){
+		VertexLayout(std::initializer_list<VertexAttribute> layoutAttributes) : m_vertexAttributes(layoutAttributes), m_stride(0){
 			size_t offset = 0;
 			for (VertexAttribute& attribute : m_vertexAttributes) {
 				//Set the offset for each vertex attribute in the vector

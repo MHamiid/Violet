@@ -73,7 +73,7 @@ namespace Violet {
 		s_data->quadVertexBufferData = new QuadVertex[s_data->MaxVerticesPerBatch];
 
 		/*
-		*NOTE: Use ref pointer instead and send it as a parameter to IndexBuffer::Create if we muliple threads are used to avoid deleting
+		* NOTE: Use ref pointer instead and send it as a parameter to IndexBuffer::Create if we muliple threads are used to avoid deleting
 		* quadIndices while it's being handled in IndexBuffer::Create on another thread
 		*/
 		uint32_t* quadIndices = new uint32_t[s_data->MaxIndicesPerBatch];
