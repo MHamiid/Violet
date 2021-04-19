@@ -42,7 +42,7 @@ namespace Violet {
 
 
 	//Base class for mouse buttons events.
-	class VIOLET_API MouseButtonEvent :public Event {
+	class VIOLET_API MouseButtonEvent : public Event {
 	public:
 		MouseCode getMouseButton() const { return m_button; }
 

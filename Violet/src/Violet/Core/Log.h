@@ -1,5 +1,8 @@
 #pragma once
-#include "spdlog/spdlog.h"
+//ignores all warnings raised inside External headers
+#pragma warning(push, 0)
+#include <spdlog/spdlog.h>
+#pragma warning(pop)
 
 //Violet Core Logging
 #define VIO_CORE_DEBUG(...)	   Violet::Log::GetCoreLogger()->debug(__VA_ARGS__)
