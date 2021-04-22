@@ -90,12 +90,9 @@ namespace Violet {
 		/*Let ImGui set mouse or keyboard events to handled whenever ImGui receive these events*/
 			ImGuiIO& io = ImGui::GetIO();
 
-			bool handledStatus = event.getEventHandleStatus();
+			event.handled |= event.isInCategory(EventCategory::Mouse) & io.WantCaptureMouse;
+			event.handled |= event.isInCategory(EventCategory::Keyboard) & io.WantCaptureKeyboard;
 
-			handledStatus |= event.isInCategory(EventCategory::Mouse) & io.WantCaptureMouse;
-			handledStatus |= event.isInCategory(EventCategory::Keyboard) & io.WantCaptureKeyboard;
-
-			event.setEventHandleStatus(handledStatus);
 		}
 	}
 	void ImGuiLayer::BeginImGuiFrame()

@@ -41,7 +41,7 @@ namespace Violet {
 		//Iterate through the layer backward to handle events
 		for (auto it = m_layerStack.end(); it != m_layerStack.begin();) {
 		
-			if (event.getEventHandleStatus()) { //Check if the event has been handled by the layer
+			if (event.handled) { //Check if the event has been handled by the layer
 				break; //If the layer handled the event, break and don't propagate the event to the remaining layers
 			}
 			(*--it)->onEvent(event); //Send the event to that layer
