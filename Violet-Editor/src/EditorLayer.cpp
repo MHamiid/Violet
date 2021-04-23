@@ -368,7 +368,7 @@ namespace Violet {
 		{
 			ImGuizmo::SetDrawlist();  //Draw to the current window
 			
-			ImGuizmo::SetRect(ImGui::GetWindowPos().x, ImGui::GetWindowPos().y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port
+			ImGuizmo::SetRect(m_viewPortBounds[0].x, m_viewPortBounds[0].y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port bounds
 
 			/*Runtime Camera Gizmos*/
 			///*Get Camera Info From The Primary Camera*/
