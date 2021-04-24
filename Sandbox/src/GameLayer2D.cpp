@@ -12,6 +12,7 @@ void GameLayer2D::onAttach()
 
 	//Create specs for the frame buffer
 	Violet::FrameBufferSpecification specs;
+	specs.textureAttachmentsSpecification = { Violet::FrameBufferTextureFormat::RGBA8, Violet::FrameBufferTextureFormat::RED_INTEGER, Violet::FrameBufferTextureFormat::DEPTH };
 	specs.width = 1280; //Window width
 	specs.height = 720; //Window height
 	
