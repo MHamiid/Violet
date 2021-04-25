@@ -86,7 +86,7 @@ void GameLayer2D::onImGuiRender()
 
 	ImGui::Begin("FrameBuffer");
 	uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void* pointer when casting
-	ImGui::Image((void*)textureID, ImVec2(320.0f, 180.0f), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
+	ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2(320.0f, 180.0f), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 	ImGui::End();
 }
 
