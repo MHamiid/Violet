@@ -21,9 +21,9 @@ namespace Violet {
 	class VIOLET_API KeyPressedEvent : public KeyEvent {
 
 	public:
-		KeyPressedEvent(KeyCode keyCode , int repeatCount) :KeyEvent(keyCode), m_repeatCount(repeatCount) {}
+		KeyPressedEvent(KeyCode keyCode , uint16_t repeatCount) :KeyEvent(keyCode), m_repeatCount(repeatCount) {}
 
-		int getRepeatCount() const { return m_repeatCount; }
+		uint16_t getRepeatCount() const { return m_repeatCount; }
 
 		static EventType GetClassType() { return EventType::KeyPressed ; }
 		//pure virtual functions implementation.
@@ -31,7 +31,7 @@ namespace Violet {
 		virtual const char* getName() const override { return "KeyPressed"; }
 
 	private:
-		int m_repeatCount;
+		uint16_t m_repeatCount;
 
 	};
 
