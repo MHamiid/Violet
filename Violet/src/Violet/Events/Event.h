@@ -44,7 +44,7 @@ namespace Violet{
 	};
 
 
-	class EventDispatcher {
+	class VIOLET_API EventDispatcher {
 		
 	public:
 		EventDispatcher(Event& event) :m_event(event) {}
