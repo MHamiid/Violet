@@ -16,6 +16,9 @@
     <Filter Include="src\Violet\ImGui">
       <UniqueIdentifier>{59B40400-45AD-2352-6EDF-08D75A37035E}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\Violet\Math">
+      <UniqueIdentifier>{28FA4717-9485-B5DB-9D96-38D009A111DC}</UniqueIdentifier>
+    </Filter>
     <Filter Include="src\Violet\Platform">
       <UniqueIdentifier>{23E1CFF9-8F42-AD07-18B0-F3B98410E4C6}</UniqueIdentifier>
     </Filter>
@@ -99,6 +102,9 @@
     <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h">
       <Filter>src\Violet\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\Math\Math.h">
+      <Filter>src\Violet\Math</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Platform\OpenGL\OpenGLBuffer.h">
       <Filter>src\Violet\Platform\OpenGL</Filter>
     </ClInclude>
@@ -127,6 +133,9 @@
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\Camera.h">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Violet\Renderer\EditorCamera.h">
       <Filter>src\Violet\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="src\Violet\Renderer\FrameBuffer.h">
@@ -189,8 +198,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\Math\Math.h" />
-    <ClInclude Include="src\Violet\Renderer\EditorCamera.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">
@@ -210,6 +217,9 @@
     </ClCompile>
     <ClCompile Include="src\Violet\ImGui\ImGuiLayer.cpp">
       <Filter>src\Violet\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Math\Math.cpp">
+      <Filter>src\Violet\Math</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Platform\OpenGL\OpenGLBuffer.cpp">
       <Filter>src\Violet\Platform\OpenGL</Filter>
@@ -242,6 +252,9 @@
       <Filter>src\Violet\Platform\Windows</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\Buffer.cpp">
+      <Filter>src\Violet\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Violet\Renderer\EditorCamera.cpp">
       <Filter>src\Violet\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="src\Violet\Renderer\FrameBuffer.cpp">
@@ -295,7 +308,5 @@
     <ClCompile Include="vendor\stb_image\stb_image.cpp">
       <Filter>vendor\stb_image</Filter>
     </ClCompile>
-    <ClCompile Include="src\Violet\Math\Math.cpp" />
-    <ClCompile Include="src\Violet\Renderer\EditorCamera.cpp" />
   </ItemGroup>
 </Project>
