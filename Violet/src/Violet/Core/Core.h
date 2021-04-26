@@ -18,17 +18,24 @@
 
 //To be defined in debug mode
 #ifdef VIO_DEBUG_MODE
+	#ifdef VIO_PLATFORM_WINDOWS
+		#define VIO_DEBUG_BREAK() __debugbreak()
+	#elif VIO_PLATFORM_LINUX
+		#include <signal.h>
+		#define VIO_DEBUG_BREAK() raise(SIGTRAP)
+	#else
+		#error "Platform debugbreak not supported"
+	#endif  //Setting VIO_DEBUG_BREAK()
 	#define VIO_ENABLE_ASSERTS
+#else
+	#define VIO_DEBUG_BREAK()
 #endif  //DEBUG_DEBUG_MODE
 
 
 //Debug Assertion
 #ifdef VIO_ENABLE_ASSERTS
-//TODO: Should detect which compiler is being used and use the correct debugbreak function
-#define VIO_BREAK __debugbreak()   //Creating two BREAK macros for the same functionality for consistency with the rest of the macros
-#define VIO_CORE_BREAK __debugbreak()
-#define VIO_ASSERT(x,...) {if(!(x)){ VIO_ERROR("Assertion Failed: {0}" , __VA_ARGS__); __debugbreak();}}
-#define VIO_CORE_ASSERT(x,...) {if(!(x)){ VIO_CORE_ERROR("Assertion Failed: {0}" , __VA_ARGS__); __debugbreak();}}
+#define VIO_ASSERT(x,...) {if(!(x)){ VIO_ERROR("Assertion Failed: {0}" , __VA_ARGS__); VIO_DEBUG_BREAK();}}
+#define VIO_CORE_ASSERT(x,...) {if(!(x)){ VIO_CORE_ERROR("Assertion Failed: {0}" , __VA_ARGS__); VIO_DEBUG_BREAK();}}
 
 
 #else
