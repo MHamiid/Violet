@@ -53,6 +53,8 @@ namespace Violet {
 		openFileName.lpstrFilter = filter;
 		openFileName.nFilterIndex = 1;
 		openFileName.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_NOCHANGEDIR;
+		openFileName.lpstrDefExt = std::strchr(filter, '\0') + 1;  //Set the default extension by extracting it from the filter
+
 
 		if (GetCurrentDirectoryA(sizeof(currentDirectory), currentDirectory))  //Get the current working directory and set it in currentDirectory buffer
 		{
