@@ -593,29 +593,27 @@ namespace Violet {
 	}
 	void EditorLayer::openSceneDialog()
 	{
-		std::optional<std::string> filePath = FileDialogs::OpenFile("Violet Scene (*.violet)\0*.violet\0");
-		if (filePath.has_value())
+		std::string filePath = FileDialogs::OpenFile("Violet Scene (*.violet)\0*.violet\0");
+		if (!filePath.empty())
 		{
-			openScene(*filePath);
+			openScene(filePath);
 		}
 	}
 	void EditorLayer::openScene(const std::string& filePath)
 	{
-		//TODO: Check the extension of the file
-		if (!filePath.empty())  //If the string is not empty 
+		//TODO: Check the extension of the file in filePath
+	
+		newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set 
+		SceneSerializer sceneSerializer(m_activeScene);
+		if (sceneSerializer.deserializeText(filePath))
 		{
-			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set it
-
-			SceneSerializer sceneSerializer(m_activeScene);
-			if (sceneSerializer.deserializeText(filePath))
-			{
-				m_activeScenePath = filePath;
-			}
-			else 
-			{
-				VIO_CORE_ERROR("Couldn't Open '{0}'", filePath);
-			}
+			m_activeScenePath = filePath;
 		}
+		else 
+		{
+			VIO_CORE_ERROR("Couldn't Open '{0}'", filePath);
+		}
+		
 	}
 	void EditorLayer::saveScene()
 	{
@@ -633,14 +631,14 @@ namespace Violet {
 	}
 	void EditorLayer::saveSceneAsDialog()
 	{
-		std::optional<std::string> filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", std::string(m_activeScene->getSceneName() + ".violet").c_str());
+		std::string filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", std::string(m_activeScene->getSceneName() + ".violet").c_str());
 
-		if (filePath)  //If the string is not empty 
+		if (!filePath.empty())  //If the string is not empty 
 		{
 			SceneSerializer sceneSerializer(m_activeScene);
-			sceneSerializer.serializeToText(*filePath);
+			sceneSerializer.serializeToText(filePath);
 
-			m_activeScenePath = *filePath;
+			m_activeScenePath = filePath;
 		}
 	}
 }
