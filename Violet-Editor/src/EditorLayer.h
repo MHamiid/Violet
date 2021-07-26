@@ -2,6 +2,7 @@
 #include <Violet.h>
 #include "Panels/SceneHierarchyPanel.h"
 #include "Panels/PropertiesPanel.h"
+#include "Panels/ContentBrowserPanel.h"
 
 namespace Violet {
 
@@ -42,6 +43,7 @@ namespace Violet {
 		/*Panels*/
 		SceneHierarchyPanel m_sceneHierarchyPanel;
 		PropertiesPanel m_propertiesPanel;
+		ContentBrowserPanel m_contentBrowserPanel;
 
 		int m_gizmoType = -1;  // -1 ====> No gizmo selected
 		float m_snapValues[3] = { 0.5f , 45.0f, 0.5f}; //Translation, Rotation, Scale  //Snap to 0.5m for translation and scale, snap to 45 degrees for rotation
