@@ -28,7 +28,12 @@ namespace Violet {
 		m_frameBuffer = FrameBuffer::Create(specs);
 
 		/*Scene And Context Initialization*/
+		//Initialize a default scene
 		m_activeScene = CreateRef<Scene>("Untitled Scene");
+		/*Add a default quad*/
+		Entity quadEntity = m_activeScene->createEntity("Quad");
+		quadEntity.addComponent<SpriteRendererComponent>();
+
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
 
