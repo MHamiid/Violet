@@ -11,6 +11,7 @@ namespace Violet {
 
 	void SceneCamera::setViewPortSize(uint32_t width, uint32_t height)
 	{
+		VIO_CORE_ASSERT(width > 0 && height > 0, "Attempting To Set Width Or Height To Value Less Than 0!");
 		m_aspectRatio = (float)width / (float)height;
 		calculateProjectionMatrix();
 	}

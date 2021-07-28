@@ -3,7 +3,7 @@
 
 namespace Violet {
 
-	//TODO: note that the directory path is hardcoded, extract the directory from the Project (Project class not created yet).
+	//TODO: Note that the directory path is hardcoded, extract the directory from the Project (Project class not created yet).
 	static const std::filesystem::path s_assestsPath = "assets";
 
 	ContentBrowserPanel::ContentBrowserPanel() : m_currentDirectory(s_assestsPath)
@@ -45,7 +45,7 @@ namespace Violet {
 				}
 			}
 			else {
-				ImGui::Button(fileNameString.c_str());  //Render the files as buttons that doesn't do anything for visual consistency with the folders buttons.
+				ImGui::Button(fileNameString.c_str());  //Render the files as buttons that don't do anything, just for visual consistency with the folders' buttons.
 			}
 		}
 
