@@ -25,29 +25,50 @@ namespace Violet {
 			}
 		}
 
+		/*Calculating how many columns are needed to display the items in the available region with a certain cell size for each item*/
+		/*TODO: Add options for the user to adjust the padding + thumbnailSize*/
+		static float padding = 16.0f;
+		static float thumbnailSize = 128.0f;
+		float cellSize = thumbnailSize + padding;
 
-		 /*TODO: Maybe store the directory entries in a list to avoid hitting the file system every single frame, render that list, and update the list if the directory has been modified ( file/folder added/deleted)
-		 or update the list every specific interval (@ex: every second). */
-		for (auto& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory)) {
+		float contentBrowserPanelWidth = ImGui::GetContentRegionAvail().x;
 
-			const std::filesystem::path& path = directoryEntry.path();
+		int columnCount = (int)(contentBrowserPanelWidth / cellSize);
 
-			std::filesystem::path relativePath = std::filesystem::relative(path, m_currentDirectory);   //Extract the current folder/file name in the current directory without the whole path.
+		//Prevent crashing if the content browser panel has been resized to the minimum
+		if (columnCount < 1) columnCount = 1;
 
-			//Note: Currently works with english paths, otherwise it'd crash (we're reading the directory path as std::string).
-			//TODO: Fix the previous note.
-			std::string fileNameString = relativePath.filename().string();
+		if (ImGui::BeginTable("Content Browser Table", columnCount, ImGuiTableFlags_SizingStretchSame))
+		{
+			 /*TODO: Maybe store the directory entries in a list to avoid hitting the file system every single frame, render that list, and update the list if the directory has been modified ( file/folder added/deleted)
+			 or update the list every specific interval (@ex: every second). */
+			for (auto& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory)) {
 
-			if (directoryEntry.is_directory()) {
+				const std::filesystem::path& path = directoryEntry.path();
 
-				if (ImGui::Button(fileNameString.c_str())) {
-					m_currentDirectory /= directoryEntry.path().filename();  //Note: operator/ is overloaded so that it concatenates two paths with a directory separator 
+				std::filesystem::path relativePath = std::filesystem::relative(path, m_currentDirectory);   //Extract the current folder/file name in the current directory without the whole path.
+
+				//Note: Currently works with english paths, otherwise it'd crash (we're reading the directory path as std::string).
+				//TODO: Fix the previous note.
+				std::string fileNameString = relativePath.filename().string();
+
+
+				ImGui::TableNextColumn();
+				if (ImGui::Button(fileNameString.c_str(), { thumbnailSize, thumbnailSize })) 
+				{
+					if (directoryEntry.is_directory()) {
+						/*Directory*/
+						m_currentDirectory /= directoryEntry.path().filename();  //Note: operator/ is overloaded so that it concatenates two paths with a directory separator 
+					}
+					else {
+						/*File*/
+					}
 				}
 			}
-			else {
-				ImGui::Button(fileNameString.c_str());  //Render the files as buttons that don't do anything, just for visual consistency with the folders' buttons.
-			}
+			ImGui::EndTable();
 		}
+
+		//TODO: Status bar (@ex: Tells the entire file path when a certain file is clicked)
 
 		ImGui::End();
 	}
