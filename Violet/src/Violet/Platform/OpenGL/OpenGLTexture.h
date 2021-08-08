@@ -12,6 +12,7 @@ namespace Violet {
 
 		virtual uint32_t getWidth() const override { return m_width; };
 		virtual uint32_t getHeight() const override { return m_height; };
+		virtual uint32_t getTextureID() const override { return m_textureID; }
 
 		virtual void setData(void* data, uint32_t size) override;
 
