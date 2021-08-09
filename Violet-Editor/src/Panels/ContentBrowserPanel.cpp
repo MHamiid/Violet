@@ -8,6 +8,11 @@ namespace Violet {
 
 	ContentBrowserPanel::ContentBrowserPanel() : m_currentDirectory(s_assestsPath)
 	{
+		/*Note: these textures is loaded everytime ContentBrowserPanel is constructed (@ex: everytime a new project is created/loaded)
+		, optimally load the textures once in the EditorLayer for example and pass them here.*/
+
+		m_directoryIcon = Texture2D::Create("resources/icons/ContentBrowser/directory.png");
+		m_fileIcon = Texture2D::Create("resources/icons/ContentBrowser/file.png");
 	}
 
 	void ContentBrowserPanel::onImGuiRender()
@@ -28,7 +33,7 @@ namespace Violet {
 		/*Calculating how many columns are needed to display the items in the available region with a certain cell size for each item*/
 		/*TODO: Add options for the user to adjust the padding + thumbnailSize*/
 		static float padding = 16.0f;
-		static float thumbnailSize = 128.0f;
+		static float thumbnailSize = 64.0f;
 		float cellSize = thumbnailSize + padding;
 
 		float contentBrowserPanelWidth = ImGui::GetContentRegionAvail().x;
@@ -53,8 +58,16 @@ namespace Violet {
 				std::string fileNameString = relativePath.filename().string();
 
 
+				Ref<Texture2D> icon = directoryEntry.is_directory() ? m_directoryIcon : m_fileIcon;
+				uint64_t textureID = icon->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
+
 				ImGui::TableNextColumn();
-				if (ImGui::Button(fileNameString.c_str(), { thumbnailSize, thumbnailSize })) 
+				ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID)
+				, { thumbnailSize, thumbnailSize }
+				, { 0, 1 }, { 1, 0 }); //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
+				
+				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) /*Using this if condition instead of using if(ImGui::ImageButton) directly cause of ImGui::ImageButton uses the same textureID
+																							  which fails to check for the condition for more that one item (they share the same textureID)*/
 				{
 					if (directoryEntry.is_directory()) {
 						/*Directory*/
@@ -64,6 +77,7 @@ namespace Violet {
 						/*File*/
 					}
 				}
+				ImGui::TextWrapped(fileNameString.c_str());
 			}
 			ImGui::EndTable();
 		}
