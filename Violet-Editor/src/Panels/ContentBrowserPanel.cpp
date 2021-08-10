@@ -66,7 +66,8 @@ namespace Violet {
 				, { thumbnailSize, thumbnailSize }
 				, { 0, 1 }, { 1, 0 }); //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 				
-				if (ImGui::IsItemHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left)) /*Using this if condition instead of using if(ImGui::ImageButton) directly cause of ImGui::ImageButton uses the same textureID
+				//Double-click
+				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) /*Using this if condition instead of using if(ImGui::ImageButton) directly cause of ImGui::ImageButton uses the same textureID
 																							  which fails to check for the condition for more that one item (they share the same textureID)*/
 				{
 					if (directoryEntry.is_directory()) {
@@ -76,6 +77,7 @@ namespace Violet {
 					else {
 						/*File*/
 					}
+					//TODO: create a condition for a single click, which should probably show info in the status bar (to be done) about the clicked item (@ex: item file path, etc)
 				}
 				ImGui::TextWrapped(fileNameString.c_str());
 			}
