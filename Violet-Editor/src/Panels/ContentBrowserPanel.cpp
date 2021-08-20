@@ -62,10 +62,13 @@ namespace Violet {
 				uint64_t textureID = icon->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
 
 				ImGui::TableNextColumn();
+				//Remove the background color for the ImageButton
+				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
 				ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID)
 				, { thumbnailSize, thumbnailSize }
 				, { 0, 1 }, { 1, 0 }); //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
-				
+				ImGui::PopStyleColor();
+
 				//Double-click
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) /*Using this if condition instead of using if(ImGui::ImageButton) directly cause of ImGui::ImageButton uses the same textureID
 																							  which fails to check for the condition for more that one item (they share the same textureID)*/
