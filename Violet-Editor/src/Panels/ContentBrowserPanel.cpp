@@ -4,9 +4,9 @@
 namespace Violet {
 
 	//TODO: Note that the directory path is hardcoded, extract the directory from the Project (Project class not created yet).
-	static const std::filesystem::path s_assestsPath = "assets";
+	static const std::filesystem::path s_assetsPath = "assets";
 
-	ContentBrowserPanel::ContentBrowserPanel() : m_currentDirectory(s_assestsPath)
+	ContentBrowserPanel::ContentBrowserPanel() : m_currentDirectory(s_assetsPath)
 	{
 		/*Note: these textures is loaded everytime ContentBrowserPanel is constructed (@ex: everytime a new project is created/loaded)
 		, optimally load the textures once in the EditorLayer for example and pass them here.*/
@@ -23,7 +23,7 @@ namespace Violet {
 
 		/*Render A Back Button*/
 		//Note: The back button is not rendered if the current directory is the root directory (prevent access to files/folders outside the assets directory).
-		if (m_currentDirectory != s_assestsPath) {
+		if (m_currentDirectory != s_assetsPath) {
 			
 			if (ImGui::Button("<-")) {
 				m_currentDirectory = m_currentDirectory.parent_path();  //Go back to the previous directory.
