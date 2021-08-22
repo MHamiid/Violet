@@ -45,13 +45,13 @@ namespace Violet {
 
 		if (ImGui::BeginTable("Content Browser Table", columnCount, ImGuiTableFlags_SizingStretchSame))
 		{
-			 /*TODO: Maybe store the directory entries in a list to avoid hitting the file system every single frame, render that list, and update the list if the directory has been modified ( file/folder added/deleted)
+			 /*TODO: Maybe store the directory entries in a list to avoid hitting the file system every single frame, render that list, and update the list if the directory has been modified (file/folder added/deleted)
 			 or update the list every specific interval (@ex: every second). */
 			for (auto& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory)) {
 
 				const std::filesystem::path& path = directoryEntry.path();
 
-				std::filesystem::path relativePath = std::filesystem::relative(path, m_currentDirectory);   //Extract the current folder/file name in the current directory without the whole path.
+				std::filesystem::path relativePath = std::filesystem::relative(path, s_assetsPath);   //Extract the current folder/file relative path to the s_assetsPath (removing s_assetsPath from the path)
 
 				//Note: Currently works with english paths, otherwise it'd crash (we're reading the directory path as std::string).
 				//TODO: Fix the previous note.
