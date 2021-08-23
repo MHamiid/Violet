@@ -3,10 +3,11 @@
 
 namespace Violet {
 
-	//TODO: Note that the directory path is hardcoded, extract the directory from the Project (Project class not created yet).
-	static const std::filesystem::path s_assetsPath = "assets";
+	//TODO: Note that the assets path is hardcoded, extract the assets path from the Project (Project class not created yet).
+	//g_assetsPath definition
+	extern const std::filesystem::path g_assetsPath = "assets"; // [HARD-CODED][TEMP][GLOBAL]
 
-	ContentBrowserPanel::ContentBrowserPanel() : m_currentDirectory(s_assetsPath)
+	ContentBrowserPanel::ContentBrowserPanel() : m_currentDirectory(g_assetsPath)
 	{
 		/*Note: these textures is loaded everytime ContentBrowserPanel is constructed (@ex: everytime a new project is created/loaded)
 		, optimally load the textures once in the EditorLayer for example and pass them here.*/
@@ -23,8 +24,8 @@ namespace Violet {
 
 		/*Render A Back Button*/
 		//Note: The back button is not rendered if the current directory is the root directory (prevent access to files/folders outside the assets directory).
-		if (m_currentDirectory != s_assetsPath) {
-			
+		if (m_currentDirectory != g_assetsPath) {
+
 			if (ImGui::Button("<-")) {
 				m_currentDirectory = m_currentDirectory.parent_path();  //Go back to the previous directory.
 			}
@@ -45,17 +46,17 @@ namespace Violet {
 
 		if (ImGui::BeginTable("Content Browser Table", columnCount, ImGuiTableFlags_SizingStretchSame))
 		{
-			 /*TODO: Maybe store the directory entries in a list to avoid hitting the file system every single frame, render that list, and update the list if the directory has been modified (file/folder added/deleted)
-			 or update the list every specific interval (@ex: every second). */
+			/*TODO: Maybe store the directory entries in a list to avoid hitting the file system every single frame, render that list, and update the list if the directory has been modified (file/folder added/deleted)
+			or update the list every specific interval (@ex: every second). */
 			for (auto& directoryEntry : std::filesystem::directory_iterator(m_currentDirectory)) {
 
 				const std::filesystem::path& path = directoryEntry.path();
 
-				std::filesystem::path relativePath = std::filesystem::relative(path, s_assetsPath);   //Extract the current folder/file relative path to the s_assetsPath (removing s_assetsPath from the path)
+				std::filesystem::path relativePath = std::filesystem::relative(path, g_assetsPath);   //Extract the current folder/file relative path to the s_assetsPath (removing s_assetsPath from the path)
 
 				//Note: Currently works with english paths, otherwise it'd crash (we're reading the directory path as std::string).
 				//TODO: Fix the previous note.
-				std::string fileNameString = relativePath.filename().string();
+				std::string itemNameString = relativePath.filename().string();
 
 
 				Ref<Texture2D> icon = directoryEntry.is_directory() ? m_directoryIcon : m_fileIcon;
@@ -64,10 +65,21 @@ namespace Violet {
 				ImGui::TableNextColumn();
 				//Remove the background color for the ImageButton
 				ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));
+				ImGui::PushID(path.string().c_str()); //Push a unique ID for each ImageButton Item
 				ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID)
-				, { thumbnailSize, thumbnailSize }
+					, { thumbnailSize, thumbnailSize }
 				, { 0, 1 }, { 1, 0 }); //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 				ImGui::PopStyleColor();
+				ImGui::PopID();
+
+				/*Drag/Drop Items*/
+				if (ImGui::BeginDragDropSource())
+				{
+					const std::string itemRelativePath = relativePath.string();
+					ImGui::SetDragDropPayload("CONTENT_BROWSER_ITEM", itemRelativePath.c_str(), itemRelativePath.size() + 1);  //NOTE: Add +1 to the size for the null termination character
+
+					ImGui::EndDragDropSource();
+				}
 
 				//Double-click
 				if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(ImGuiMouseButton_Left)) /*Using this if condition instead of using if(ImGui::ImageButton) directly cause of ImGui::ImageButton uses the same textureID
@@ -82,7 +94,7 @@ namespace Violet {
 					}
 					//TODO: create a condition for a single click, which should probably show info in the status bar (to be done) about the clicked item (@ex: item file path, etc)
 				}
-				ImGui::TextWrapped(fileNameString.c_str());
+				ImGui::TextWrapped(itemNameString.c_str());
 			}
 			ImGui::EndTable();
 		}

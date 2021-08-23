@@ -8,6 +8,10 @@
 
 namespace Violet {
 
+	//TODO: Note that the assets path is hardcoded, extract the assets path from the Project (Project class not created yet).
+	//g_assetsPath declaration
+	extern const std::filesystem::path g_assetsPath; // [HARD-CODED][TEMP][GLOBAL]
+
 	EditorLayer::EditorLayer() : Layer("EditorLayer")
 	{
 	}
@@ -365,6 +369,23 @@ namespace Violet {
 		
 		uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer when casting
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
+
+
+		/*Receive Dropped Payloads*/
+		if (ImGui::BeginDragDropTarget())
+		{
+			const ImGuiPayload* contentBrowserPayload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"); //ContentBrowser payload
+			if (contentBrowserPayload) //If not nullptr
+			{
+				const char* itemRelativePath = reinterpret_cast<const char*>(contentBrowserPayload->Data);
+
+				//Open the dropped scene
+				openScene((g_assetsPath / itemRelativePath).string());
+
+				ImGui::EndDragDropTarget();
+			}
+		}
+
 
 		//TODO: Set UI buttons for selecting the gizmo type
 		//ImGizmos
