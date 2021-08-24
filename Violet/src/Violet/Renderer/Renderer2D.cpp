@@ -356,7 +356,17 @@ namespace Violet {
 
 	void Renderer2D::DrawSprit(const glm::mat4& transformationMatrix, SpriteRendererComponent& spriteRendererComponent, int entityID)
 	{
-		DrawQuad(transformationMatrix, spriteRendererComponent.color, entityID);
+		//With texture
+		if (spriteRendererComponent.texture) //if texture is not nullptr
+		{
+			DrawQuad(transformationMatrix, spriteRendererComponent.texture, spriteRendererComponent.textureSizeFactor, spriteRendererComponent.color, entityID);
+		}
+		//Without texture
+		else
+		{
+			//Renders with the default (1 * 1) white texture, has the effect of not using a texture
+			DrawQuad(transformationMatrix, spriteRendererComponent.color, entityID);
+		}
 	}
 
 	void Renderer2D::StartNewBatch()

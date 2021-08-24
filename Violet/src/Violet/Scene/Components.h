@@ -3,6 +3,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "SceneCamera.h"
 #include "Script.h"
+#include "Violet/Renderer/Texture.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
@@ -46,6 +47,8 @@ namespace Violet {
 	{
 		/*TODO: Should Have A Material When Material System Is Added*/
 		glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		Ref<Texture2D> texture;
+		float textureSizeFactor = 1.0;
 
 		SpriteRendererComponent() = default;
 		SpriteRendererComponent(const glm::vec4& color) : color(color) {}

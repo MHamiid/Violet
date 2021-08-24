@@ -4,8 +4,13 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <misc/cpp/imgui_stdlib.h>
 #include <imgui_internal.h>
+#include <filesystem>
 
 namespace Violet {
+
+	//TODO: Note that the assets path is hardcoded, extract the assets path from the Project (Project class not created yet).
+	//g_assetsPath declaration
+	extern const std::filesystem::path g_assetsPath; // [HARD-CODED][TEMP][GLOBAL]
 
 	PropertiesPanel::PropertiesPanel(Entity entity)
 	{
@@ -314,6 +319,24 @@ namespace Violet {
 		drawComponent<SpriteRendererComponent>("Sprite", entity, [](SpriteRendererComponent& spritRendererComponent)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
+			ImGui::Button("Texture", ImVec2(60.0f, 60.0f));
+
+			/*Receive Dropped Payloads*/
+			if (ImGui::BeginDragDropTarget())
+			{
+				const ImGuiPayload* contentBrowserPayload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"); //ContentBrowser payload
+				if (contentBrowserPayload) //If not nullptr
+				{
+					const char* textureRelativePath = reinterpret_cast<const char*>(contentBrowserPayload->Data);
+
+					//Load the texture
+					spritRendererComponent.texture = Texture2D::Create((g_assetsPath / textureRelativePath).string());
+				
+					ImGui::EndDragDropTarget();
+				}
+			}
+
+			ImGui::DragFloat("Size Factor", &spritRendererComponent.textureSizeFactor, 0.1f, 0.0f, 100.0f);
 		});
 
 	}
