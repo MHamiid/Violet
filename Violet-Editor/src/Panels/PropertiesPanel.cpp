@@ -319,7 +319,17 @@ namespace Violet {
 		drawComponent<SpriteRendererComponent>("Sprite", entity, [](SpriteRendererComponent& spritRendererComponent)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
-			ImGui::Button("Texture", ImVec2(60.0f, 60.0f));
+
+			/*Texture Thumbnail*/
+			if (spritRendererComponent.texture) //If not nullptr
+			{
+				uint64_t textureID = spritRendererComponent.texture->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
+				ImGui::ImageButton(reinterpret_cast<ImTextureID*>(textureID), ImVec2(60.0f, 60.0f), { 0, 1 }, { 1, 0 }); //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default)
+			}
+			else
+			{
+				ImGui::Button("Texture", ImVec2(60.0f, 60.0f));
+			}
 
 			/*Receive Dropped Payloads*/
 			if (ImGui::BeginDragDropTarget())
