@@ -5,6 +5,7 @@
 #include "Violet/Math/Math.h"
 #include <misc/cpp/imgui_stdlib.h>
 #include <filesystem>
+#include <imgui_internal.h>
 
 namespace Violet {
 
@@ -192,7 +193,29 @@ namespace Violet {
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 
 	}
+	//[TEMP] Copied from PropertiesPanel.cpp
+	/*TODO: Move It To A UI Library*/
+	template<typename UIFunction>
+	static void DrawWithHiddenStyle(bool hide, UIFunction UIFUNC)
+	{
+		bool itemHidden = false;
+		if (hide)
+		{
+			/*Draw With Hidden Style*/
+			itemHidden = true;
+			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+		}
 
+		UIFUNC();
+
+		if (itemHidden)
+		{
+			/*Pop Drawing With Hidden Style*/
+			ImGui::PopItemFlag();
+			ImGui::PopStyleVar();
+		}
+	}
 	void EditorLayer::onImGuiRender()
 	{
 		/*Begining ImGui DockSpace Code*/
@@ -473,14 +496,15 @@ namespace Violet {
 			{
 				ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
 				ImGui::Separator();
-
-				if (ImGui::Button("OK", ImVec2(120, 0)))
-				{
-					m_showNewScenePopupModal = false;
-					newScene(m_newSceneNameBuffer);
-					ImGui::CloseCurrentPopup();
-				}
-
+				DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&]()
+					{
+						if (ImGui::Button("OK", ImVec2(120, 0)))
+						{
+							m_showNewScenePopupModal = false;
+							newScene(m_newSceneNameBuffer);
+							ImGui::CloseCurrentPopup();
+						}
+					});
 				ImGui::SetItemDefaultFocus();
 				ImGui::SameLine();
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
