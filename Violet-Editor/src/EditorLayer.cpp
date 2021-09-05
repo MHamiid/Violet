@@ -502,6 +502,7 @@ namespace Violet {
 						{
 							m_showNewScenePopupModal = false;
 							newScene(m_newSceneNameBuffer);
+							m_newSceneNameBuffer = ""; //Clear the buffer
 							ImGui::CloseCurrentPopup();
 						}
 					});
@@ -510,6 +511,7 @@ namespace Violet {
 				if (ImGui::Button("Cancel", ImVec2(120, 0)))
 				{
 					m_showNewScenePopupModal = false;
+					m_newSceneNameBuffer = ""; //Clear the buffer
 					ImGui::CloseCurrentPopup();
 				}
 				ImGui::EndPopup();
