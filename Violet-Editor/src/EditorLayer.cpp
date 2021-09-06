@@ -638,6 +638,7 @@ namespace Violet {
 		m_activeScene = CreateRef<Scene>(sceneName); //Reset the current active scene
 		m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
 		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+		m_activeScenePath = ""; //Reset the scene path to empty path (it's a new created scene, doesn't have a path, it's not read from a file)
 
 		//Reset editor camera
 		m_editorCamera = EditorCamera(45.0f, 0.0f, 0.1f, 1000.0f);
