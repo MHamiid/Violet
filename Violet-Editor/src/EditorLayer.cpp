@@ -207,7 +207,7 @@ namespace Violet {
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
 
-		UIFUNC();
+		UIFUNC(itemHidden);
 
 		if (itemHidden)
 		{
@@ -496,7 +496,7 @@ namespace Violet {
 			{
 				ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
 				ImGui::Separator();
-				DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&]()
+				DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
 					{
 						if (ImGui::Button("OK", ImVec2(120, 0)))
 						{

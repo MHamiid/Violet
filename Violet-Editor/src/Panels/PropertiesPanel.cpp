@@ -142,7 +142,7 @@ namespace Violet {
 			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
 		}
 
-			UIFUNC();
+		UIFUNC(itemHidden);
 
 		if (itemHidden)
 		{
@@ -235,7 +235,7 @@ namespace Violet {
 
 				bool isThisCameraPrimary = entity.getScene()->getPrimaryCameraEntity() == entity;
 				
-				DrawWithHiddenStyle(isThisCameraPrimary, [&]() 
+				DrawWithHiddenStyle(isThisCameraPrimary, [&](bool itemHidden) 
 				{
 
 				if (ImGui::Checkbox("Primary", &isThisCameraPrimary))
@@ -357,7 +357,7 @@ namespace Violet {
 		bool entityHasAllComponents = m_entityContext.hasComponent<TransformComponent>() && m_entityContext.hasComponent<SpriteRendererComponent>()
 			&& m_entityContext.hasComponent<CameraComponent>();
 		
-		DrawWithHiddenStyle(entityHasAllComponents, []() 
+		DrawWithHiddenStyle(entityHasAllComponents, [](bool itemHidden)
 		{
 			if (ImGui::Button("Add Component")) //If pressed open the pop-up
 			{
