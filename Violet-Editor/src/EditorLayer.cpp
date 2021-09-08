@@ -498,7 +498,8 @@ namespace Violet {
 				ImGui::Separator();
 				DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
 					{
-						if (ImGui::Button("OK", ImVec2(120, 0)))
+						//If the button is [Left-Clicked] or the [Enter] key is pressed while the button is not hidden
+						if (ImGui::Button("OK", ImVec2(120, 0)) || (!itemHidden && ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Enter])))
 						{
 							m_showNewScenePopupModal = false;
 							newScene(m_newSceneNameBuffer);
@@ -508,7 +509,8 @@ namespace Violet {
 					});
 				ImGui::SetItemDefaultFocus();
 				ImGui::SameLine();
-				if (ImGui::Button("Cancel", ImVec2(120, 0)))
+				//If the button is [Left-Clicked] or the [Escape] key is pressed
+				if (ImGui::Button("Cancel", ImVec2(120, 0)) || ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Escape]))
 				{
 					m_showNewScenePopupModal = false;
 					m_newSceneNameBuffer = ""; //Clear the buffer
