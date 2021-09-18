@@ -494,7 +494,13 @@ namespace Violet {
 
 			if (ImGui::BeginPopupModal("New Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
 			{
+				/*Set the ImGui::InputText to be auto-focused when the New Scene Popup Modal Dialogue is created if there is no item active (@ex: the Button is pressed)
+				(we have the cursor in the inputText field by default, so that we can type upon opening the PopUpModal without the clicking the inputText field),
+				otherwise the focus is set every frame, so it will steal the focus from the Button every frame and we can't click a button*/
+				if (!ImGui::IsAnyItemActive())
+					ImGui::SetKeyboardFocusHere(0);
 				ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
+
 				ImGui::Separator();
 				DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
 					{
