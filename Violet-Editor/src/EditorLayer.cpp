@@ -125,9 +125,11 @@ namespace Violet {
 		//}
 
 
-		//Update the editor camera movement 
-		m_editorCamera.onUpdate(deltaTime);
-
+		//Update the editor camera movement
+		if (m_viewPortFocused || m_viewPortHovered)
+		{
+			m_editorCamera.onUpdate(deltaTime);
+		}
 
 		/*Animation*/
 		//m_translationSpeed = m_objectPosition.x >= m_cameraController.getRight() || m_objectPosition.x <= m_cameraController.getLeft() ? -1.0f * m_translationSpeed : m_translationSpeed;
