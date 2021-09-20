@@ -621,6 +621,7 @@ namespace Violet {
 		}
 		return true;
 	}
+	/*Dropping Items From Outside The Editor*/
 	bool EditorLayer::onItemsDropped(ItemsDroppedEvent& event)
 	{
 		if (event.getItemsCount() > 1) 
@@ -630,14 +631,7 @@ namespace Violet {
 		else
 		{
 			std::filesystem::path filePath = event.getItemsPaths()[0];
-			if (filePath.extension() == ".violet")
-			{
-				openScene(filePath.string());
-			}
-			else 
-			{
-				VIO_CORE_ERROR("Attempting To Open An Invalid Scene File Type '{0}', try '.violet' File Type", filePath.filename().string().c_str());
-			}
+			openScene(filePath.string());
 		}
 
 
@@ -665,18 +659,24 @@ namespace Violet {
 	}
 	void EditorLayer::openScene(const std::string& filePath)
 	{
-		//TODO: Check the extension of the file in filePath
-	
-		newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set 
-		SceneSerializer sceneSerializer(m_activeScene);
-		if (sceneSerializer.deserializeText(filePath))
+		if (std::filesystem::path(filePath).extension() == ".violet")
 		{
-			m_activeScenePath = filePath;
+			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set 
+			SceneSerializer sceneSerializer(m_activeScene);
+			if (sceneSerializer.deserializeText(filePath))
+			{
+				m_activeScenePath = filePath;
+			}
+			else
+			{
+				VIO_CORE_ERROR("Couldn't Open '{0}'", filePath);
+			}
 		}
-		else 
+		else
 		{
-			VIO_CORE_ERROR("Couldn't Open '{0}'", filePath);
+			VIO_CORE_ERROR("Attempting To Open An Invalid Scene File Type '{0}', try '.violet' File Type", filePath);
 		}
+		
 		
 	}
 	void EditorLayer::saveScene()
