@@ -331,7 +331,7 @@ namespace Violet {
 				ImGui::Button("Texture", ImVec2(60.0f, 60.0f));
 			}
 
-			/*Receive Dropped Payloads*/
+			/*Receive Dropped Payloads On The Previous Item (Texture ImageButton)*/
 			if (ImGui::BeginDragDropTarget())
 			{
 				const ImGuiPayload* contentBrowserPayload = ImGui::AcceptDragDropPayload("CONTENT_BROWSER_ITEM"); //ContentBrowser payload
@@ -346,6 +346,18 @@ namespace Violet {
 				}
 			}
 
+			/*[TEMP]*/
+			/*Clear Texture Button*/
+			ImGui::SameLine();
+			if (ImGui::Button("Clear", ImVec2(40.0f, 25.0f)))
+			{
+				if (spritRendererComponent.texture) //If not nullptr ===> There is a texture being used on that entity
+				{
+					spritRendererComponent.texture.reset();
+				}
+			}
+
+			//Controlling the texture's size factor
 			ImGui::DragFloat("Size Factor", &spritRendererComponent.textureSizeFactor, 0.1f, 0.0f, 100.0f);
 		});
 
