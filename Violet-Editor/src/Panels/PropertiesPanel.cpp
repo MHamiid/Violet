@@ -5,6 +5,7 @@
 #include <misc/cpp/imgui_stdlib.h>
 #include <imgui_internal.h>
 #include <filesystem>
+#include "Violet/Utils/PlatformUtils.h"
 
 namespace Violet {
 
@@ -316,7 +317,7 @@ namespace Violet {
 			});
 
 		/*Sprit Renderer Component*/
-		drawComponent<SpriteRendererComponent>("Sprite", entity, [](SpriteRendererComponent& spritRendererComponent)
+		drawComponent<SpriteRendererComponent>("Sprite", entity, [&](SpriteRendererComponent& spritRendererComponent)
 		{
 			ImGui::ColorEdit4("Color", glm::value_ptr(spritRendererComponent.color));
 
@@ -324,11 +325,14 @@ namespace Violet {
 			if (spritRendererComponent.texture) //If not nullptr
 			{
 				uint64_t textureID = spritRendererComponent.texture->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
-				ImGui::ImageButton(reinterpret_cast<ImTextureID*>(textureID), ImVec2(60.0f, 60.0f), { 0, 1 }, { 1, 0 }); //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default)
+				if (ImGui::ImageButton(reinterpret_cast<ImTextureID*>(textureID), ImVec2(60.0f, 60.0f), { 0, 1 }, { 1, 0 })) //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default)
+				{
+					spritRendererComponent.texture = openTextureDialog();
+				}
 			}
-			else
+			else if(ImGui::Button("Texture", ImVec2(60.0f, 60.0f)))
 			{
-				ImGui::Button("Texture", ImVec2(60.0f, 60.0f));
+				spritRendererComponent.texture = openTextureDialog();
 			}
 
 			/*Receive Dropped Payloads On The Previous Item (Texture ImageButton)*/
@@ -397,6 +401,14 @@ namespace Violet {
 
 			ImGui::EndPopup();
 		}
+	}
+
+	Ref<Texture2D> PropertiesPanel::openTextureDialog()
+	{
+		std::string textureFileName = FileDialogs::OpenFile("Image files(*.jpg; *.png; *.bmp)\0 * .jpg; *.png; *.bmp\0All files\0*.*\0");
+
+		//Load the texture
+		return Texture2D::Create(textureFileName);
 	}
 
 }
