@@ -6,6 +6,7 @@
 #include <imgui_internal.h>
 #include <filesystem>
 #include "Violet/Utils/PlatformUtils.h"
+#include "Violet/ImGui/ImGuiUtils.h"
 
 namespace Violet {
 
@@ -130,29 +131,7 @@ namespace Violet {
 		return isValueChanged;
 	}
 
-	/*TODO: Move It To A UI Library*/
-	template<typename UIFunction>
-	static void DrawWithHiddenStyle(bool hide, UIFunction UIFUNC)
-	{
-		bool itemHidden = false;
-		if (hide)
-		{
-			/*Draw With Hidden Style*/
-			itemHidden = true;
-			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-		}
-
-		UIFUNC(itemHidden);
-
-		if (itemHidden)
-		{
-			/*Pop Drawing With Hidden Style*/
-			ImGui::PopItemFlag();
-			ImGui::PopStyleVar();
-		}
-	}
-
+	
 	/*TODO: Set a better way for creating a unique ID for ImGui::TreeNodeEx rather than typeid(class).hash_code()*/
 	template<typename ComponentType, typename UIFunction>
 	void PropertiesPanel::drawComponent(const std::string& name, Entity entity, UIFunction UIFUNC)
@@ -236,7 +215,7 @@ namespace Violet {
 
 				bool isThisCameraPrimary = entity.getScene()->getPrimaryCameraEntity() == entity;
 				
-				DrawWithHiddenStyle(isThisCameraPrimary, [&](bool itemHidden) 
+				Utils::ImGuiUtils::DrawWithHiddenStyle(isThisCameraPrimary, [&](bool itemHidden) 
 				{
 
 				if (ImGui::Checkbox("Primary", &isThisCameraPrimary))
@@ -373,7 +352,7 @@ namespace Violet {
 		bool entityHasAllComponents = m_entityContext.hasComponent<TransformComponent>() && m_entityContext.hasComponent<SpriteRendererComponent>()
 			&& m_entityContext.hasComponent<CameraComponent>();
 		
-		DrawWithHiddenStyle(entityHasAllComponents, [](bool itemHidden)
+		Utils::ImGuiUtils::DrawWithHiddenStyle(entityHasAllComponents, [](bool itemHidden)
 		{
 			if (ImGui::Button("Add Component")) //If pressed open the pop-up
 			{

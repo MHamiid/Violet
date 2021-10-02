@@ -6,6 +6,7 @@
 #include <misc/cpp/imgui_stdlib.h>
 #include <filesystem>
 #include <imgui_internal.h>
+#include "Violet/ImGui/ImGuiUtils.h"
 
 namespace Violet {
 
@@ -195,29 +196,7 @@ namespace Violet {
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 
 	}
-	//[TEMP] Copied from PropertiesPanel.cpp
-	/*TODO: Move It To A UI Library*/
-	template<typename UIFunction>
-	static void DrawWithHiddenStyle(bool hide, UIFunction UIFUNC)
-	{
-		bool itemHidden = false;
-		if (hide)
-		{
-			/*Draw With Hidden Style*/
-			itemHidden = true;
-			ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
-			ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
-		}
-
-		UIFUNC(itemHidden);
-
-		if (itemHidden)
-		{
-			/*Pop Drawing With Hidden Style*/
-			ImGui::PopItemFlag();
-			ImGui::PopStyleVar();
-		}
-	}
+	
 	void EditorLayer::onImGuiRender()
 	{
 		/*Begining ImGui DockSpace Code*/
@@ -504,7 +483,7 @@ namespace Violet {
 				ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
 
 				ImGui::Separator();
-				DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
+				Utils::ImGuiUtils::DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
 					{
 						//If the button is [Left-Clicked] or the [Enter] key is pressed while the button is not hidden
 						if (ImGui::Button("OK", ImVec2(120, 0)) || (!itemHidden && ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Enter])))
