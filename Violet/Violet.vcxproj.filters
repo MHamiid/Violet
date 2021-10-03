@@ -102,6 +102,9 @@
     <ClInclude Include="src\Violet\ImGui\ImGuiLayer.h">
       <Filter>src\Violet\ImGui</Filter>
     </ClInclude>
+    <ClInclude Include="src\Violet\ImGui\ImGuiUtils.h">
+      <Filter>src\Violet\ImGui</Filter>
+    </ClInclude>
     <ClInclude Include="src\Violet\Math\Math.h">
       <Filter>src\Violet\Math</Filter>
     </ClInclude>
@@ -198,7 +201,6 @@
     <ClInclude Include="vendor\stb_image\stb_image.h">
       <Filter>vendor\stb_image</Filter>
     </ClInclude>
-    <ClInclude Include="src\Violet\ImGui\ImGuiUtils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\VIOPCH.cpp">

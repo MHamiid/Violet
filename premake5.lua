@@ -53,14 +53,17 @@ project "Violet"
 		"%{prj.name}/vendor/stb_image",						--Include dir for stb_image
 		"%{prj.name}/vendor/entt/single_include/entt",	    --Include dir for entt
 		"%{prj.name}/vendor/yaml-cpp/include",				--Include dir for yaml-cpp
-		"%{prj.name}/vendor/ImGuizmo"						--Include dir for ImGuizmo
+		"%{prj.name}/vendor/ImGuizmo",						--Include dir for ImGuizmo
+		"%{prj.name}/vendor/Box2D/include"					--Include dir for Box2D
+
 	}
 
 	links{
 		"GLFW",
 		"Glad",
 		"ImGui",
-		"yaml-cpp"
+		"yaml-cpp",
+		"Box2D"
 	
 	}
 
@@ -405,5 +408,44 @@ project "yaml-cpp"
 		runtime "Release"
 		optimize "on"
 
+project "Box2D"
+	location "Box2D"
+	kind "StaticLib"
+	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
+
+	targetdir ("bin/" .. outputDir .. "/%{prj.name}")
+	objdir ("bin-intermediates/" .. outputDir .. "/%{prj.name}")
+
+	Box2DSrcDir = "Violet/vendor/Box2D/"
+
+	files
+	{
+		Box2DSrcDir .."src/**.h",
+        Box2DSrcDir .."src/**.cpp",
+        Box2DSrcDir .."include/**.h"
+	}
+	
+	includedirs{
+		
+		Box2DSrcDir .."include",
+		Box2DSrcDir .."src"
+	}
+
+	filter "system:windows"
+		systemversion "latest"
+
+	filter "system:linux"
+		pic "on"
+		systemversion "latest"
+
+	filter "configurations:Debug"
+		runtime "Debug"
+		symbols "on"
+
+	filter "configurations:Release"
+		runtime "Release"
+		optimize "on"
 
 group "" --Dependencies
