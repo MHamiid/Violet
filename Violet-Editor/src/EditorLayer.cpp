@@ -20,6 +20,12 @@ namespace Violet {
 
 	void EditorLayer::onAttach()
 	{
+		/*Editor Resources*/
+		/*Toolbar Textures*/
+		m_iconPlay = Texture2D::Create("resources/icons/playButton.png");
+		m_iconStop = Texture2D::Create("resources/icons/stopButton.png");
+
+		/*Test Textures*/
 		m_LetterVTexture = Texture2D::Create("assets/textures/LetterV_RGBA.png");
 		m_transparentTexture = Texture2D::Create("assets/textures/Checkerboard_RGB.png");
 		m_grassTexture = Texture2D::Create("assets/textures/WildGrass_1024x1024.png");
@@ -126,12 +132,6 @@ namespace Violet {
 		//}
 
 
-		//Update the editor camera movement
-		if (m_viewPortFocused || m_viewPortHovered)
-		{
-			m_editorCamera.onUpdate(deltaTime);
-		}
-
 		/*Animation*/
 		//m_translationSpeed = m_objectPosition.x >= m_cameraController.getRight() || m_objectPosition.x <= m_cameraController.getLeft() ? -1.0f * m_translationSpeed : m_translationSpeed;
 		//m_objectPosition.x +=(m_translationSpeed * deltaTime);
@@ -147,7 +147,7 @@ namespace Violet {
 		//Render FrameBuffer
 		m_frameBuffer->bind();
 
-		/*Clear all of the frame buffer attachments*/
+		/*Clear all of the framebuffer attachments*/
 		RenderCommand::SetClearColor(glm::vec4(0.1f, 0.1f, 0.1f, 1.0f));
 		RenderCommand::Clear();
 
@@ -157,8 +157,29 @@ namespace Violet {
 		int clearValueInt = -1;
 		m_frameBuffer->clearColorAttachment(1, &clearValueInt);
 
-		//Render the scene
-		m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
+		/*Render/Update The Scene*/
+		//NOTE: Rendering must be here after the framebuffer is bound and cleared
+		switch (m_sceneState) 
+		{
+			case SceneState::Edit:
+			{
+				//Update the editor camera movement
+				if (m_viewPortFocused || m_viewPortHovered)
+				{
+					m_editorCamera.onUpdate(deltaTime);
+				}
+
+				//Render the scene
+				m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
+				break;
+			}
+			case SceneState::Play:
+			{
+				//Render the scene
+				m_activeScene->onUpdateRuntime(deltaTime);
+				break;
+			}
+		}
 
 		/*Entity Mouse Selection*/
 		if (m_updateMouseSelectedEntityID)
@@ -392,76 +413,79 @@ namespace Violet {
 
 
 		//TODO: Set UI buttons for selecting the gizmo type
-		//ImGizmos
-		Entity selectedEntity =  m_sceneHierarchyPanel.getSelectedEntity();
-		//If the selected entity is a valid entity which has a transform component attached to it and we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
-		if (selectedEntity && selectedEntity.hasComponent<TransformComponent>() && m_gizmoType!= -1)
+		//Rendering ImGizmos
+		if (m_sceneState == SceneState::Edit)
 		{
-			ImGuizmo::SetDrawlist();  //Draw to the current window
-			
-			ImGuizmo::SetRect(m_viewPortBounds[0].x, m_viewPortBounds[0].y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port bounds
-
-			/*Runtime Camera Gizmos*/
-			///*Get Camera Info From The Primary Camera*/
-			//Entity primaryCameraEntity = m_activeScene->getPrimaryCameraEntity();
-			//const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
-
-			//const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
-			//glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
-
-			/*Editor Camera Gizmos*/
-			const glm::mat4& editorCameraProjectionMatrix = m_editorCamera.getProjectionMatrix();
-			glm::mat4 editorCameraViewMatrix = m_editorCamera.getViewMatrix();
-
-
-
-			/*Get The Selected Entity Info*/
-			TransformComponent& selectedEntityTransformComponent = selectedEntity.getComponent<TransformComponent>();
-			glm::mat4 selectedEntityGizmosTransform = selectedEntityTransformComponent.getTransform();
-	
-			/*Get The Correct Snapping Value*/
-			float snapValue = 0.0f;
-			bool snapEnabled = Input::IsKeyPressed(Key::LEFT_CONTROL);
-			//TODO: Create A UI For Setting m_snapValue
-			if (snapEnabled)
+			Entity selectedEntity = m_sceneHierarchyPanel.getSelectedEntity();
+			//If the selected entity is a valid entity which has a transform component attached to it and we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
+			if (selectedEntity && selectedEntity.hasComponent<TransformComponent>() && m_gizmoType != -1)
 			{
-				if (m_gizmoType == ImGuizmo::OPERATION::TRANSLATE) 
+				ImGuizmo::SetDrawlist();  //Draw to the current window
+
+				ImGuizmo::SetRect(m_viewPortBounds[0].x, m_viewPortBounds[0].y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port bounds
+
+				/*Runtime Camera Gizmos*/
+				///*Get Camera Info From The Primary Camera*/
+				//Entity primaryCameraEntity = m_activeScene->getPrimaryCameraEntity();
+				//const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
+
+				//const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
+				//glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
+
+				/*Editor Camera Gizmos*/
+				const glm::mat4& editorCameraProjectionMatrix = m_editorCamera.getProjectionMatrix();
+				glm::mat4 editorCameraViewMatrix = m_editorCamera.getViewMatrix();
+
+
+
+				/*Get The Selected Entity Info*/
+				TransformComponent& selectedEntityTransformComponent = selectedEntity.getComponent<TransformComponent>();
+				glm::mat4 selectedEntityGizmosTransform = selectedEntityTransformComponent.getTransform();
+
+				/*Get The Correct Snapping Value*/
+				float snapValue = 0.0f;
+				bool snapEnabled = Input::IsKeyPressed(Key::LEFT_CONTROL);
+				//TODO: Create A UI For Setting m_snapValue
+				if (snapEnabled)
 				{
-					snapValue = m_snapValues[0];
+					if (m_gizmoType == ImGuizmo::OPERATION::TRANSLATE)
+					{
+						snapValue = m_snapValues[0];
+					}
+					else if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+					{
+						snapValue = m_snapValues[1];
+					}
+					else if (m_gizmoType == ImGuizmo::OPERATION::SCALE)
+					{
+						snapValue = m_snapValues[2];
+					}
 				}
-				else if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+				float snapValuesAxes[3] = { snapValue, snapValue, snapValue };
+
+
+				//Pass the parameters to ImGuizmo to draw the gizmos and write the new transformation to the selectedEntityGizmosTransform matrix
+				ImGuizmo::Manipulate(glm::value_ptr(editorCameraViewMatrix), glm::value_ptr(editorCameraProjectionMatrix)
+					, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
+					, nullptr, snapEnabled ? snapValuesAxes : nullptr);
+
+				if (ImGuizmo::IsUsing() && !m_editorCamera.isUsing()) //If mouse IsOver or if the gizmo is in moving state and the editor camera is not in use
 				{
-					snapValue = m_snapValues[1];
+					/*Apply the gizmo transformation changes to the selected entity*/
+
+					glm::vec3 selectedEntityTranslation, selectedEntityRotation, selectedEntityScale;  //Note that these are not initialized
+
+					//Get the translation, rotation, scale from the transformation matrix
+					Math::decomposeTransformationMatrix(selectedEntityGizmosTransform, selectedEntityTranslation, selectedEntityRotation, selectedEntityScale);
+
+					//Set the transformations
+					selectedEntityTransformComponent.translation = selectedEntityTranslation;
+					selectedEntityTransformComponent.rotation = selectedEntityRotation;
+					selectedEntityTransformComponent.scale = selectedEntityScale;
+
 				}
-				else if (m_gizmoType == ImGuizmo::OPERATION::SCALE)
-				{
-					snapValue = m_snapValues[2];
-				}
+
 			}
-			float snapValuesAxes[3] = { snapValue, snapValue, snapValue };
-
-
-			//Pass the parameters to ImGuizmo to draw the gizmos and write the new transformation to the selectedEntityGizmosTransform matrix
-			ImGuizmo::Manipulate(glm::value_ptr(editorCameraViewMatrix), glm::value_ptr(editorCameraProjectionMatrix)
-			, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
-			, nullptr, snapEnabled ? snapValuesAxes : nullptr);
-
-			if (ImGuizmo::IsUsing() && !m_editorCamera.isUsing()) //If mouse IsOver or if the gizmo is in moving state and the editor camera is not in use
-			{	
-				/*Apply the gizmo transformation changes to the selected entity*/
-
-				glm::vec3 selectedEntityTranslation, selectedEntityRotation, selectedEntityScale;  //Note that these are not initialized
-
-				//Get the translation, rotation, scale from the transformation matrix
-				Math::decomposeTransformationMatrix(selectedEntityGizmosTransform, selectedEntityTranslation, selectedEntityRotation, selectedEntityScale);
-
-				//Set the transformations
-				selectedEntityTransformComponent.translation = selectedEntityTranslation;
-				selectedEntityTransformComponent.rotation = selectedEntityRotation;
-				selectedEntityTransformComponent.scale = selectedEntityScale;
-			
-			}
-
 		}
 		ImGui::End();  //ViewPort
 	
@@ -509,7 +533,40 @@ namespace Violet {
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 		/*End ImGui Code*/
 
+		UIToolbar();
+
 		ImGui::End();  //DockSpace ImGui::End
+	}
+	void EditorLayer::UIToolbar()
+	{
+		/*Set Styles/Colors For The Window/Button*/
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0)); //Spacing between items
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+		
+		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove);  //NOTE: Second parameter is set to nullptr, which means there is no close button for the window
+
+		/*Play/Stop Button*/
+		float buttonSize = ImGui::GetWindowHeight() - 4.0f;  //Gets the Toolbar height - Some padding value
+		Ref<Texture2D> icon = m_sceneState == SceneState::Edit ? m_iconPlay : m_iconStop;
+		uint64_t textureID = icon->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
+		//Centering the Button in middle of the Toolbar
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (buttonSize * 0.5f)); //NOTE: We can use ImGui::SameLine instead of ImGui::SetCursorPosX as a way to set a desired offset for the button (Propably would use it when we have more than one button in the toolbar)
+		if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID), ImVec2(buttonSize, buttonSize),
+			ImVec2(0, 0), ImVec2(1, 1), 0)) //Remove frame padding
+		{
+			if (m_sceneState == SceneState::Edit)
+			{
+				onScenePlay();
+			}
+			else if (m_sceneState == SceneState::Play)
+			{
+				onSceneStop();
+			}
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor();
+		ImGui::End();
 	}
 
 	void EditorLayer::onEvent(Event& e)
@@ -594,7 +651,7 @@ namespace Violet {
 	bool EditorLayer::onMouseButtonPressed(MouseButtonPressedEvent& event)
 	{
 		/*Entity Mouse Selection*/
-		if (event.getMouseButton() == Mouse::BUTTON_LEFT && !m_editorCamera.isUsing() && m_viewPortHovered && !ImGuizmo::IsOver())
+		if (m_sceneState == SceneState::Edit && event.getMouseButton() == Mouse::BUTTON_LEFT && !m_editorCamera.isUsing() && m_viewPortHovered && !ImGuizmo::IsOver())
 		{
 			m_updateMouseSelectedEntityID = true;
 		}
@@ -683,5 +740,13 @@ namespace Violet {
 
 			m_activeScenePath = filePath;
 		}
+	}
+	void EditorLayer::onScenePlay()
+	{
+		m_sceneState = SceneState::Play;
+	}
+	void EditorLayer::onSceneStop()
+	{
+		m_sceneState = SceneState::Edit;
 	}
 }

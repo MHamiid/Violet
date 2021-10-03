@@ -26,11 +26,22 @@ namespace Violet {
 		void openScene(const std::string& filePath);
 		void saveScene();
 		void saveSceneAsDialog();
-	private:
 
+		void onScenePlay();
+		void onSceneStop();
+
+		/*Panels*/
+		void UIToolbar();
+	private:
+		/*Editor Resources*/
+		/*Toolbar Textures*/
+		Ref<Texture2D> m_iconPlay, m_iconStop;
+
+		/*Test Textures*/
 		Ref<Texture2D> m_LetterVTexture;
 		Ref<Texture2D> m_transparentTexture;
 		Ref<Texture2D> m_grassTexture;
+
 		Ref<FrameBuffer> m_frameBuffer;
 
 		bool m_viewPortFocused = false, m_viewPortHovered = false;
@@ -45,6 +56,7 @@ namespace Violet {
 		PropertiesPanel m_propertiesPanel;
 		ContentBrowserPanel m_contentBrowserPanel;
 
+		/*Gizmos*/
 		int m_gizmoType = -1;  // -1 ====> No gizmo selected
 		float m_snapValues[3] = { 0.5f , 45.0f, 0.5f}; //Translation, Rotation, Scale  //Snap to 0.5m for translation and scale, snap to 45 degrees for rotation
 
@@ -55,6 +67,13 @@ namespace Violet {
 		std::string m_activeScenePath;
 
 		bool m_updateMouseSelectedEntityID = false;
+
+		enum class SceneState
+		{
+			Edit = 0, Play = 1
+		};
+
+		SceneState m_sceneState = SceneState::Edit;
 	};
 
 }
