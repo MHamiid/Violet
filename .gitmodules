@@ -19,3 +19,6 @@
 [submodule "Violet/vendor/ImGuizmo"]
 	path = Violet/vendor/ImGuizmo
 	url = https://github.com/MHamiid/ImGuizmo
+[submodule "Violet/vendor/Box2D"]
+	path = Violet/vendor/Box2D
+	url = https://github.com/erincatto/box2d
