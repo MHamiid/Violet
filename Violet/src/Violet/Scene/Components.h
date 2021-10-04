@@ -87,4 +87,33 @@ namespace Violet {
 		}
 
 	};
+
+	/*Physics*/
+	struct VIOLET_API RidgidBody2DComponent
+	{
+		enum class BodyType { Static = 0, Dynamic, Kinematic };
+		BodyType Type = BodyType::Static;  //Set a default BodyType
+		bool FixedRotation = false;
+
+		//Storage for b2Body that is created using this component data
+		void* RuntimeBody = nullptr;
+
+		RidgidBody2DComponent() = default;
+		RidgidBody2DComponent(const RidgidBody2DComponent&) = default;
+	};
+
+	struct VIOLET_API BoxCollider2DComponent
+	{
+		glm::vec2 Offset = { 0.0f, 0.0f };		  //To set the collider to be offset from the middle of the entity (from the transfrom position)
+		glm::vec2 SizeFactor = { 0.5f, 0.5f };    //Size Factor from the middle of the entity (from the transfrom position)
+
+		//TODO: Move these into physics material??
+		float Density = 1.0f;
+		float Friction = 0.5f;
+		float Restitution = 0.0f;   //Bounciness
+		float RestitutionThreshold = 0.5f;   //Restitution velocity threshold, usually in m / s.Collisions above this speed have restitution applied(will bounce)
+
+		BoxCollider2DComponent() = default;
+		BoxCollider2DComponent(const BoxCollider2DComponent&) = default;
+	};
 }

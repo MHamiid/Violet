@@ -3,7 +3,29 @@
 #include "Violet/Renderer/Renderer2D.h"
 #include "Entity.h"
 #include "Components.h"
+/*BOX2D*/
+#include <box2d/b2_world.h>
+#include <box2d/b2_body.h>
+#include <box2d/b2_fixture.h>
+#include <box2d/b2_polygon_shape.h>
 
+namespace Violet {
+	/*Helper Functions*/
+	//Conversion function between Box2D body type and our RidgidBody2D type
+	static b2BodyType RidgidBody2DTypeToBox2DType(RidgidBody2DComponent::BodyType bodyType)
+	{
+		switch (bodyType)
+		{
+		case RidgidBody2DComponent::BodyType::Static:	 return b2_staticBody;
+		case RidgidBody2DComponent::BodyType::Dynamic:   return b2_dynamicBody;
+		case RidgidBody2DComponent::BodyType::Kinematic: return b2_kinematicBody;
+		}
+
+		VIO_CORE_ASSERT(false, "[Scene] Unknown Body Type");
+		return b2_staticBody;
+	}
+
+}
 namespace Violet {
 	Scene::Scene(const std::string& sceneName) : m_sceneName(sceneName)
 	{
@@ -15,8 +37,64 @@ namespace Violet {
 	{
 	}
 
+	void Scene::onRuntimeStart()
+	{
+		//Start Box2D world
+		m_b2PhysicsWorld = new b2World({0.0f, -9.8f});  //Set the gravity to real world gravity -9.8 m/s
+
+		auto view = m_registry.view<RidgidBody2DComponent>();
+		//Iterate over all the entities that have RidgitBody2DComponent
+		for (auto enttEntity : view)
+		{
+			Entity entity(enttEntity, this); //Create an object of our own Entity from enttEntity to use our Entity API features and functions
+			
+			/*Pull Up Data From The Entity*/
+			TransformComponent& transformComponent = entity.getComponent<TransformComponent>();
+			RidgidBody2DComponent& rb2dComponent = entity.getComponent<RidgidBody2DComponent>();
+
+			/*Create Bodies Into The Physics World*/
+			b2BodyDef bodyDef;
+			bodyDef.type = RidgidBody2DTypeToBox2DType(rb2dComponent.Type);
+			bodyDef.position.Set(transformComponent.translation.x, transformComponent.translation.y);
+			bodyDef.angle = transformComponent.rotation.z;
+
+			b2Body* body = m_b2PhysicsWorld->CreateBody(&bodyDef);
+			body->SetFixedRotation(rb2dComponent.FixedRotation);
+
+			rb2dComponent.RuntimeBody = body;   //Store a pointer to the created b2body in the RidgidBody2DComponent
+			
+			if (entity.hasComponent<BoxCollider2DComponent>())
+			{
+				BoxCollider2DComponent& bc2dComponent = entity.getComponent<BoxCollider2DComponent>();
+
+				//Create a shape for the collider
+				b2PolygonShape colliderShape;
+				colliderShape.SetAsBox(bc2dComponent.SizeFactor.x * transformComponent.scale.x, bc2dComponent.SizeFactor.y * transformComponent.scale.y);
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &colliderShape;
+				fixtureDef.density = bc2dComponent.Density;
+				fixtureDef.friction = bc2dComponent.Friction;
+				fixtureDef.restitution = bc2dComponent.Restitution;
+				fixtureDef.restitutionThreshold = bc2dComponent.RestitutionThreshold;
+				
+				body->CreateFixture(&fixtureDef);  //Add the fixture to the body
+			}
+		}
+
+	}
+
+	void Scene::onRuntimeStop()
+	{
+		delete m_b2PhysicsWorld;
+		m_b2PhysicsWorld = nullptr;
+	}
+
 	void Scene::onUpdateRuntime(DeltaTime deltaTime)
 	{
+		/*NOTE: The order of updating the runtime is: Scripts ===> Physics ===> Render
+		, as each step can affect the outcome of the next step and it won't be picked up until next frame if it was not for that order*/
+
 		/*Update Scripts*/
 		//Get all script components
 		m_registry.view<NativeScriptComponent>().each([=](entt::entity entity, NativeScriptComponent& nativeScriptComponent) {
@@ -33,6 +111,34 @@ namespace Violet {
 			}
 		
 		); 
+
+		/*Update Physics*/
+		//TODO: Expose these variables to the editor as physics settings
+		//These variables control the trade of between performance and precision (ex: defines how often calculations are done)
+		const int32_t velocityIterations = 6;
+		const int32_t positionIterations = 2;
+
+		m_b2PhysicsWorld->Step(deltaTime, velocityIterations, positionIterations);  //Simulate the physics in the world
+
+		/*Retrieve the transfromation from Box2D after the physics simulation is done*/
+
+		auto view = m_registry.view<RidgidBody2DComponent>();
+		//Iterate over the entities that the physics simulation has the ability to affect them
+		for (auto enttEntity : view)
+		{
+			Entity entity(enttEntity, this); //Create an object of our own Entity from enttEntity to use our Entity API features and functions
+
+			RidgidBody2DComponent& rb2dComponent = entity.getComponent<RidgidBody2DComponent>();
+			TransformComponent& transfromComponent = entity.getComponent<TransformComponent>();
+
+			/*Pull up the transfromation data from Box2D and update the entity's transformation*/
+			b2Body* body = reinterpret_cast<b2Body*>(rb2dComponent.RuntimeBody);
+			const b2Vec2& position = body->GetPosition();
+			transfromComponent.translation.x = position.x;
+			transfromComponent.translation.y = position.y;
+			transfromComponent.rotation.z = body->GetAngle();
+		}
+
 
 		/*Render 2D*/
 		//Check if the entity is valid and has been assigned to a scene and the entity has a CameraComponent attached, Note the sequence of the checking of the conditions
@@ -158,6 +264,16 @@ namespace Violet {
 
 	template<>
 	void Scene::onComponentAdded<NativeScriptComponent>(Entity entity, NativeScriptComponent& nativeScriptComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<RidgidBody2DComponent>(Entity entity, RidgidBody2DComponent& rb2dComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& bc2dComponent)
 	{
 	}
 }

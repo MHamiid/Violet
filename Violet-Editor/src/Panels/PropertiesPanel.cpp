@@ -344,6 +344,46 @@ namespace Violet {
 			ImGui::DragFloat("Size Factor", &spritRendererComponent.textureSizeFactor, 0.1f, 0.0f, 100.0f);
 		});
 
+
+		/*RidgidBody2D Component*/
+		drawComponent<RidgidBody2DComponent>("RidgidBody2D", entity, [&](RidgidBody2DComponent& rb2dComponent)
+			{
+				const char* bodyTypeStrings[3] = { "Static", "Dynamic", "Kinematic" };  //NOTE: Arrange this array the same as the RidgidBody2DComponent::BodyType enum class
+				const char* currentBodyTypeString = bodyTypeStrings[(int)rb2dComponent.Type];  //Get the body type
+
+				//ComboBox
+				if (ImGui::BeginCombo("Body Type", currentBodyTypeString))  //If opened
+				{
+					for (int i = 0; i < 3; i++) {
+						bool showItemAsSelected = currentBodyTypeString == bodyTypeStrings[i];
+						if (ImGui::Selectable(bodyTypeStrings[i], showItemAsSelected))
+						{
+							rb2dComponent.Type = (RidgidBody2DComponent::BodyType)i;
+						}
+						if (showItemAsSelected)
+						{
+							ImGui::SetItemDefaultFocus();
+						}
+					}
+					ImGui::EndCombo();
+				}
+
+				//Control Fixed Rotation parameter
+				ImGui::Checkbox("Fixed Rotation", &rb2dComponent.FixedRotation);
+			});
+
+		/*BoxCollider2D Component*/
+		drawComponent<BoxCollider2DComponent>("BoxCollider2D", entity, [&](BoxCollider2DComponent& bc2dComponent)
+			{
+				ImGui::DragFloat2("Offset", glm::value_ptr(bc2dComponent.Offset));
+				ImGui::DragFloat2("Size Factor", glm::value_ptr(bc2dComponent.SizeFactor));
+				ImGui::DragFloat("Density", &bc2dComponent.Density, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &bc2dComponent.Friction, 0.01f, 0.0f, 1.0f); 			//[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
+				ImGui::DragFloat("Restitution", &bc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
+				ImGui::DragFloat("Restitution Threshold", &bc2dComponent.RestitutionThreshold, 0.01f, 0.0f);
+			});
+
+
 	}
 
 	void PropertiesPanel::drawAddComponentButton()
@@ -375,6 +415,16 @@ namespace Violet {
 			if (!m_entityContext.hasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
 			{
 				m_entityContext.addComponent<CameraComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (!m_entityContext.hasComponent<RidgidBody2DComponent>() && ImGui::MenuItem("RidgidBody2D"))
+			{
+				m_entityContext.addComponent<RidgidBody2DComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (!m_entityContext.hasComponent<BoxCollider2DComponent>() && ImGui::MenuItem("BoxCollider2D"))
+			{
+				m_entityContext.addComponent<BoxCollider2DComponent>();
 				ImGui::CloseCurrentPopup();
 			}
 

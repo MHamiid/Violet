@@ -744,9 +744,11 @@ namespace Violet {
 	void EditorLayer::onScenePlay()
 	{
 		m_sceneState = SceneState::Play;
+		m_activeScene->onRuntimeStart();
 	}
 	void EditorLayer::onSceneStop()
 	{
 		m_sceneState = SceneState::Edit;
+		m_activeScene->onRuntimeStop();
 	}
 }

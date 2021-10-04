@@ -3,6 +3,9 @@
 #include "Violet/Core/DeltaTime.h"
 #include "Violet/Renderer/EditorCamera.h"
 
+class b2World;  /*NOTE: b2World is forward declared and used as pointer to keep Box2D used in Violet only and not exposed outside it
+				, also not to have to setup the include dirs for Box2D for every project that uses Violet
+				, as Scene.h is included in multiple places outside Violet (ex: Violet-Editor, game runtime)*/
 namespace Violet {
 	class Entity;  //NOTE: Can't include Entity header, cause the entity includes Scene header, which result is infinite recursive include loop
 
@@ -10,8 +13,13 @@ namespace Violet {
 	public:
 		Scene(const std::string& sceneName = "Untitled");
 		~Scene();
+
+		void onRuntimeStart();
+		void onRuntimeStop();
+
 		void onUpdateRuntime(DeltaTime deltaTime);
 		void onUpdateEditor(DeltaTime deltaTime, EditorCamera& editorCamera);
+
 		void onViewPortResize(uint32_t width, uint32_t height);
 
 		Entity createEntity(const std::string& tagName = std::string("Unnamed Entity"));
@@ -29,6 +37,7 @@ namespace Violet {
 		Scoped<Entity> m_primaryCameraEntity; //Using a pointer cause of forward declaration (Can't include Entity header here)
 		uint32_t m_viewPortWidth = 0, m_viewPortHeight = 0;
 		std::string m_sceneName;
+		b2World* m_b2PhysicsWorld = nullptr;
 	private:
 		friend class Entity;
 		friend class SceneSerializer;

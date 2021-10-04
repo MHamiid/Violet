@@ -9,6 +9,29 @@
 namespace YAML {
 
 	template<>
+	struct convert<glm::vec2>
+	{
+		static Node encode(const glm::vec2& rhs)
+		{
+			Node node;
+			node.push_back(rhs.x);
+			node.push_back(rhs.y);
+			node.SetStyle(EmitterStyle::Flow);
+			return node;
+		}
+
+		static bool decode(const Node& node, glm::vec2& rhs)
+		{
+			if (!node.IsSequence() || node.size() != 2)
+				return false;
+
+			rhs.x = node[0].as<float>();
+			rhs.y = node[1].as<float>();
+			return true;
+		}
+	};
+
+	template<>
 	struct convert<glm::vec3>
 	{
 		static Node encode(const glm::vec3& rhs)
@@ -63,9 +86,41 @@ namespace YAML {
 }
 
 namespace Violet {
+	/*Helper Functions*/
+	static std::string RidgidBody2DBodyTypeToString(RidgidBody2DComponent::BodyType bodyType)
+	{
+		switch (bodyType)
+		{
+			case RidgidBody2DComponent::BodyType::Static:     return "Static";
+			case RidgidBody2DComponent::BodyType::Dynamic:	  return "Dynamic";
+			case RidgidBody2DComponent::BodyType::Kinematic:  return "Kinematic";
+		}
 
-	/*Create Yaml Shift Operator Overloads To Take glm::vec3, glm::vec4*/
+		VIO_CORE_ASSERT(false, "[Scene Serializer] Unknown Body Type");
+		return std::string();
+	}
 
+	static RidgidBody2DComponent::BodyType RidgidBody2DBodyTypeFromString(const std::string& bodyTypeString)
+	{
+		if (bodyTypeString == "Static")			 return RidgidBody2DComponent::BodyType::Static;
+		else if (bodyTypeString == "Dynamic")	 return RidgidBody2DComponent::BodyType::Dynamic;
+		else if (bodyTypeString == "Kinematic")  return RidgidBody2DComponent::BodyType::Kinematic;
+
+		VIO_CORE_ASSERT(false, "[Scene Serializer] Unknown Body Type");
+		return RidgidBody2DComponent::BodyType::Static;
+	}
+}
+
+namespace Violet {
+
+	/*Create Yaml Shift Operator Overloads To Take glm::vec2, glm::vec3, glm::vec4*/
+
+	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec2& v) 
+	{
+		out << YAML::Flow;  //Set the output to be in one line [x, y, z, .....]
+		out << YAML::BeginSeq << v.x << v.y << YAML::EndSeq;
+		return out;
+	}
 	YAML::Emitter& operator<<(YAML::Emitter& out, const glm::vec3& v) 
 	{
 		out << YAML::Flow;  //Set the output to be in one line [x, y, z, .....]
@@ -159,6 +214,39 @@ namespace Violet {
 
 			out << YAML::EndMap;   //SpriteRenderer Component
 		}
+
+		/*RidgidBody2D Component*/
+		if (entity.hasComponent<RidgidBody2DComponent>())
+		{
+			out << YAML::Key << "RidgidBody2DComponent";
+
+			out << YAML::BeginMap; //RidgidBody2D Component
+
+			RidgidBody2DComponent& rb2dComponent = entity.getComponent<RidgidBody2DComponent>();
+			out << YAML::Key << "BodyType" << YAML::Value << RidgidBody2DBodyTypeToString(rb2dComponent.Type);
+			out << YAML::Key << "FixedRotation" << YAML::Value << rb2dComponent.FixedRotation;
+
+			out << YAML::EndMap;   //RidgidBody2D Component
+		}
+
+		/*BoxCollider2D Component*/
+		if (entity.hasComponent<BoxCollider2DComponent>())
+		{
+			out << YAML::Key << "BoxCollider2DComponent";
+
+			out << YAML::BeginMap; //BoxCollider2D Component
+
+			BoxCollider2DComponent& bc2dComponent = entity.getComponent<BoxCollider2DComponent>();
+			out << YAML::Key << "Offset" << YAML::Value << bc2dComponent.Offset;
+			out << YAML::Key << "SizeFactor" << YAML::Value << bc2dComponent.SizeFactor;
+			out << YAML::Key << "Density" << YAML::Value << bc2dComponent.Density;
+			out << YAML::Key << "Friction" << YAML::Value << bc2dComponent.Friction;
+			out << YAML::Key << "Restitution" << YAML::Value << bc2dComponent.Restitution;
+			out << YAML::Key << "RestitutionThreshold" << YAML::Value << bc2dComponent.RestitutionThreshold;
+
+			out << YAML::EndMap;   //BoxCollider2D Component
+		}
+
 
 		out << YAML::EndMap;    //Entity
 	}
@@ -295,6 +383,30 @@ namespace Violet {
 				{
 					SpriteRendererComponent& spritRendererComponent = deserializedEntity.addComponent<SpriteRendererComponent>();
 					spritRendererComponent.color = spriteComponentNode["Color"].as<glm::vec4>();
+				}
+
+				/*RidgidBody2D Component*/
+				YAML::Node rb2dComponentNode = entity["RidgidBody2DComponent"];
+
+				if (rb2dComponentNode)
+				{
+					RidgidBody2DComponent& rb2dComponent = deserializedEntity.addComponent<RidgidBody2DComponent>();
+					rb2dComponent.Type = RidgidBody2DBodyTypeFromString(rb2dComponentNode["BodyType"].as<std::string>());
+					rb2dComponent.FixedRotation = rb2dComponentNode["FixedRotation"].as<bool>();
+				}
+
+				/*BoxCollider2D Component*/
+				YAML::Node bc2dComponentNode = entity["BoxCollider2DComponent"];
+
+				if (bc2dComponentNode)
+				{
+					BoxCollider2DComponent& bc2dComponent = deserializedEntity.addComponent<BoxCollider2DComponent>();
+					bc2dComponent.Offset = bc2dComponentNode["Offset"].as<glm::vec2>();
+					bc2dComponent.SizeFactor = bc2dComponentNode["SizeFactor"].as<glm::vec2>();
+					bc2dComponent.Density = bc2dComponentNode["Density"].as<float>();
+					bc2dComponent.Friction = bc2dComponentNode["Friction"].as<float>();
+					bc2dComponent.Restitution = bc2dComponentNode["Restitution"].as<float>();
+					bc2dComponent.RestitutionThreshold = bc2dComponentNode["RestitutionThreshold"].as<float>();
 				}
 
 			}

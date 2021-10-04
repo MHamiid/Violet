@@ -1,0 +1,115 @@
+Scene: Untitled Scene
+PrimaryCameraEntityID: 0
+Entities:
+  - EntityID: 5
+    TagComponent:
+      Tag: Brick4
+    TransformComponent:
+      Translation: [4.27484512, -7.09717083, 1.11184846e-07]
+      Rotation: [3.85313008e-08, 3.97364133e-08, 0.528848708]
+      Scale: [6.00000048, 0.50000006, 1]
+    SpriteRendererComponent:
+      Color: [0.937254906, 0.525490224, 0.239215687, 1]
+    RidgidBody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      SizeFactor: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - EntityID: 4
+    TagComponent:
+      Tag: Brick1
+    TransformComponent:
+      Translation: [5.28350878, 4.89392519, 0]
+      Rotation: [0, -0, 0.571463704]
+      Scale: [5.39137459, 0.49999994, 1]
+    SpriteRendererComponent:
+      Color: [0.936274529, 0.525179267, 0.238658205, 1]
+    RidgidBody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      SizeFactor: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - EntityID: 3
+    TagComponent:
+      Tag: Brick2
+    TransformComponent:
+      Translation: [0, -14.1699371, 0]
+      Rotation: [0, -0, 0]
+      Scale: [52.4629784, 0.5, 1]
+    SpriteRendererComponent:
+      Color: [0.937254906, 0.525490224, 0.239215687, 1]
+    RidgidBody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      SizeFactor: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - EntityID: 2
+    TagComponent:
+      Tag: Brick3
+    TransformComponent:
+      Translation: [-1.71676874, -1.6359024, 0]
+      Rotation: [0, -0, -0.78721112]
+      Scale: [6.00000048, 0.49999994, 1]
+    SpriteRendererComponent:
+      Color: [0.937254906, 0.525490224, 0.239215687, 1]
+    RidgidBody2DComponent:
+      BodyType: Static
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      SizeFactor: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - EntityID: 1
+    TagComponent:
+      Tag: Quad
+    TransformComponent:
+      Translation: [5.34222078, 9.68631554, 6.10350507e-05]
+      Rotation: [0, -0, -3.14159226]
+      Scale: [0.999983788, 0.999983788, 1]
+    SpriteRendererComponent:
+      Color: [1, 0.999989986, 0.999989986, 1]
+    RidgidBody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    BoxCollider2DComponent:
+      Offset: [0, 0]
+      SizeFactor: [0.5, 0.5]
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5
+  - EntityID: 0
+    TagComponent:
+      Tag: Camera
+    TransformComponent:
+      Translation: [0, -1.73000002, 4.35968304]
+      Rotation: [0, -0, 0]
+      Scale: [1, 1, 1]
+    CameraComponent:
+      SceneCamera:
+        ProjectionType: 0
+        PerspectiveFOV: 2.52112794
+        PerspectiveNear: 0.00999999978
+        PerspectiveFar: 1000
+        OrthographicSize: 10
+        OrthographicNear: -1
+        OrthographicFar: 1
+      FixedAspectRatio: false
