@@ -304,7 +304,7 @@ namespace Violet {
 			if (spritRendererComponent.texture) //If not nullptr
 			{
 				uint64_t textureID = spritRendererComponent.texture->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
-				if (ImGui::ImageButton(reinterpret_cast<ImTextureID*>(textureID), ImVec2(60.0f, 60.0f), { 0, 1 }, { 1, 0 })) //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default)
+				if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID), ImVec2(60.0f, 60.0f), { 0, 1 }, { 1, 0 })) //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default)
 				{
 					spritRendererComponent.texture = openTextureDialog();
 				}
