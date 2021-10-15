@@ -23,7 +23,7 @@ namespace Violet {
 		//glTextureParameteri(m_textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);   //For OpenGL 4.5
 		//glTextureParameteri(m_textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   //For OpenGL 4.5
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		/*
 		Set to repeat the texture if we exceeded the texture coordinates range [0.0f, 1.0f]
@@ -65,7 +65,7 @@ namespace Violet {
 		//glTextureParameteri(m_textureID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);   //For OpenGL 4.5
 		//glTextureParameteri(m_textureID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);   //For OpenGL 4.5
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 		/*
 		Set to repeat the texture if we exceeded the texture coordinates range [0.0f, 1.0f]
