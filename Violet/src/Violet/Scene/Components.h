@@ -1,14 +1,21 @@
 #pragma once
+#include "SceneCamera.h"
+#include "Violet/Renderer/Texture.h"
+#include "Violet/Core/UUID.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include "SceneCamera.h"
-#include "Script.h"
-#include "Violet/Renderer/Texture.h"
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
 namespace Violet {
 
+	struct IDComponent
+	{
+		UUID ID; 
+
+		IDComponent() = default;
+		IDComponent(const IDComponent&) = default;
+	};
 
 	struct VIOLET_API TagComponent
 	{
@@ -68,6 +75,9 @@ namespace Violet {
 
 	};
 
+	class Script; //Forward Declaration
+	//NOTE: We don't include the Script header, cause the Script header includes entity header, which result is infinite recursive include loop when we include the Components header in the Entity header
+	//NOTE: Since Script is forward declared we would need to include Script.h whereever the Script/NativeScriptComponent is used
 	struct VIOLET_API NativeScriptComponent
 	{
 		Script* script = nullptr;

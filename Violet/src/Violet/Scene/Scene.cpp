@@ -3,6 +3,7 @@
 #include "Violet/Renderer/Renderer2D.h"
 #include "Entity.h"
 #include "Components.h"
+#include "Script.h"
 /*BOX2D*/
 #include <box2d/b2_world.h>
 #include <box2d/b2_body.h>
@@ -200,10 +201,16 @@ namespace Violet {
 
 	Entity Scene::createEntity(const std::string& tagName)
 	{
-		/*All entities the are created come with a TransformComponent and a TagComponent*/
+		return createEntityWithUUID(UUID(), tagName); //Generate a new UUID
+	}
+
+	Entity Scene::createEntityWithUUID(UUID uuid, const std::string& tagName)
+	{
+		/*All entities that are created come with IDComponent, TransformComponent and TagComponent*/
 
 		Entity entity = { m_registry.create(), this };
 
+		entity.addComponent<IDComponent>(uuid);
 		entity.addComponent<TransformComponent>();
 		entity.addComponent<TagComponent>(tagName);
 
@@ -232,6 +239,11 @@ namespace Violet {
 
 	/*Specialized Templates*/
 	/*Must Add A Definition For Every Possible Component*/
+	template<>
+	void Scene::onComponentAdded<IDComponent>(Entity entity, IDComponent& IDComponent)
+	{
+	}
+
 	template<>
 	void Scene::onComponentAdded<TagComponent>(Entity entity, TagComponent& tagComponent)
 	{

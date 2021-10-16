@@ -1,7 +1,7 @@
 Scene: TestScene
-PrimaryCameraEntityID: 2
+PrimaryCameraEntityID: 11070559660360451890
 Entities:
-  - EntityID: 4
+  - EntityID: 2643509557015301645
     TagComponent:
       Tag: Top
     TransformComponent:
@@ -10,7 +10,7 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.848101258, 0.791975975, 0.214709163, 1]
-  - EntityID: 3
+  - EntityID: 4590751528757531630
     TagComponent:
       Tag: Camera
     TransformComponent:
@@ -27,7 +27,7 @@ Entities:
         OrthographicNear: -1
         OrthographicFar: 1
       FixedAspectRatio: false
-  - EntityID: 2
+  - EntityID: 11070559660360451890
     TagComponent:
       Tag: Perspective Camera
     TransformComponent:
@@ -44,7 +44,7 @@ Entities:
         OrthographicNear: -1
         OrthographicFar: 1
       FixedAspectRatio: false
-  - EntityID: 1
+  - EntityID: 3057482925154473752
     TagComponent:
       Tag: Right
     TransformComponent:
@@ -53,7 +53,7 @@ Entities:
       Scale: [1, 1, 1]
     SpriteRendererComponent:
       Color: [0.585195363, 0.590717316, 0.154533625, 1]
-  - EntityID: 0
+  - EntityID: 5983513170242664821
     TagComponent:
       Tag: Left
     TransformComponent:

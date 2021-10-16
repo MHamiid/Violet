@@ -2,6 +2,7 @@
 #include <entt.hpp>
 #include "Violet/Core/DeltaTime.h"
 #include "Violet/Renderer/EditorCamera.h"
+#include "Violet/Core/UUID.h"
 
 class b2World;  /*NOTE: b2World is forward declared and used as pointer to keep Box2D used in Violet only and not exposed outside it
 				, also not to have to setup the include dirs for Box2D for every project that uses Violet
@@ -23,6 +24,7 @@ namespace Violet {
 		void onViewPortResize(uint32_t width, uint32_t height);
 
 		Entity createEntity(const std::string& tagName = std::string("Unnamed Entity"));
+		Entity createEntityWithUUID(UUID uuid, const std::string& tagName = std::string("Unnamed Entity"));
 		void destroyEntity(Entity entity);
 	
 		void setPrimaryCameraEntity(Entity cameraEntity);

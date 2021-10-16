@@ -4,8 +4,9 @@
 #include <fstream>
 #include "Entity.h"
 #include "Components.h"
+#include "Violet/Core/UUID.h"
 
-/*Handling YAML::Node.as<glm::vec3>() and YAML::Node.as<glm::vec4>()*/
+/*Handling YAML::Node.as<glm::vec2>(), YAML::Node.as<glm::vec3>(), YAML::Node.as<glm::vec4>(), YAML::Node.as<UUID>()*/
 namespace YAML {
 
 	template<>
@@ -83,6 +84,23 @@ namespace YAML {
 		}
 	};
 
+	template<>
+	struct convert<Violet::UUID>
+	{
+		static Node encode(const Violet::UUID& rhs)
+		{
+			Node node;
+			node.push_back(rhs);
+			return node;
+		}
+
+		static bool decode(const Node& node, Violet::UUID& rhs)
+		{
+			rhs = node.as<uint64_t>();
+			return true;
+		}
+	};
+
 }
 
 namespace Violet {
@@ -140,9 +158,11 @@ namespace Violet {
 
 	static void SerializeEntity(YAML::Emitter& out, Entity entity)
 	{
+		VIO_CORE_ASSERT(entity.hasComponent<IDComponent>(), "Entity Does Not Have IDComponent!");
+
 		out << YAML::BeginMap;  //Entity
 
-		out << YAML::Key << "EntityID" << YAML::Value << (uint32_t)(entt::entity)entity;
+		out << YAML::Key << "EntityID" << YAML::Value << entity.getUUID();
 
 		/*Tag Component*/
 		if (entity.hasComponent<TagComponent>()) 
@@ -259,7 +279,7 @@ namespace Violet {
 		out << YAML::Key << "Scene" << YAML::Value << m_scene->getSceneName().c_str();
 		if (m_scene->getPrimaryCameraEntity())  //If there is a primary camera entity in the scene
 		{
-			out << YAML::Key << "PrimaryCameraEntityID" << YAML::Value << (uint32_t)(entt::entity)m_scene->getPrimaryCameraEntity();
+			out << YAML::Key << "PrimaryCameraEntityID" << YAML::Value << m_scene->getPrimaryCameraEntity().getUUID();
 		}
 		out << YAML::Key << "Entities" << YAML::Value << YAML::BeginSeq;  //Array of values
 
@@ -303,11 +323,11 @@ namespace Violet {
 		m_scene->m_sceneName = sceneData["Scene"].as<std::string>().c_str();
 
 		YAML::Node primaryCameraEntityIDNode = sceneData["PrimaryCameraEntityID"];
-		uint32_t primaryCameraEntityID = -1;  //Initialize with a non-valid entity ID
+		UUID primaryCameraEntityID = -1;  //Initialize with a non-valid entity ID (?? Is it really non-valid entity ID?)
 
 		if (primaryCameraEntityIDNode) 
 		{
-			primaryCameraEntityID = primaryCameraEntityIDNode.as<uint32_t>();
+			primaryCameraEntityID = primaryCameraEntityIDNode.as<UUID>();
 		}
 
 
@@ -317,6 +337,9 @@ namespace Violet {
 		{
 			for (auto entity : entities)
 			{
+				/*ID Component*/
+				UUID uuid = entity["EntityID"].as<UUID>();
+
 				/*Tag Component*/
 				YAML::Node tagComponentNode = entity["TagComponent"];
 
@@ -325,16 +348,15 @@ namespace Violet {
 				{
 					tag = tagComponentNode["Tag"].as<std::string>();
 				}
-				Entity deserializedEntity = m_scene->createEntity(tag);
+				Entity deserializedEntity = m_scene->createEntityWithUUID(uuid ,tag);
 
 
-				/*Entity(entt::entity) ID*/
 				YAML::Node entityIDNode = entity["EntityID"];
 
 				/*Check is this entity is the primaryCameraEntity*/
 				if (entityIDNode && primaryCameraEntityID != -1)
 				{
-					uint32_t entityID = entityIDNode.as<uint32_t>();
+					UUID entityID = entityIDNode.as<UUID>();
 					if (entityID == primaryCameraEntityID) //If this entity is the primary camera entity
 					{
 						m_scene->setPrimaryCameraEntity(deserializedEntity);
