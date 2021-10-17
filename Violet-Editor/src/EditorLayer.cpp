@@ -695,6 +695,12 @@ namespace Violet {
 	}
 	void EditorLayer::openScene(const std::string& filePath)
 	{
+		//If there is a scene running stop it first before opening a new scene
+		if (m_sceneState != SceneState::Edit)
+		{
+			onSceneStop();
+		}
+
 		if (std::filesystem::path(filePath).extension() == ".violet")
 		{
 			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set 
