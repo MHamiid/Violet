@@ -615,6 +615,7 @@ namespace Violet {
 			if (controlKeyIsPressed && shiftKeyIsPressed) 
 			{
 				saveSceneAsDialog();
+				return true;
 			}
 			if (controlKeyIsPressed)
 			{
@@ -626,6 +627,7 @@ namespace Violet {
 				{
 					saveSceneAsDialog();
 				}
+				return true;
 			}
 			/*Gizmos*/
 			if (!ImGuizmo::IsUsing() && m_sceneHierarchyPanel.getSelectedEntity()) { m_gizmoType = ImGuizmo::OPERATION::SCALE; }
