@@ -18,7 +18,7 @@ namespace Violet {
 	private:
 		void drawComponents(Entity entity);
 		void drawAddComponentButton();
-		Ref<Texture2D> openTextureDialog();
+		std::string openTextureDialog();
 	private:
 		template<typename ComponentType, typename UIFunction>
 		static void drawComponent(const std::string& name, Entity entity, UIFunction UIFUNC);

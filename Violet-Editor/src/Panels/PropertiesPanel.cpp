@@ -306,12 +306,22 @@ namespace Violet {
 				uint64_t textureID = spritRendererComponent.texture->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
 				if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID), ImVec2(60.0f, 60.0f), { 0, 1 }, { 1, 0 })) //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default)
 				{
-					spritRendererComponent.texture = openTextureDialog();
+					std::string textureFilePath = openTextureDialog();
+					if (!textureFilePath.empty())
+					{
+						//Load the texture
+						spritRendererComponent.texture = Texture2D::Create(textureFilePath);
+					}
 				}
 			}
 			else if(ImGui::Button("Texture", ImVec2(60.0f, 60.0f)))
 			{
-				spritRendererComponent.texture = openTextureDialog();
+				std::string textureFilePath = openTextureDialog();
+				if (!textureFilePath.empty())
+				{
+					//Load the texture
+					spritRendererComponent.texture = Texture2D::Create(textureFilePath);
+				}
 			}
 
 			/*Receive Dropped Payloads On The Previous Item (Texture ImageButton)*/
@@ -432,12 +442,11 @@ namespace Violet {
 		}
 	}
 
-	Ref<Texture2D> PropertiesPanel::openTextureDialog()
+	std::string PropertiesPanel::openTextureDialog()
 	{
-		std::string textureFileName = FileDialogs::OpenFile("Image files(*.jpg; *.png; *.bmp)\0 * .jpg; *.png; *.bmp\0All files\0*.*\0");
+		std::string textureFilePath = FileDialogs::OpenFile("Image files(*.jpg; *.png; *.bmp)\0 * .jpg; *.png; *.bmp\0All files\0*.*\0");
 
-		//Load the texture
-		return Texture2D::Create(textureFileName);
+		return textureFilePath;
 	}
 
 }
