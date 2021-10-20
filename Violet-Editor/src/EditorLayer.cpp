@@ -41,12 +41,12 @@ namespace Violet {
 
 		/*Scene And Context Initialization*/
 		//Initialize a default scene
-		m_activeScene = CreateRef<Scene>("Untitled Scene");
+		m_editorScene = CreateRef<Scene>("Untitled Scene");
 		/*Add a default quad*/
-		Entity quadEntity = m_activeScene->createEntity("Quad");
+		Entity quadEntity = m_editorScene->createEntity("Quad");
 		quadEntity.addComponent<SpriteRendererComponent>();
 
-		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
+		m_sceneHierarchyPanel.setSceneContext(m_editorScene);
 		m_sceneHierarchyPanel.setPropertiesPanelContext(&m_propertiesPanel);
 
 		/*Editor Camera Initialization*/
@@ -125,7 +125,11 @@ namespace Violet {
 			//Update the editor camera viewport
 			m_editorCamera.setViewPortSize(m_viewPortSize.x, m_viewPortSize.y);
 
-			m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
+			m_editorScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);  //Always update the original scene
+			if (m_runtimeScene)  //SceneState == SceneState::Play
+			{
+				m_runtimeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y); //Updates the copied/temp scene (runtimeScene)
+			}
 		}
 		//if (m_viewPortFocused)
 		//{
@@ -170,13 +174,13 @@ namespace Violet {
 				}
 
 				//Render the scene
-				m_activeScene->onUpdateEditor(deltaTime, m_editorCamera);
+				m_editorScene->onUpdateEditor(deltaTime, m_editorCamera);
 				break;
 			}
 			case SceneState::Play:
 			{
 				//Render the scene
-				m_activeScene->onUpdateRuntime(deltaTime);
+				m_runtimeScene->onUpdateRuntime(deltaTime);
 				break;
 			}
 		}
@@ -207,7 +211,7 @@ namespace Violet {
 				}
 				else 
 				{
-					m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_activeScene.get() });
+					m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_editorScene.get() });
 				}
 			}
 			m_updateMouseSelectedEntityID = false;
@@ -297,7 +301,7 @@ namespace Violet {
 				}
 				if (ImGui::MenuItem("Save", "Ctrl+S"))
 				{
-					if (!m_activeScenePath.empty())
+					if (!m_editorScenePath.empty())
 					{
 						saveScene();
 					}
@@ -393,7 +397,8 @@ namespace Violet {
 
 		
 		uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer when casting
-		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));  //Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
+		//Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
+		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));
 
 
 		/*Receive Dropped Payloads*/
@@ -417,7 +422,8 @@ namespace Violet {
 		if (m_sceneState == SceneState::Edit)
 		{
 			Entity selectedEntity = m_sceneHierarchyPanel.getSelectedEntity();
-			//If the selected entity is a valid entity which has a transform component attached to it and we have a gizmo to use, NOTE: check for  && m_activeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid
+			/*If the selected entity is a valid entity which has a transform component attached to it and we have a gizmo to use
+			, NOTE: check for  && m_runtimeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid*/
 			if (selectedEntity && selectedEntity.hasComponent<TransformComponent>() && m_gizmoType != -1)
 			{
 				ImGuizmo::SetDrawlist();  //Draw to the current window
@@ -426,7 +432,7 @@ namespace Violet {
 
 				/*Runtime Camera Gizmos*/
 				///*Get Camera Info From The Primary Camera*/
-				//Entity primaryCameraEntity = m_activeScene->getPrimaryCameraEntity();
+				//Entity primaryCameraEntity = m_runtimeScene->getPrimaryCameraEntity();
 				//const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
 
 				//const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
@@ -619,7 +625,7 @@ namespace Violet {
 			}
 			if (controlKeyIsPressed)
 			{
-				if (!m_activeScenePath.empty())
+				if (!m_editorScenePath.empty())
 				{
 					saveScene();
 				}
@@ -677,10 +683,10 @@ namespace Violet {
 	}
 	void EditorLayer::newScene(const std::string& sceneName)
 	{
-		m_activeScene = CreateRef<Scene>(sceneName); //Reset the current active scene
-		m_activeScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
-		m_sceneHierarchyPanel.setSceneContext(m_activeScene);
-		m_activeScenePath = ""; //Reset the scene path to empty path (it's a new created scene, doesn't have a path, it's not read from a file)
+		m_editorScene = CreateRef<Scene>(sceneName); //Reset the current editor scene
+		m_editorScene->onViewPortResize((uint32_t)m_viewPortSize.x, (uint32_t)m_viewPortSize.y);
+		m_sceneHierarchyPanel.setSceneContext(m_editorScene);
+		m_editorScenePath = ""; //Reset the scene path to empty path (it's a new created scene, doesn't have a path, it's not read from a file)
 
 		//Reset editor camera
 		m_editorCamera = EditorCamera(45.0f, 0.0f, 0.1f, 1000.0f);
@@ -705,11 +711,11 @@ namespace Violet {
 
 		if (std::filesystem::path(filePath).extension() == ".violet")
 		{
-			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set 
-			SceneSerializer sceneSerializer(m_activeScene);
-			if (sceneSerializer.deserializeText(filePath))
+			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set it
+			SceneSerializer sceneSerializer(m_editorScene);
+			if (sceneSerializer.deserializeText(filePath)) //If deserialization succeeded
 			{
-				m_activeScenePath = filePath;
+				m_editorScenePath = filePath;
 			}
 			else
 			{
@@ -725,11 +731,11 @@ namespace Violet {
 	}
 	void EditorLayer::saveScene()
 	{
-		//Extra check that the m_activeScenePath is not empty, this function shouldn't be called anyway if the m_activeScenePath is empty
-		if (!m_activeScenePath.empty())
+		//Extra check that the m_editorScenePath is not empty, this function shouldn't be called anyway if the m_editorScenePath is empty
+		if (!m_editorScenePath.empty())
 		{
-			SceneSerializer sceneSerializer(m_activeScene);
-			sceneSerializer.serializeToText(m_activeScenePath);
+			SceneSerializer sceneSerializer(m_editorScene);
+			sceneSerializer.serializeToText(m_editorScenePath);
 		}
 		else 
 		{
@@ -739,24 +745,38 @@ namespace Violet {
 	}
 	void EditorLayer::saveSceneAsDialog()
 	{
-		std::string filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", std::string(m_activeScene->getSceneName() + ".violet").c_str());
+		std::string filePath = FileDialogs::SaveFile("Violet Scene (*.violet)\0*.violet\0", std::string(m_editorScene->getSceneName() + ".violet").c_str());
 
 		if (!filePath.empty())  //If the string is not empty 
 		{
-			SceneSerializer sceneSerializer(m_activeScene);
+			SceneSerializer sceneSerializer(m_editorScene);
 			sceneSerializer.serializeToText(filePath);
 
-			m_activeScenePath = filePath;
+			m_editorScenePath = filePath;
 		}
 	}
 	void EditorLayer::onScenePlay()
 	{
 		m_sceneState = SceneState::Play;
-		m_activeScene->onRuntimeStart();
+
+		//Create a copy of the editorScene
+		m_runtimeScene = CreateRef<Scene>(*m_editorScene);
+		//Set the context to be the new copied/temp scene (m_runtimeScene)
+		m_sceneHierarchyPanel.setSceneContext(m_runtimeScene);
+
+		m_runtimeScene->onRuntimeStart();
+
 	}
 	void EditorLayer::onSceneStop()
 	{
 		m_sceneState = SceneState::Edit;
-		m_activeScene->onRuntimeStop();
+
+		m_runtimeScene->onRuntimeStop();
+
+		//Reset the context to be the original scene (m_editorScene)
+		m_sceneHierarchyPanel.setSceneContext(m_editorScene);
+		//Delete the copied/runtimeScene (Decrementing the shared_ptr reference count results in deleting it if there is no other references)
+		m_runtimeScene = nullptr;
+
 	}
 }

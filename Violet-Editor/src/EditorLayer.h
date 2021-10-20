@@ -48,7 +48,8 @@ namespace Violet {
 		glm::vec2 m_viewPortSize = { 0.0f, 0.0f };
 		glm::vec2 m_viewPortBounds[2] = { { 0.0f, 0.0f }, { 0.0f, 0.0f } };  //Min and max bounds without the tab bar, In screen space
 
-		Ref<Scene> m_activeScene;
+		Ref<Scene> m_editorScene;  //The original scene
+		Ref<Scene> m_runtimeScene; //A copy from m_editorScene when the play button is pressed (SceneState == SceneState::Play)
 		EditorCamera m_editorCamera;
 
 		/*Panels*/
@@ -63,8 +64,8 @@ namespace Violet {
 		/*New Scene Dialogue Popup*/
 		bool m_showNewScenePopupModal = false;
 		std::string m_newSceneNameBuffer;
-		//Caching the current active scene path
-		std::string m_activeScenePath;
+		//Caching the current editor scene path
+		std::string m_editorScenePath;
 
 		bool m_updateMouseSelectedEntityID = false;
 

@@ -34,6 +34,51 @@ namespace Violet {
 		m_primaryCameraEntity = CreateScope<Entity>();
 	}
 
+	Scene::Scene(const Scene& other)
+	{
+		m_sceneName = other.m_sceneName;
+		m_viewPortWidth = other.m_viewPortWidth;
+		m_viewPortHeight = other.m_viewPortHeight;
+
+		std::unordered_map<UUID, entt::entity> dstEnttMap;  //A map that links the new copied/created entities' entt:entity (enttID) with UUID
+
+		/*Copy Entities*/
+
+		const entt::registry& srcRegistryCONST = other.m_registry;  //NOTE: Scene& other is const
+		//Remove the constness from the registry so we can use a view into the registry, otherwise it would result in a compile error when trying to use a view into the registry
+		entt::registry& srcRegistry = const_cast<entt::registry&>(srcRegistryCONST);
+
+		//Get all the entities in the registry (getting a view for IDComponents to get access to all the entities as that any created entity must have IDComponent by default)
+		auto idView = srcRegistry.view<IDComponent>();
+		for (auto srcEnttID : idView)
+		{
+			UUID uuid = other.m_registry.get<IDComponent>(srcEnttID).ID;
+			const std::string& tagName = other.m_registry.get<TagComponent>(srcEnttID).tag;
+
+			//Create the entity
+			Entity dstEntity = createEntityWithUUID(uuid, tagName);
+			//Register the new create entity's entt::entity (enttID) into the map with it's corresponding UUID
+			dstEnttMap[uuid] = static_cast<entt::entity>(dstEntity);
+
+			//Finding the primaryCameraEntity
+			if (srcEnttID == *other.m_primaryCameraEntity)
+			{
+				m_primaryCameraEntity = CreateScope<Entity>(dstEntity);
+			}
+		}
+
+		/*Copy Components (except IDComponent and TagComponent [they are already copied when the entity is created using createEntityWithUUID()])
+		* NOTE: createEntityWithUUID() also adds TransfromComponent, however we still want to copy the values/data in the TransfromComponent
+		*/
+		copyComponent<TransformComponent>(srcRegistry, dstEnttMap);
+		copyComponent<SpriteRendererComponent>(srcRegistry, dstEnttMap);
+		copyComponent<CameraComponent>(srcRegistry, dstEnttMap);
+		copyComponent<NativeScriptComponent>(srcRegistry, dstEnttMap);
+		copyComponent<RidgidBody2DComponent>(srcRegistry, dstEnttMap);
+		copyComponent<BoxCollider2DComponent>(srcRegistry, dstEnttMap);
+
+	}
+
 	Scene::~Scene()
 	{
 	}
@@ -235,6 +280,30 @@ namespace Violet {
 	Entity Scene::getPrimaryCameraEntity()
 	{
 		return *m_primaryCameraEntity;
+	}
+
+	/*
+	* Copies a component from another registry that has the same entities (same UUID)
+	* std::unordered_map<UUID, entt::entity>& dstEnttMap ===> maps the UUID to the destination entt::entity (enttID), UUID is the only link between the src registry and dst registry (this->m_registry)
+	*/
+	template<typename Component>
+	void Scene::copyComponent(entt::registry& src, const std::unordered_map<UUID, entt::entity>& dstEnttMap)
+	{
+		//NOTE: Using UUID to match the entities between dst and src (dst registry == this->m_registry)
+
+		auto view = src.view<Component>();
+		for (auto srcEnttID : view)
+		{
+			UUID srcUUID = src.get<IDComponent>(srcEnttID).ID;
+			VIO_CORE_ASSERT(dstEnttMap.find(srcUUID) != dstEnttMap.end(), "[Scene] Source Registry Entity UUID Not Found In The Destination Map!");
+			entt::entity dstEnttID = dstEnttMap.at(srcUUID);
+
+			auto& component = src.get<Component>(srcEnttID);
+
+			/*Copy the component*/
+			//NOTE: Using emplace_or_replace<>() instead of emplace<>(), incase the component already exists for that entity (as for the TransformComponent, which already exists)
+			m_registry.emplace_or_replace<Component>(dstEnttID, component);   //Forwards the component to the copy constructor to copy it
+		}
 	}
 
 	/*Specialized Templates*/

@@ -13,6 +13,7 @@ namespace Violet {
 	class VIOLET_API Scene {
 	public:
 		Scene(const std::string& sceneName = "Untitled");
+		Scene(const Scene& other);
 		~Scene();
 
 		void onRuntimeStart();
@@ -32,6 +33,8 @@ namespace Violet {
 
 		const std::string& getSceneName() const { return m_sceneName; }
 	private:
+		template<typename Component>
+		void copyComponent(entt::registry& src, const std::unordered_map<UUID, entt::entity>& dstEnttMap);
 		template<typename T>
 		void onComponentAdded(Entity entity, T& component);
 	private:
