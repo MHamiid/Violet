@@ -2,7 +2,6 @@
 #include "Violet/Core/Core.h"
 #include "Violet/Core/Log.h"
 #include "Violet/Scene/Entity.h"
-#include "Violet/Renderer/Texture.h"
 
 namespace Violet {
 
