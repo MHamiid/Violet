@@ -30,6 +30,8 @@ namespace Violet {
 		void onScenePlay();
 		void onSceneStop();
 
+		void onDuplicateEntity();
+
 		/*Panels*/
 		void UIToolbar();
 	private:

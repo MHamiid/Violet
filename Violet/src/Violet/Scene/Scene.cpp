@@ -26,6 +26,19 @@ namespace Violet {
 		return b2_staticBody;
 	}
 
+	template <typename Component>
+	static void CopyComponentIfExists(Entity dst, Entity src)
+	{
+		if (src.hasComponent<Component>())
+		{
+			/*
+			* NOTE: Using addOrReplaceComponent() rather than addComponent()
+			, because the dst entity has some default components when created (EX: IdComponent, TagComponent, TransfromComponent)
+			, or the dst entity might already has that component
+			*/
+			dst.addOrReplaceComponent<Component>(src.getComponent<Component>());
+		}
+	}
 }
 namespace Violet {
 	Scene::Scene(const std::string& sceneName) : m_sceneName(sceneName)
@@ -270,6 +283,21 @@ namespace Violet {
 			*m_primaryCameraEntity = Entity(); //Reset the primary camera to a non-valid entity (default entity: m_enttID = null and m_scene = nullptr) ====> stop scene rendering with the deleted entity
 		}
 		m_registry.destroy(entity);
+	}
+
+	void Scene::duplicateEntity(Entity entity)
+	{
+		Entity newEntity = createEntity(entity.getName());
+
+		/*Copy Components (except IDComponent and TagComponent [they are already copied when the entity is created using createEntityWithUUID()])
+		* NOTE: createEntityWithUUID() also adds TransfromComponent, however we still want to copy the values/data in the TransfromComponent
+		*/
+		CopyComponentIfExists<TransformComponent>(newEntity, entity);
+		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CameraComponent>(newEntity, entity);
+		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
+		CopyComponentIfExists<RidgidBody2DComponent>(newEntity, entity);
+		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 	}
 
 	void Scene::setPrimaryCameraEntity(Entity cameraEntity)

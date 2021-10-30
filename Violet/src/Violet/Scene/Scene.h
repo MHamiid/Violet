@@ -27,7 +27,9 @@ namespace Violet {
 		Entity createEntity(const std::string& tagName = std::string("Unnamed Entity"));
 		Entity createEntityWithUUID(UUID uuid, const std::string& tagName = std::string("Unnamed Entity"));
 		void destroyEntity(Entity entity);
-	
+
+		void duplicateEntity(Entity entity);
+
 		void setPrimaryCameraEntity(Entity cameraEntity);
 		Entity getPrimaryCameraEntity();
 

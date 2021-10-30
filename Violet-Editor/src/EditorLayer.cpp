@@ -639,6 +639,15 @@ namespace Violet {
 			if (!ImGuizmo::IsUsing() && m_sceneHierarchyPanel.getSelectedEntity()) { m_gizmoType = ImGuizmo::OPERATION::SCALE; }
 			return true;
 		}
+		/*Scene Commands*/
+		case Key::D:
+		{
+			if (controlKeyIsPressed)
+			{
+				onDuplicateEntity();
+			}
+			return true;
+		}
 		/*Gizmos*/
 		case Key::ESCAPE:
 			m_gizmoType = -1;
@@ -778,5 +787,19 @@ namespace Violet {
 		//Delete the copied/runtimeScene (Decrementing the shared_ptr reference count results in deleting it if there is no other references)
 		m_runtimeScene = nullptr;
 
+	}
+	void EditorLayer::onDuplicateEntity()
+	{
+		//Make sure we are in edit mode
+		if (m_sceneState != SceneState::Edit)
+			return;
+		
+		Entity selectedEntity = m_sceneHierarchyPanel.getSelectedEntity();
+		//Check if there is an entity selected
+		if (selectedEntity)  //NOTE: Entity has an overload for the bool operator
+		{
+			m_editorScene->duplicateEntity(selectedEntity);
+		}
+		
 	}
 }

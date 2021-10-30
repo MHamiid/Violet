@@ -39,6 +39,16 @@ namespace Violet {
 			return component;
 		}
 
+		//Takes the arguments and forward them to entt's emplace_or_replace directly rather than constructing them and then call entt to emplace_or_replace
+		template<typename T, typename... Args>
+		T& addOrReplaceComponent(Args&&... args) {
+			
+			T& component = m_scene->m_registry.emplace_or_replace<T>(m_enttID, std::forward<Args>(args)...);
+			m_scene->onComponentAdded<T>(*this, component);
+
+			return component;
+		}
+
 		template<typename T>
 		T& getComponent() {
 			/*
@@ -68,6 +78,7 @@ namespace Violet {
 
 		Scene* getScene() { return m_scene; }  //TODO: Not final, think of a better approach
 		UUID getUUID() { return getComponent<IDComponent>().ID; }
+		const std::string& getName() { return getComponent<TagComponent>().tag; }
 
 	private:
 		entt::entity m_enttID{ entt::null }; //NOTE: ent::entity is a uint32_t ID
