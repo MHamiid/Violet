@@ -6,6 +6,11 @@
 ## Violet Defined Ignores
 bin-intermediates/
 
+## Vistual Studio Project files
+*.sln
+*.vcxproj
+*.vcxproj.filters
+
 # User-specific files
 *.rsuser
 *.suo
