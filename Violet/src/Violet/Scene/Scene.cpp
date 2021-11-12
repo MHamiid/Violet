@@ -200,8 +200,8 @@ namespace Violet {
 
 
 		/*Render 2D*/
-		//Check if the entity is valid and has been assigned to a scene and the entity has a CameraComponent attached, Note the sequence of the checking of the conditions
-		if ((*m_primaryCameraEntity) && m_primaryCameraEntity->hasComponent<TransformComponent>() && m_primaryCameraEntity->hasComponent<CameraComponent>())
+		//Check if the camera entity is valid and has been assigned to a scene and the entity has a CameraComponent attached, Note the sequence of the checking of the conditions
+		if (m_primaryCameraEntity != nullptr && (*m_primaryCameraEntity) && m_primaryCameraEntity->hasComponent<TransformComponent>() && m_primaryCameraEntity->hasComponent<CameraComponent>())
 		{
 			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
