@@ -721,8 +721,7 @@ namespace Violet {
 		if (std::filesystem::path(filePath).extension() == ".violet")
 		{
 			newScene(std::string()); //Pass the scene name as empty string, as that the SceneSerializer will deserialize the scene and get the scene name and set it
-			SceneSerializer sceneSerializer(m_editorScene);
-			if (sceneSerializer.deserializeText(filePath)) //If deserialization succeeded
+			if (deserializeScene(m_editorScene, filePath)) //If deserialization succeeded
 			{
 				m_editorScenePath = filePath;
 			}
@@ -743,8 +742,7 @@ namespace Violet {
 		//Extra check that the m_editorScenePath is not empty, this function shouldn't be called anyway if the m_editorScenePath is empty
 		if (!m_editorScenePath.empty())
 		{
-			SceneSerializer sceneSerializer(m_editorScene);
-			sceneSerializer.serializeToText(m_editorScenePath);
+			serializeScene(m_editorScene, m_editorScenePath);
 		}
 		else 
 		{
@@ -758,11 +756,20 @@ namespace Violet {
 
 		if (!filePath.empty())  //If the string is not empty 
 		{
-			SceneSerializer sceneSerializer(m_editorScene);
-			sceneSerializer.serializeToText(filePath);
+			serializeScene(m_editorScene, filePath);
 
 			m_editorScenePath = filePath;
 		}
+	}
+	void EditorLayer::serializeScene(Ref<Scene> scene, const std::string& filePath)
+	{
+		SceneSerializer sceneSerializer(scene);
+		sceneSerializer.serializeToText(filePath);
+	}
+	bool EditorLayer::deserializeScene(Ref<Scene> dstScene, const std::string& filePath)
+	{
+		SceneSerializer sceneSerializer(dstScene);
+		return sceneSerializer.deserializeText(filePath);
 	}
 	void EditorLayer::onScenePlay()
 	{

@@ -27,6 +27,9 @@ namespace Violet {
 		void saveScene();
 		void saveSceneAsDialog();
 
+		void serializeScene(Ref<Scene> scene, const std::string& filePath);
+		bool deserializeScene(Ref<Scene> dstScene, const std::string& filePath);
+
 		void onScenePlay();
 		void onSceneStop();
 
