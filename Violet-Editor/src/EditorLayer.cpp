@@ -697,6 +697,12 @@ namespace Violet {
 		m_sceneHierarchyPanel.setSceneContext(m_editorScene);
 		m_editorScenePath = ""; //Reset the scene path to empty path (it's a new created scene, doesn't have a path, it's not read from a file)
 
+		//Stop the runtime scene if running
+		if (m_sceneState == SceneState::Play)
+		{
+			onSceneStop();
+		}
+
 		//Reset editor camera
 		m_editorCamera = EditorCamera(45.0f, 0.0f, 0.1f, 1000.0f);
 		//set the editor camera viewport
