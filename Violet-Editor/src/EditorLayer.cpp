@@ -783,6 +783,9 @@ namespace Violet {
 
 		//Create a copy of the editorScene
 		m_runtimeScene = CreateRef<Scene>(*m_editorScene);
+
+		//Cache the editor scene's selected entity before setting up a new runtime scene context for the sceneHierarchyPanel
+		m_editorSceneSelectedEntityCache = m_sceneHierarchyPanel.getSelectedEntity();
 		//Set the context to be the new copied/temp scene (m_runtimeScene)
 		m_sceneHierarchyPanel.setSceneContext(m_runtimeScene);
 
@@ -795,8 +798,11 @@ namespace Violet {
 
 		m_runtimeScene->onRuntimeStop();
 
-		//Reset the context to be the original scene (m_editorScene)
+		//Set back the context to be the original scene (m_editorScene)
 		m_sceneHierarchyPanel.setSceneContext(m_editorScene);
+		//Set back the selected entity for the editor scene context
+		m_sceneHierarchyPanel.setSelectedEntity(m_editorSceneSelectedEntityCache);
+
 		//Delete the copied/runtimeScene (Decrementing the shared_ptr reference count results in deleting it if there is no other references)
 		m_runtimeScene = nullptr;
 

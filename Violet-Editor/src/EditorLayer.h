@@ -73,6 +73,7 @@ namespace Violet {
 		std::string m_editorScenePath;
 
 		bool m_updateMouseSelectedEntityID = false;
+		Entity m_editorSceneSelectedEntityCache;
 
 		enum class SceneState
 		{
