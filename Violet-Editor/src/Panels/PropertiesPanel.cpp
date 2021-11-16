@@ -342,13 +342,15 @@ namespace Violet {
 			/*[TEMP]*/
 			/*Clear Texture Button*/
 			ImGui::SameLine();
-			if (ImGui::Button("Clear", ImVec2(40.0f, 25.0f)))
-			{
-				if (spritRendererComponent.texture) //If not nullptr ===> There is a texture being used on that entity
+			//Draw the button with hidden style (Not Clickable), if there is no texture being used on that entity
+			Utils::ImGuiUtils::DrawWithHiddenStyle(spritRendererComponent.texture == nullptr, [&](bool itemHidden)
 				{
-					spritRendererComponent.texture.reset();
-				}
-			}
+					//Button will be drawn with the normal style (Clickable), if spritRendererComponent.texture != nullptr ===> There is a texture being used on that entity
+					if (ImGui::Button("Clear", ImVec2(40.0f, 25.0f)))
+					{
+						spritRendererComponent.texture.reset();
+					}
+				});
 
 			//Controlling the texture's size factor
 			ImGui::DragFloat("Size Factor", &spritRendererComponent.textureSizeFactor, 0.1f, 0.0f, 100.0f);
