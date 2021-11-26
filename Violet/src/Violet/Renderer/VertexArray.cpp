@@ -12,7 +12,7 @@ namespace Violet {
 			return nullptr;
 
 		case GraphicsAPI::API::OPENGL:
-			VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
+			//VIO_CORE_DEBUG("[Renderer] OpenGL Selected");
 			return CreateRef<OpenGLVertexArray>();
 		}
 
