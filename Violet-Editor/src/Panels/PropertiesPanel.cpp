@@ -390,7 +390,7 @@ namespace Violet {
 				ImGui::DragFloat2("Offset", glm::value_ptr(bc2dComponent.Offset));
 				ImGui::DragFloat2("Size Factor", glm::value_ptr(bc2dComponent.SizeFactor));
 				ImGui::DragFloat("Density", &bc2dComponent.Density, 0.01f, 0.0f, 1.0f);
-				ImGui::DragFloat("Friction", &bc2dComponent.Friction, 0.01f, 0.0f, 1.0f); 			//[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
+				ImGui::DragFloat("Friction", &bc2dComponent.Friction, 0.01f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);      //[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
 				ImGui::DragFloat("Restitution", &bc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
 				ImGui::DragFloat("Restitution Threshold", &bc2dComponent.RestitutionThreshold, 0.01f, 0.0f);
 			});
