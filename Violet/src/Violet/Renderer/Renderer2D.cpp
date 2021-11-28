@@ -29,6 +29,7 @@ namespace Violet {
 														   //TODO: Query the gpu driver to ask for the max texture slots
 
 		Ref<VertexArray> quadVertexArray;
+		Ref<VertexBuffer> quadVertexBuffer;
 		Ref<Shader> textureShader;
 		Ref<Texture2D> defaultWhiteTexture;
 
@@ -57,9 +58,9 @@ namespace Violet {
 
 		s_data->quadVertexArray = VertexArray::Create();
 
-		Ref<VertexBuffer> quadVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(QuadVertex));
+		s_data->quadVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(QuadVertex));
 
-		quadVertexBuffer->setLayout({ {VertexAttributeDataType::Float3, "Position"           },
+		s_data->quadVertexBuffer->setLayout({ {VertexAttributeDataType::Float3, "Position"           },
 									  {VertexAttributeDataType::Float4, "Color"				 },
 									  {VertexAttributeDataType::Float2, "TextureCoordinates" },
 									  {VertexAttributeDataType::Float,  "TextureIndex"		 },
@@ -67,7 +68,7 @@ namespace Violet {
 									  {VertexAttributeDataType::Int,    "EntityID"			 } 
 			});
 
-		s_data->quadVertexArray->addVertexBufferAndLinkLayout(quadVertexBuffer);
+		s_data->quadVertexArray->addVertexBufferAndLinkLayout(s_data->quadVertexBuffer);
 
 		//Allocate enough storage for vertices
 		s_data->quadVertexBufferData = new QuadVertex[s_data->MaxVerticesPerBatch];
