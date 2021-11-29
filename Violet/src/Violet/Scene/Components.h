@@ -64,6 +64,17 @@ namespace Violet {
 
 	};
 
+	struct VIOLET_API CircleRendererComponent
+	{
+		glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+		float Thickness = 1.0f;    //1.0f for filled-in circle
+		float Fade = 0.005f;   //The point at which the circle starts to gradually fade from it's color to 0.0f (used mostly for Anti-Aliasing)
+
+		CircleRendererComponent() = default;
+		CircleRendererComponent(const CircleRendererComponent&) = default;
+
+	};
+
 	struct VIOLET_API CameraComponent
 	{
 		SceneCamera sceneCamera;

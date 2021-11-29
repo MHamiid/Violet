@@ -54,7 +54,7 @@ namespace Violet {
 		}
 
 		VertexAttributeDataType dataType;
-		std::string name;
+		std::string name;  //It has no usage, mostly used for clarity when developing, and also for consistency in the future, as in DirectX and HLSL it has a usage
 		uint32_t size;
 		size_t offset;  //Set to size_t cuz it's converted to (const void*) later on in the OpenGL implementation
 		bool normalized;

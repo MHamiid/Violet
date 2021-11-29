@@ -235,6 +235,21 @@ namespace Violet {
 			out << YAML::EndMap;   //SpriteRenderer Component
 		}
 
+		/*CircleRenderer Component*/
+		if (entity.hasComponent<CircleRendererComponent>())
+		{
+			out << YAML::Key << "CircleRendererComponent";
+
+			out << YAML::BeginMap; //CircleRenderer Component
+
+			CircleRendererComponent& circleRendererComponent = entity.getComponent<CircleRendererComponent>();
+			out << YAML::Key << "Color" << YAML::Value << circleRendererComponent.color;
+			out << YAML::Key << "Thickness" << YAML::Value << circleRendererComponent.Thickness;
+			out << YAML::Key << "Fade" << YAML::Value << circleRendererComponent.Fade;
+
+			out << YAML::EndMap;   //CircleRenderer Component
+		}
+
 		/*RidgidBody2D Component*/
 		if (entity.hasComponent<RidgidBody2DComponent>())
 		{
@@ -405,6 +420,17 @@ namespace Violet {
 				{
 					SpriteRendererComponent& spritRendererComponent = deserializedEntity.addComponent<SpriteRendererComponent>();
 					spritRendererComponent.color = spriteComponentNode["Color"].as<glm::vec4>();
+				}
+
+				/*CircleRenderer Component*/
+				YAML::Node circleComponentNode = entity["CircleRendererComponent"];
+
+				if (circleComponentNode)
+				{
+					CircleRendererComponent& circleRendererComponent = deserializedEntity.addComponent<CircleRendererComponent>();
+					circleRendererComponent.color = circleComponentNode["Color"].as<glm::vec4>();
+					circleRendererComponent.Thickness = circleComponentNode["Thickness"].as<float>();
+					circleRendererComponent.Fade = circleComponentNode["Fade"].as<float>();
 				}
 
 				/*RidgidBody2D Component*/

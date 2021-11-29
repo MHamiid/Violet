@@ -85,6 +85,7 @@ namespace Violet {
 		*/
 		copyComponent<TransformComponent>(srcRegistry, dstEnttMap);
 		copyComponent<SpriteRendererComponent>(srcRegistry, dstEnttMap);
+		copyComponent<CircleRendererComponent>(srcRegistry, dstEnttMap);
 		copyComponent<CameraComponent>(srcRegistry, dstEnttMap);
 		copyComponent<NativeScriptComponent>(srcRegistry, dstEnttMap);
 		copyComponent<RidgidBody2DComponent>(srcRegistry, dstEnttMap);
@@ -209,6 +210,8 @@ namespace Violet {
 			{
 				/*Render 2D*/
 				Renderer2D::BeginScene(primaryCameraComponent.sceneCamera, m_primaryCameraEntity->getComponent<TransformComponent>().getTransform());
+
+				/*Render Sprites*/
 				entt::basic_group spriteGroup = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
 				for (auto entity : spriteGroup) {
@@ -216,6 +219,21 @@ namespace Violet {
 
 					Renderer2D::DrawSprit(transform.getTransform(), sprite, (int)entity);
 				}
+
+				/*Render Circles*/
+				/*
+				* NOTE: We are using view instead of using group again to avoid unnecessary memory operations??,
+				* as that we already grouped the TransfromComponent with the SpriteRendererComponent,
+				* and that plays with the memory layout.
+				*/
+				entt::basic_view circleView = m_registry.view<TransformComponent, CircleRendererComponent>();
+
+				for (auto entity : circleView) {
+					auto [transform, circle] = circleView.get<TransformComponent, CircleRendererComponent>(entity);
+
+					Renderer2D::DrawCircle(transform.getTransform(), circle.color, circle.Thickness, circle.Fade, (int)entity);
+				}
+
 				Renderer2D::EndScene();
 			}
 		}
@@ -231,6 +249,8 @@ namespace Violet {
 	{
 		/*Render 2D*/
 		Renderer2D::BeginScene(editorCamera);
+
+		/*Render Sprites*/
 		entt::basic_group spriteGroup = m_registry.group<TransformComponent>(entt::get<SpriteRendererComponent>);
 
 		for (auto entity : spriteGroup) {
@@ -238,6 +258,21 @@ namespace Violet {
 
 			Renderer2D::DrawSprit(transform.getTransform(), sprite, (int)entity);
 		}
+
+		/*Render Circles*/
+		/*
+		* NOTE: We are using view instead of using group again to avoid unnecessary memory operations??,
+		* as that we already grouped the TransfromComponent with the SpriteRendererComponent,
+		* and that plays with the memory layout.
+		*/
+		entt::basic_view circleView = m_registry.view<TransformComponent, CircleRendererComponent>();
+
+		for (auto entity : circleView) {
+			auto [transform, circle] = circleView.get<TransformComponent, CircleRendererComponent>(entity);
+
+			Renderer2D::DrawCircle(transform.getTransform(), circle.color, circle.Thickness, circle.Fade, (int)entity);
+		}
+
 		Renderer2D::EndScene();
 	}
 
@@ -294,6 +329,7 @@ namespace Violet {
 		*/
 		CopyComponentIfExists<TransformComponent>(newEntity, entity);
 		CopyComponentIfExists<SpriteRendererComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleRendererComponent>(newEntity, entity);
 		CopyComponentIfExists<CameraComponent>(newEntity, entity);
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<RidgidBody2DComponent>(newEntity, entity);
@@ -353,6 +389,11 @@ namespace Violet {
 
 	template<>
 	void Scene::onComponentAdded<SpriteRendererComponent>(Entity entity, SpriteRendererComponent& spriteRendererComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<CircleRendererComponent>(Entity entity, CircleRendererComponent& circleRendererComponent)
 	{
 	}
 

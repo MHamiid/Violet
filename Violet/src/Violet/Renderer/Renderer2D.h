@@ -1,8 +1,9 @@
 #pragma once
-#include "Violet/Renderer/OrthographicCamera.h"
+#include "Violet/Renderer/OrthographicCamera.h"   //TODO: Remove
 #include "Violet/Renderer/Texture.h"
 #include "Violet/Renderer/Camera.h"
 #include "Violet/Renderer/EditorCamera.h"
+#include "Violet/Renderer/Shader.h"
 #include "Violet/Scene/Components.h"
 
 namespace Violet {
@@ -15,11 +16,12 @@ namespace Violet {
 		static void BeginScene(const EditorCamera& camera);
 		static void BeginScene(const OrthographicCamera& camera);  //TODO: Remove
 		static void EndScene();
-		static void Flush();
+		static void FlushQuads();
+		static void FlushCircles();
 
 		//#########//
 		/*
-			QUADS
+		*	QUADS
 		*/
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -49,6 +51,12 @@ namespace Violet {
 		*/
 		static void DrawSprit(const glm::mat4& transformationMatrix, SpriteRendererComponent& spriteRendererComponent, int entityID);
 
+		/*
+		* CIRCLES
+		*/
+		static void DrawCircle(const glm::mat4& transfromationMatrix, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, float thickness = 1.0f, float fade = 0.005f, int entityID = -1);
+
+
 	public:
 		/*
 		* Statistics
@@ -67,10 +75,15 @@ namespace Violet {
 		static void ResetSceneStatistics();
 
 	private:
-		static void StartNewBatch();
-		static bool IsBatchBufferFull();
+		static void StartNewQuadsBatch();
+		static void StartNewCirclesBatch();
+		static void SetupShader(const Ref<Shader> shader, const glm::mat4& viewProjectionMatrix);
+		static bool IsQuadsBatchBufferFull();
+		static bool IsCirclesBatchBufferFull();
 		static bool IsTextureSlotsFull();
-		static void AddVertexToBuffer(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor, int entityID);
+		static void AddQuadVertexToBuffer(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor, int entityID);
+		static void AddCircleVertexToBuffer(const glm::vec3& worldPosition, const glm::vec3& localPosition, const glm::vec4& color, float thickness, float fade, int entityID);
+
 
 	};
 }

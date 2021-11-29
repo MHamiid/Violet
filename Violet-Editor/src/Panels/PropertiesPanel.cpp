@@ -356,6 +356,14 @@ namespace Violet {
 			ImGui::DragFloat("Size Factor", &spritRendererComponent.textureSizeFactor, 0.1f, 0.0f, 100.0f);
 		});
 
+		/*Circle Renderer Component*/
+		drawComponent<CircleRendererComponent>("Circle Renderer", entity, [&](CircleRendererComponent& circleRendererComponent)
+			{
+				ImGui::ColorEdit4("Color", glm::value_ptr(circleRendererComponent.color));
+				ImGui::DragFloat("Thickness", &circleRendererComponent.Thickness, 0.025f, 0.0f, 1.0f);
+				ImGui::DragFloat("Fade", &circleRendererComponent.Fade, 0.00025f, 0.0f, 1.0f);
+		
+			});
 
 		/*RidgidBody2D Component*/
 		drawComponent<RidgidBody2DComponent>("RidgidBody2D", entity, [&](RidgidBody2DComponent& rb2dComponent)
@@ -422,6 +430,11 @@ namespace Violet {
 			if (!m_entityContext.hasComponent<SpriteRendererComponent>() && ImGui::MenuItem("Sprite"))
 			{
 				m_entityContext.addComponent<SpriteRendererComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if(!m_entityContext.hasComponent<CircleRendererComponent>() && ImGui::MenuItem("Circle Renderer"))
+			{
+				m_entityContext.addComponent<CircleRendererComponent>();
 				ImGui::CloseCurrentPopup();
 			}
 			if (!m_entityContext.hasComponent<CameraComponent>() && ImGui::MenuItem("Camera"))
