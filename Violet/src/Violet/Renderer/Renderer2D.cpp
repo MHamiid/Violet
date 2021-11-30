@@ -492,7 +492,7 @@ namespace Violet {
 
 		for (size_t i = 0; i < CircleVertexCount; i++) {
 			AddCircleVertexToBuffer(transfromationMatrix * s_data->quadVertexPositions[i]
-									, s_data->quadVertexPositions[i] * 2.0f    //Sets the range [-1.0f to 1.0f] on XY axes, as that the range of s_data->quadVertexPositions is [-1.0f to 1.0f]
+									, s_data->quadVertexPositions[i] * 2.0f    //Sets the range [-1.0f to 1.0f] on XY axes, as that the range of s_data->quadVertexPositions is [-0.5f to 0.5f]
 									, color, thickness, fade, entityID);
 		}
 
