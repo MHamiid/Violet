@@ -62,7 +62,7 @@ namespace Violet {
 		/*Quad*/
 		Ref<VertexArray> quadVertexArray;
 		Ref<VertexBuffer> quadVertexBuffer;
-		Ref<Shader> textureShader;
+		Ref<Shader> quadShader;
 		Ref<Texture2D> defaultWhiteTexture;
 
 		/*Circle*/
@@ -174,7 +174,7 @@ namespace Violet {
 		s_data->defaultWhiteTexture->setData(&whiteTextureData, sizeof(whiteTextureData));
 
 		/*Load Shaders*/
-		s_data->textureShader = Shader::Create("assets/shaders/Texture.glsl");
+		s_data->quadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
 		s_data->circleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
 
 		/*Set The Texture Samplers Array*/
@@ -182,8 +182,8 @@ namespace Violet {
 		for (uint32_t i = 0; i < s_data->MaxTextureSlots; i++) {
 			textureSamplers[i] = i; 
 		}
-		s_data->textureShader->bind();  //Binding the shader before setting a uniform
-		s_data->textureShader->setIntArray("u_textures", textureSamplers, s_data->MaxTextureSlots);
+		s_data->quadShader->bind();  //Binding the shader before setting a uniform
+		s_data->quadShader->setIntArray("u_textures", textureSamplers, s_data->MaxTextureSlots);
 
 
 		s_data->textureSlots[0] = s_data->defaultWhiteTexture;    //Set the first element to our default white texture (no texture used and only the color is taken in the shader)
@@ -204,7 +204,7 @@ namespace Violet {
 
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
-		SetupShader(s_data->textureShader, camera.getProjectionMatrix() * glm::inverse(transform));
+		SetupShader(s_data->quadShader, camera.getProjectionMatrix() * glm::inverse(transform));
 		SetupShader(s_data->circleShader, camera.getProjectionMatrix() * glm::inverse(transform));
 
 		/*Reset Scene Statistics*/
@@ -217,7 +217,7 @@ namespace Violet {
 
 	void Renderer2D::BeginScene(const EditorCamera& editorCamera)
 	{
-		SetupShader(s_data->textureShader, editorCamera.getViewProjection());
+		SetupShader(s_data->quadShader, editorCamera.getViewProjection());
 		SetupShader(s_data->circleShader, editorCamera.getViewProjection());
 
 		/*Reset Scene Statistics*/
@@ -230,7 +230,7 @@ namespace Violet {
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
-		SetupShader(s_data->textureShader, camera.getViewProjectionMatrix());
+		SetupShader(s_data->quadShader, camera.getViewProjectionMatrix());
 		SetupShader(s_data->circleShader, camera.getViewProjectionMatrix());
 
 		/*Reset Scene Statistics*/
@@ -271,7 +271,7 @@ namespace Violet {
 			s_data->textureSlots[i]->bind(i);
 		}
 		s_data->quadVertexArray->bind();
-		s_data->textureShader->bind();
+		s_data->quadShader->bind();
 
 		/*Draw Call*/
 		RenderCommand::DrawIndices(s_data->quadVertexArray, s_data->quadIndicesToBeDrawnCount);
