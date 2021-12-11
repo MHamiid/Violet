@@ -11,6 +11,9 @@ namespace Violet {
 		virtual void clear() override;
 
 		virtual void drawIndices(const Ref<VertexArray>& vertexArray, uint32_t numberOfIndicesToDraw = 0) override;
+		virtual void drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) override;
+
+		virtual void setLineWidth(float width) override;
 	};
 
 }

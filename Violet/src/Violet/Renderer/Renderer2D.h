@@ -18,10 +18,12 @@ namespace Violet {
 		static void EndScene();
 		static void FlushQuads();
 		static void FlushCircles();
+		static void FlushLines();
 
 		//#########//
 		/*
 		*	QUADS
+		* NOTE: @param: glm::vec2/vec3 position ===> is the center of the quad
 		*/
 		static void DrawQuad(const glm::vec2& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawQuad(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -36,7 +38,6 @@ namespace Violet {
 		* 
 		* ROTATED QUADS
 		* NOTE: Created a Rotated function for rotated quad to avoid the overhead of creating a rotation matrix and multiplication when it is not needed.
-		* 
 		*/
 		static void DrawRotatedQuad(const glm::vec2& position, const glm::vec2& size, float rotationZ, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
 		static void DrawRotatedQuad(const glm::vec3& position, const glm::vec2& size, float rotationZ, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f });
@@ -56,7 +57,14 @@ namespace Violet {
 		*/
 		static void DrawCircle(const glm::mat4& transfromationMatrix, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, float thickness = 1.0f, float fade = 0.005f, int entityID = -1);
 
-
+		/*
+		* LINES
+		*/
+		static void DrawLine(const glm::vec3& p0, const glm::vec3& p1, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, int entityID = -1);
+		static void DrawRectangle(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, int entityID = -1); //position is the center of the rectangle
+		static void DrawRectangle(const glm::mat4& transfromationMatrix, const glm::vec4& color = { 1.0f, 1.0f, 1.0f, 1.0f }, int entityID = -1);
+		static float getLineWidth();
+		static void setLineWidth(float width);
 	public:
 		/*
 		* Statistics
@@ -77,13 +85,15 @@ namespace Violet {
 	private:
 		static void StartNewQuadsBatch();
 		static void StartNewCirclesBatch();
+		static void StartNewLinesBatch();
 		static void SetupShader(const Ref<Shader> shader, const glm::mat4& viewProjectionMatrix);
 		static bool IsQuadsBatchBufferFull();
 		static bool IsCirclesBatchBufferFull();
+		static bool IsLinesBatchBufferFull();
 		static bool IsTextureSlotsFull();
 		static void AddQuadVertexToBuffer(const glm::vec3& position, const glm::vec4& color, const glm::vec2& textureCoordinates, float textureIndex, float textureSizeFactor, int entityID);
 		static void AddCircleVertexToBuffer(const glm::vec3& worldPosition, const glm::vec3& localPosition, const glm::vec4& color, float thickness, float fade, int entityID);
-
+		static void AddLineVertexToBuffer(const glm::vec3& position, const glm::vec4& color, int entityID);
 
 	};
 }

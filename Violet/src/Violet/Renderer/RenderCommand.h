@@ -10,6 +10,8 @@ namespace Violet {
 		static void SetClearColor(const glm::vec4& color) { s_GraphicsAPI->setClearColor(color); }
 		static void Clear() { s_GraphicsAPI->clear(); }
 		static void DrawIndices(const Ref<VertexArray>& vertexArray, uint32_t numberOfIndicesToDraw = 0) { s_GraphicsAPI->drawIndices(vertexArray, numberOfIndicesToDraw); }  //If set to 0 draw the entire IndexBuffer
+		static void DrawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) { s_GraphicsAPI->drawLines(vertexArray, vertexCount); }
+		static void SetLineWidth(float width) { s_GraphicsAPI->setLineWidth(width); }
 	private:
 		static Scoped<GraphicsAPI> s_GraphicsAPI;  //Contains a pointer to the implementation class of GraphicsAPI interface
 

@@ -40,6 +40,7 @@ namespace Violet {
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); //Set the blending function
 
 		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_LINE_SMOOTH);  //Enable line Anti-Aliasing
 	}
 	void OpenGLRendererAPI::setViewPort(uint32_t x, uint32_t y, uint32_t width, uint32_t height)
 	{
@@ -58,5 +59,13 @@ namespace Violet {
 		//If set to 0 draw the entire IndexBuffer
 		uint32_t indicesCount = numberOfIndicesToDraw == 0 ? vertexArray->getIndexBuffer()->getCount() : numberOfIndicesToDraw;
 		glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
+	}
+	void OpenGLRendererAPI::drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
+	{
+		glDrawArrays(GL_LINES, 0, vertexCount);
+	}
+	void OpenGLRendererAPI::setLineWidth(float width)
+	{
+		glLineWidth(width);
 	}
 }	

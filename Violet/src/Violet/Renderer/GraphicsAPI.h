@@ -20,11 +20,14 @@ namespace Violet {
 		virtual void clear() = 0;
 
 		virtual void drawIndices(const Ref<VertexArray>& vertexArray, uint32_t numberOfIndicesToDraw) = 0;
+		virtual void drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount) = 0;
+
+		virtual void setLineWidth(float width) = 0;
 	public:
 		static API getAPI() { return s_GraphicsAPI; }
 		static Scoped<GraphicsAPI> Create();
 	private:
-		static API s_GraphicsAPI;  //What type of api is set to use
+		static API s_GraphicsAPI;  //What type of API is set to use
 	};
 
 }

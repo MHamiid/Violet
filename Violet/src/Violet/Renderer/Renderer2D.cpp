@@ -45,12 +45,32 @@ namespace Violet {
 		int entityID;
 	};
 
+	struct LineVertex {
+		/*
+		* position: Position in world space with the transformation matrix applied
+		* (We are using batch rendering, which means all the trasformation
+		* calculations are done on the CPU side before being sent to the Shader)
+		*/
+		glm::vec3 position;
+		glm::vec4 color;
+
+		/*
+		 * NOTE: entityID currently has no usage (lines are only used for visualizing physics colliders)
+		 * , unless Lines are used as in game entity and is included in the ECS(Entity Component System)
+		 */
+		/*Editor-Only*/
+		int entityID;
+	};
+
 	struct Renderer2DData {
 		/*
 		* TODO: Make MaxQuadsPerBatch resizable, instead of allocating large space of memory 
 		* for the quads that may not be used. Maybe start off with something small like 100
 		* and double/+50% the size whenever more memory is needed.
 		* NOTE: The constants below are also used for circles.
+		* NOTE: The constants below are also used for Lines
+		* (should be refactored, lines are only used for visualizing physics collider
+		* , we don't need that many lines).
 		*/
 		static const uint32_t MaxQuadsPerBatch = 10000;   //Batch 10000 quads together
 		static const uint32_t MaxVerticesPerBatch = MaxQuadsPerBatch * 4;  // Times 4 cause we are drawing quads
@@ -70,13 +90,26 @@ namespace Violet {
 		Ref<VertexBuffer> circleVertexBuffer;
 		Ref<Shader> circleShader;
 
+		/*Line*/
+		Ref<VertexArray> lineVertexArray;
+		Ref<VertexBuffer> lineVertexBuffer;
+		Ref<Shader> lineShader;
+
+		/*Quad*/
 		uint32_t quadIndicesToBeDrawnCount = 0;    //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
 		QuadVertex* quadVertexBufferData = nullptr;
 		QuadVertex* quadVertexBufferDataPtr = nullptr;  //A pointer into the buffer to manipulate and control the buffer
 
+		/*Circle*/
 		uint32_t circleIndicesToBeDrawnCount = 0;    //Is incremented by 6 (6 indices are required to draw a quad) every time a quad is added to the buffer
 		CircleVertex* circleVertexBufferData = nullptr;
 		CircleVertex* circleVertexBufferDataPtr = nullptr;  //A pointer into the buffer to manipulate and control the buffer
+
+		/*Line*/
+		uint32_t lineVerticesToBeDrawnCount = 0;    //Is incremented by 2 (2 vertices are required to draw a line) every time a line is added to the buffer
+		LineVertex* lineVertexBufferData = nullptr;
+		LineVertex* lineVertexBufferDataPtr = nullptr;  //A pointer into the buffer to manipulate and control the buffer
+		float lineWidth = 2.0f;
 
 		std::array<Ref<Texture2D>, MaxTextureSlots> textureSlots;
 		uint32_t textureSlotIndex = 1;  //Points to the first free space in the textureSlots array, starts from 1, 0 = default white texture
@@ -169,6 +202,27 @@ namespace Violet {
 		s_data->circleVertexArray->setIndexBuffer(quadIndexBuffer);  //Use quadIndexBuffer, as they have the same geometry (Circle is essentially a quad)
 
 
+		/*Lines*/
+		s_data->lineVertexArray = VertexArray::Create();
+
+		s_data->lineVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(LineVertex));
+
+		s_data->lineVertexBuffer->setLayout({
+									  {VertexAttributeDataType::Float3, "Position" },
+									  {VertexAttributeDataType::Float4, "Color"         },
+									  {VertexAttributeDataType::Int,    "EntityID"      }
+			});
+
+		s_data->lineVertexArray->addVertexBufferAndLinkLayout(s_data->lineVertexBuffer);
+
+		//Allocate enough storage for vertices
+		/*
+		 * NOTE: s_data->MaxVerticesPerBatch ===> allocates large number of vertices
+		 * (should be refactored, lines are only used for visualizing physics, we don't need that many lines)
+		 */
+		s_data->lineVertexBufferData = new LineVertex[s_data->MaxVerticesPerBatch];
+
+
 		s_data->defaultWhiteTexture = Texture2D::Create(1, 1);  //Create a one pixel texture
 		uint32_t whiteTextureData = 0xffffffff;   //4-Bytes
 		s_data->defaultWhiteTexture->setData(&whiteTextureData, sizeof(whiteTextureData));
@@ -176,6 +230,7 @@ namespace Violet {
 		/*Load Shaders*/
 		s_data->quadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
 		s_data->circleShader = Shader::Create("assets/shaders/Renderer2D_Circle.glsl");
+		s_data->lineShader = Shader::Create("assets/shaders/Renderer2D_Line.glsl");
 
 		/*Set The Texture Samplers Array*/
 		int32_t textureSamplers[s_data->MaxTextureSlots];
@@ -206,6 +261,7 @@ namespace Violet {
 	{
 		SetupShader(s_data->quadShader, camera.getProjectionMatrix() * glm::inverse(transform));
 		SetupShader(s_data->circleShader, camera.getProjectionMatrix() * glm::inverse(transform));
+		SetupShader(s_data->lineShader, camera.getProjectionMatrix() * glm::inverse(transform));
 
 		/*Reset Scene Statistics*/
 		ResetSceneStatistics();
@@ -213,12 +269,14 @@ namespace Violet {
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
+		StartNewLinesBatch();
 	}
 
 	void Renderer2D::BeginScene(const EditorCamera& editorCamera)
 	{
 		SetupShader(s_data->quadShader, editorCamera.getViewProjection());
 		SetupShader(s_data->circleShader, editorCamera.getViewProjection());
+		SetupShader(s_data->lineShader, editorCamera.getViewProjection());
 
 		/*Reset Scene Statistics*/
 		ResetSceneStatistics();
@@ -226,12 +284,14 @@ namespace Violet {
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
+		StartNewLinesBatch();
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		SetupShader(s_data->quadShader, camera.getViewProjectionMatrix());
 		SetupShader(s_data->circleShader, camera.getViewProjectionMatrix());
+		SetupShader(s_data->lineShader, camera.getViewProjectionMatrix());
 
 		/*Reset Scene Statistics*/
 		ResetSceneStatistics();
@@ -239,12 +299,14 @@ namespace Violet {
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
+		StartNewLinesBatch();
 	}
 
 	void Renderer2D::EndScene()
 	{
 		FlushQuads();
 		FlushCircles();
+		FlushLines();
 	}
 	/*
 	* Sends the draw call for the batch
@@ -264,7 +326,6 @@ namespace Violet {
 		
 
 		/*Binding*/
-
 		/*Bind All The Textures*/
 		for (uint32_t i = 0; i < s_data->textureSlotIndex; i++) 
 		{
@@ -295,12 +356,36 @@ namespace Violet {
 
 
 		/*Binding*/
-
 		s_data->circleVertexArray->bind();
 		s_data->circleShader->bind();
 
 		/*Draw Call*/
 		RenderCommand::DrawIndices(s_data->circleVertexArray, s_data->circleIndicesToBeDrawnCount);
+
+		/*STATISTICS*/
+		//Keep track of draw calls count for scene statistics
+		s_data->sceneStatistics.drawCallsCount++;
+	}
+	void Renderer2D::FlushLines()
+	{
+		/*Uploads The Data To The GPU, Does All The Neccessary Bindings And Issues A Draw Call*/
+
+		//If there is no lines to render return from function
+		if (s_data->lineVerticesToBeDrawnCount == 0)
+			return;
+
+
+		uint32_t dataSize = static_cast<uint32_t>(reinterpret_cast<uint8_t*>(s_data->lineVertexBufferDataPtr) - reinterpret_cast<uint8_t*>(s_data->lineVertexBufferData));  //NOTE: Converted to uint8_t (1 Byte) to get the size and not the number of vertcies
+		//Upload vertex buffer to GPU
+		s_data->lineVertexArray->getVertexBuffers()[0]->setData(s_data->lineVertexBufferData, dataSize);
+
+
+		/*Binding*/
+		s_data->lineVertexArray->bind();
+		s_data->lineShader->bind();
+
+		/*Draw Call*/
+		RenderCommand::DrawLines(s_data->lineVertexArray, s_data->lineVerticesToBeDrawnCount);
 
 		/*STATISTICS*/
 		//Keep track of draw calls count for scene statistics
@@ -476,7 +561,6 @@ namespace Violet {
 
 	void Renderer2D::DrawCircle(const glm::mat4& transfromationMatrix, const glm::vec4& color, float thickness, float fade, int entityID)
 	{
-
 		/*
 		* NOTE: Drawing a circle is essentially drawing a quad with a different shader, and it has a different vertex layout.
 		* Quad vertices goes counter clock-wise.
@@ -503,6 +587,62 @@ namespace Violet {
 		s_data->sceneStatistics.quadCount++;   //NOTE: Increase the quadCount and not creating a new stats for circleCount, as that drawing a circle is ultimately drawing a quad
 	}
 
+	void Renderer2D::DrawLine(const glm::vec3& p0, const glm::vec3& p1, const glm::vec4& color, int entityID)
+	{
+		//Check if the lines batch buffer is full
+		if (IsLinesBatchBufferFull()) {
+			FlushLines();
+			StartNewLinesBatch();
+		}
+
+		AddLineVertexToBuffer(p0, color, entityID);
+		AddLineVertexToBuffer(p1, color, entityID);
+
+		s_data->lineVerticesToBeDrawnCount += 2;   //Is incremented by 2 (2 vertices are required to draw a line) every time a line is added to the buffer
+
+		/*STATISTICS*/
+		//Keep track of line count for scene statistics
+		//s_data->sceneStatistics.lineCount++;    ===> TODO, not implemented yet
+	}
+
+	void Renderer2D::DrawRectangle(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID)
+	{
+		//Going clock-wise
+		glm::vec3 p0 = glm::vec3(position.x - (size.x * 0.5f), position.y - (size.y * 0.5f), position.z);  //Bottom-Left corner
+		glm::vec3 p1 = glm::vec3(position.x + (size.x * 0.5f), position.y - (size.y * 0.5f), position.z);  //Bottom-Right corner
+		glm::vec3 p2 = glm::vec3(position.x + (size.x * 0.5f), position.y + (size.y * 0.5f), position.z);  //Top-Right corner
+		glm::vec3 p3 = glm::vec3(position.x - (size.x * 0.5f), position.y + (size.y * 0.5f), position.z);  //Top-Left corner
+
+		DrawLine(p0, p1, color, entityID);
+		DrawLine(p1, p2, color, entityID);
+		DrawLine(p2, p3, color, entityID);
+		DrawLine(p3, p0, color, entityID);
+	}
+
+	void Renderer2D::DrawRectangle(const glm::mat4& transfromationMatrix, const glm::vec4& color, int entityID)
+	{	
+		glm::vec3 rectangleVertices[4];
+		for (size_t i = 0; i < 4; i++) {
+			rectangleVertices[i] = transfromationMatrix * s_data->quadVertexPositions[i]; //Using s_data->quadVertexPositions, as it is centered at the origin (0.0f, 0.0f) with size of (1.0f, 1.0f)
+		}
+
+		DrawLine(rectangleVertices[0], rectangleVertices[1], color, entityID);
+		DrawLine(rectangleVertices[1], rectangleVertices[2], color, entityID);
+		DrawLine(rectangleVertices[2], rectangleVertices[3], color, entityID);
+		DrawLine(rectangleVertices[3], rectangleVertices[0], color, entityID);
+	}
+
+	float Renderer2D::getLineWidth()
+	{
+		return s_data->lineWidth;
+	}
+
+	void Renderer2D::setLineWidth(float width)
+	{
+		s_data->lineWidth = width;
+		RenderCommand::SetLineWidth(s_data->lineWidth); //NOTE: It calls an "OpenGL global" that just changes the state, which just need to be done once whenever the width is changed
+	}
+
 	void Renderer2D::StartNewQuadsBatch()
 	{
 		/*Reset The Quad Variables*/
@@ -517,6 +657,13 @@ namespace Violet {
 		/*Reset The Circle Variables*/
 		s_data->circleIndicesToBeDrawnCount = 0;
 		s_data->circleVertexBufferDataPtr = s_data->circleVertexBufferData;  //Let the pointer point to the begining of the buffer
+	}
+
+	void Renderer2D::StartNewLinesBatch()
+	{
+		/*Reset The Line Variables*/
+		s_data->lineVerticesToBeDrawnCount = 0;
+		s_data->lineVertexBufferDataPtr = s_data->lineVertexBufferData;  //Let the pointer point to the begining of the buffer
 	}
 
 	void Renderer2D::SetupShader(const Ref<Shader> shader, const glm::mat4& viewProjectionMatrix)
@@ -542,6 +689,17 @@ namespace Violet {
 		* Returns true if the circles buffer is full
 		*/
 		if (s_data->circleIndicesToBeDrawnCount >= Renderer2DData::MaxIndicesPerBatch) {
+			return true;
+		}
+		return false;
+	}
+
+	bool Renderer2D::IsLinesBatchBufferFull()
+	{
+		/*
+		* Returns true if the lines buffer is full
+		*/
+		if (s_data->lineVerticesToBeDrawnCount >= Renderer2DData::MaxVerticesPerBatch) {
 			return true;
 		}
 		return false;
@@ -580,6 +738,15 @@ namespace Violet {
 		s_data->circleVertexBufferDataPtr->Fade = fade;
 		s_data->circleVertexBufferDataPtr->entityID = entityID;
 		s_data->circleVertexBufferDataPtr++; //Increment pointer to the next vertex
+	}
+
+	void Renderer2D::AddLineVertexToBuffer(const glm::vec3& position, const glm::vec4& color, int entityID)
+	{
+		//lineVertexBufferDataPtr points to the first empty space in the buffer
+		s_data->lineVertexBufferDataPtr->position = position;
+		s_data->lineVertexBufferDataPtr->color = color;
+		s_data->lineVertexBufferDataPtr->entityID = entityID;
+		s_data->lineVertexBufferDataPtr++; //Increment pointer to the next vertex
 	}
 
 	/*
