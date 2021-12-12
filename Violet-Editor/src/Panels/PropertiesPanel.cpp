@@ -403,7 +403,16 @@ namespace Violet {
 				ImGui::DragFloat("Restitution Threshold", &bc2dComponent.RestitutionThreshold, 0.01f, 0.0f);
 			});
 
-
+		/*CircleCollider2D Component*/
+		drawComponent<CircleCollider2DComponent>("CircleCollider2D", entity, [&](CircleCollider2DComponent& cc2dComponent)
+			{
+				ImGui::DragFloat2("Offset", glm::value_ptr(cc2dComponent.Offset));
+				ImGui::DragFloat("Radius", &cc2dComponent.Radius);
+				ImGui::DragFloat("Density", &cc2dComponent.Density, 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Friction", &cc2dComponent.Friction, 0.01f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);      //[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
+				ImGui::DragFloat("Restitution", &cc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
+				ImGui::DragFloat("Restitution Threshold", &cc2dComponent.RestitutionThreshold, 0.01f, 0.0f);
+			});
 	}
 
 	void PropertiesPanel::drawAddComponentButton()
@@ -450,6 +459,11 @@ namespace Violet {
 			if (!m_entityContext.hasComponent<BoxCollider2DComponent>() && ImGui::MenuItem("BoxCollider2D"))
 			{
 				m_entityContext.addComponent<BoxCollider2DComponent>();
+				ImGui::CloseCurrentPopup();
+			}
+			if (!m_entityContext.hasComponent<CircleCollider2DComponent>() && ImGui::MenuItem("CircleCollider2D"))
+			{
+				m_entityContext.addComponent<CircleCollider2DComponent>();
 				ImGui::CloseCurrentPopup();
 			}
 

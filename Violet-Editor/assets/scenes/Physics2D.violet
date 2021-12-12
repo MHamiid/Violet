@@ -113,3 +113,24 @@ Entities:
         OrthographicNear: -1
         OrthographicFar: 1
       FixedAspectRatio: false
+  - EntityID: 5240290851386603906
+    TagComponent:
+      Tag: Circle
+    TransformComponent:
+      Translation: [-2.90283227, 11.0177965, -0.000122070356]
+      Rotation: [0, -0, 0]
+      Scale: [2, 2, 2]
+    CircleRendererComponent:
+      Color: [0.924692214, 0.573529422, 1, 1]
+      Thickness: 1
+      Fade: 0.00499999989
+    RidgidBody2DComponent:
+      BodyType: Dynamic
+      FixedRotation: false
+    CircleCollider2DComponent:
+      Offset: [0, 0]
+      Radius: 0.5
+      Density: 1
+      Friction: 0.5
+      Restitution: 0
+      RestitutionThreshold: 0.5

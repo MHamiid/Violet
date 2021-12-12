@@ -282,6 +282,23 @@ namespace Violet {
 			out << YAML::EndMap;   //BoxCollider2D Component
 		}
 
+		/*CircleCollider2D Component*/
+		if (entity.hasComponent<CircleCollider2DComponent>())
+		{
+			out << YAML::Key << "CircleCollider2DComponent";
+
+			out << YAML::BeginMap; //CircleCollider2D Component
+
+			CircleCollider2DComponent& cc2dComponent = entity.getComponent<CircleCollider2DComponent>();
+			out << YAML::Key << "Offset" << YAML::Value << cc2dComponent.Offset;
+			out << YAML::Key << "Radius" << YAML::Value << cc2dComponent.Radius;
+			out << YAML::Key << "Density" << YAML::Value << cc2dComponent.Density;
+			out << YAML::Key << "Friction" << YAML::Value << cc2dComponent.Friction;
+			out << YAML::Key << "Restitution" << YAML::Value << cc2dComponent.Restitution;
+			out << YAML::Key << "RestitutionThreshold" << YAML::Value << cc2dComponent.RestitutionThreshold;
+
+			out << YAML::EndMap;   //CircleCollider2D Component
+		}
 
 		out << YAML::EndMap;    //Entity
 	}
@@ -455,6 +472,21 @@ namespace Violet {
 					bc2dComponent.Friction = bc2dComponentNode["Friction"].as<float>();
 					bc2dComponent.Restitution = bc2dComponentNode["Restitution"].as<float>();
 					bc2dComponent.RestitutionThreshold = bc2dComponentNode["RestitutionThreshold"].as<float>();
+				}
+
+				/*CircleCollider2D Component*/
+				YAML::Node cc2dComponentNode = entity["CircleCollider2DComponent"];
+
+				if (cc2dComponentNode)
+				{
+					VIO_CORE_WARN("HERE");
+					CircleCollider2DComponent& cc2dComponent = deserializedEntity.addComponent<CircleCollider2DComponent>();
+					cc2dComponent.Offset = cc2dComponentNode["Offset"].as<glm::vec2>();
+					cc2dComponent.Radius = cc2dComponentNode["Radius"].as<float>();
+					cc2dComponent.Density = cc2dComponentNode["Density"].as<float>();
+					cc2dComponent.Friction = cc2dComponentNode["Friction"].as<float>();
+					cc2dComponent.Restitution = cc2dComponentNode["Restitution"].as<float>();
+					cc2dComponent.RestitutionThreshold = cc2dComponentNode["RestitutionThreshold"].as<float>();
 				}
 
 			}

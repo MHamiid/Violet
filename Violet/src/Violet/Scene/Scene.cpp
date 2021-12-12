@@ -9,6 +9,7 @@
 #include <box2d/b2_body.h>
 #include <box2d/b2_fixture.h>
 #include <box2d/b2_polygon_shape.h>
+#include <box2d/b2_circle_shape.h>
 
 namespace Violet {
 	/*Helper Functions*/
@@ -90,7 +91,7 @@ namespace Violet {
 		copyComponent<NativeScriptComponent>(srcRegistry, dstEnttMap);
 		copyComponent<RidgidBody2DComponent>(srcRegistry, dstEnttMap);
 		copyComponent<BoxCollider2DComponent>(srcRegistry, dstEnttMap);
-
+		copyComponent<CircleCollider2DComponent>(srcRegistry, dstEnttMap);
 	}
 
 	Scene::~Scene()
@@ -123,21 +124,51 @@ namespace Violet {
 
 			rb2dComponent.RuntimeBody = body;   //Store a pointer to the created b2body in the RidgidBody2DComponent
 			
+			/*BoxCollider2DComponent*/
 			if (entity.hasComponent<BoxCollider2DComponent>())
 			{
 				BoxCollider2DComponent& bc2dComponent = entity.getComponent<BoxCollider2DComponent>();
 
-				//Create a shape for the collider
-				b2PolygonShape colliderShape;
-				colliderShape.SetAsBox(bc2dComponent.SizeFactor.x * transformComponent.scale.x, bc2dComponent.SizeFactor.y * transformComponent.scale.y);
+				//Create the shape for the collider
+				b2PolygonShape boxShape;
+				/*
+				* Set the size
+				* NOTE: The translation and rotation are already set in the b2Body instance
+				*/
+				boxShape.SetAsBox(bc2dComponent.SizeFactor.x * transformComponent.scale.x, bc2dComponent.SizeFactor.y * transformComponent.scale.y);
 
 				b2FixtureDef fixtureDef;
-				fixtureDef.shape = &colliderShape;
+				fixtureDef.shape = &boxShape;
 				fixtureDef.density = bc2dComponent.Density;
 				fixtureDef.friction = bc2dComponent.Friction;
 				fixtureDef.restitution = bc2dComponent.Restitution;
 				fixtureDef.restitutionThreshold = bc2dComponent.RestitutionThreshold;
 				
+				body->CreateFixture(&fixtureDef);  //Add the fixture to the body
+			}
+
+			/*CircleCollider2DComponent*/
+			if (entity.hasComponent<CircleCollider2DComponent>())
+			{
+				CircleCollider2DComponent& cc2dComponent = entity.getComponent<CircleCollider2DComponent>();
+
+				//Create the shape for the collider
+				b2CircleShape circleShape;
+				circleShape.m_p.Set(cc2dComponent.Offset.x, cc2dComponent.Offset.y);  //Set an offset for the position
+				/*
+				* Set the radius (size)
+				* NOTE: The translation and rotation are already set in the b2Body instance.
+				* NOTE: Circle collider shape currently only works for rounded circle (size.x == size.y) and not ovals.
+				*/
+				circleShape.m_radius = cc2dComponent.Radius * transformComponent.scale.x; //Multiply with any size axis x or y, assuming that the circle is a rounded circle not an oval (scale.x == scale.y)
+
+				b2FixtureDef fixtureDef;
+				fixtureDef.shape = &circleShape;
+				fixtureDef.density = cc2dComponent.Density;
+				fixtureDef.friction = cc2dComponent.Friction;
+				fixtureDef.restitution = cc2dComponent.Restitution;
+				fixtureDef.restitutionThreshold = cc2dComponent.RestitutionThreshold;
+
 				body->CreateFixture(&fixtureDef);  //Add the fixture to the body
 			}
 		}
@@ -334,6 +365,7 @@ namespace Violet {
 		CopyComponentIfExists<NativeScriptComponent>(newEntity, entity);
 		CopyComponentIfExists<RidgidBody2DComponent>(newEntity, entity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
+		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
 	}
 
 	void Scene::setPrimaryCameraEntity(Entity cameraEntity)
@@ -424,6 +456,11 @@ namespace Violet {
 
 	template<>
 	void Scene::onComponentAdded<BoxCollider2DComponent>(Entity entity, BoxCollider2DComponent& bc2dComponent)
+	{
+	}
+
+	template<>
+	void Scene::onComponentAdded<CircleCollider2DComponent>(Entity entity, CircleCollider2DComponent& cc2dComponent)
 	{
 	}
 }

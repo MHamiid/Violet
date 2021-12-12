@@ -137,4 +137,19 @@ namespace Violet {
 		BoxCollider2DComponent() = default;
 		BoxCollider2DComponent(const BoxCollider2DComponent&) = default;
 	};
+
+	struct VIOLET_API CircleCollider2DComponent
+	{
+		glm::vec2 Offset = { 0.0f, 0.0f };    //To set the collider to be offset from the middle of the entity (from the transfrom position)
+		float Radius = 0.5f;    //The factor of the circle diameter (circle size)
+
+		//TODO: Move these into physics material??
+		float Density = 1.0f;
+		float Friction = 0.5f;
+		float Restitution = 0.0f;   //Bounciness
+		float RestitutionThreshold = 0.5f;   //Restitution velocity threshold, usually in m / s.Collisions above this speed have restitution applied(will bounce)
+
+		CircleCollider2DComponent() = default;
+		CircleCollider2DComponent(const CircleCollider2DComponent&) = default;
+	};
 }
