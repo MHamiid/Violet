@@ -479,7 +479,6 @@ namespace Violet {
 
 				if (cc2dComponentNode)
 				{
-					VIO_CORE_WARN("HERE");
 					CircleCollider2DComponent& cc2dComponent = deserializedEntity.addComponent<CircleCollider2DComponent>();
 					cc2dComponent.Offset = cc2dComponentNode["Offset"].as<glm::vec2>();
 					cc2dComponent.Radius = cc2dComponentNode["Radius"].as<float>();
