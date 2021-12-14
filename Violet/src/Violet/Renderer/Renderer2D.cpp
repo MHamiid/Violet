@@ -10,7 +10,7 @@ namespace Violet {
 	struct QuadVertex {
 		/*
 		* position: Position in world space with the transformation matrix applied
-		* (We are using batch rendering, which means all the trasformation 
+		* (We are using batch rendering, which means all the transformation 
 		* calculations are done on the CPU side before being sent to the Shader)
 		*/
 		glm::vec3 position;
@@ -29,7 +29,7 @@ namespace Violet {
 	struct CircleVertex {
 		/*
 		* worldPosition: Position in world space with the transformation matrix applied
-		* (We are using batch rendering, which means all the trasformation
+		* (We are using batch rendering, which means all the transformation
 		* calculations are done on the CPU side before being sent to the Shader)
 		* 
 		* localPosition: Is used for creating a custom range [-1.0f to 1.0f] on XY axes
@@ -48,7 +48,7 @@ namespace Violet {
 	struct LineVertex {
 		/*
 		* position: Position in world space with the transformation matrix applied
-		* (We are using batch rendering, which means all the trasformation
+		* (We are using batch rendering, which means all the transformation
 		* calculations are done on the CPU side before being sent to the Shader)
 		*/
 		glm::vec3 position;
