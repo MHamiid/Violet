@@ -56,12 +56,18 @@ namespace Violet {
 	}
 	void OpenGLRendererAPI::drawIndices(const Ref<VertexArray>& vertexArray, uint32_t numberOfIndicesToDraw)
 	{
+		//Bind the vertex array
+		vertexArray->bind();
+
 		//If set to 0 draw the entire IndexBuffer
 		uint32_t indicesCount = numberOfIndicesToDraw == 0 ? vertexArray->getIndexBuffer()->getCount() : numberOfIndicesToDraw;
 		glDrawElements(GL_TRIANGLES, indicesCount, GL_UNSIGNED_INT, nullptr);
 	}
 	void OpenGLRendererAPI::drawLines(const Ref<VertexArray>& vertexArray, uint32_t vertexCount)
 	{
+		//Bind the vertex array
+		vertexArray->bind();
+
 		glDrawArrays(GL_LINES, 0, vertexCount);
 	}
 	void OpenGLRendererAPI::setLineWidth(float width)

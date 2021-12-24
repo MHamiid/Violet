@@ -331,7 +331,6 @@ namespace Violet {
 		{
 			s_data->textureSlots[i]->bind(i);
 		}
-		s_data->quadVertexArray->bind();
 		s_data->quadShader->bind();
 
 		/*Draw Call*/
@@ -356,7 +355,6 @@ namespace Violet {
 
 
 		/*Binding*/
-		s_data->circleVertexArray->bind();
 		s_data->circleShader->bind();
 
 		/*Draw Call*/
@@ -381,7 +379,6 @@ namespace Violet {
 
 
 		/*Binding*/
-		s_data->lineVertexArray->bind();
 		s_data->lineShader->bind();
 
 		/*Draw Call*/
