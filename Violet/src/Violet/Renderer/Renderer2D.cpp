@@ -644,7 +644,7 @@ namespace Violet {
 	{
 		/*Reset The Quad Variables*/
 		s_data->quadIndicesToBeDrawnCount = 0;
-		s_data->quadVertexBufferDataPtr = s_data->quadVertexBufferData;  //Let the pointer point to the begining of the buffer
+		s_data->quadVertexBufferDataPtr = s_data->quadVertexBufferData;  //Let the pointer point to the beginning of the buffer
 
 		s_data->textureSlotIndex = 1;   //Resets to 1, cause index 0 is occupied by the default white texture
 	}
@@ -653,14 +653,14 @@ namespace Violet {
 	{
 		/*Reset The Circle Variables*/
 		s_data->circleIndicesToBeDrawnCount = 0;
-		s_data->circleVertexBufferDataPtr = s_data->circleVertexBufferData;  //Let the pointer point to the begining of the buffer
+		s_data->circleVertexBufferDataPtr = s_data->circleVertexBufferData;  //Let the pointer point to the beginning of the buffer
 	}
 
 	void Renderer2D::StartNewLinesBatch()
 	{
 		/*Reset The Line Variables*/
 		s_data->lineVerticesToBeDrawnCount = 0;
-		s_data->lineVertexBufferDataPtr = s_data->lineVertexBufferData;  //Let the pointer point to the begining of the buffer
+		s_data->lineVertexBufferDataPtr = s_data->lineVertexBufferData;  //Let the pointer point to the beginning of the buffer
 	}
 
 	void Renderer2D::SetupShader(const Ref<Shader> shader, const glm::mat4& viewProjectionMatrix)
