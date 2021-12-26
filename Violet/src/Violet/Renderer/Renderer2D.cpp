@@ -252,7 +252,9 @@ namespace Violet {
 
 	void Renderer2D::Shutdown()
 	{
-		delete [] s_data->quadVertexBufferData;
+		delete[] s_data->quadVertexBufferData;
+		delete[] s_data->circleVertexBufferData;
+		delete[] s_data->lineVertexBufferData;
 		//Free the memory and let VertexArray's destructor free gpu memory and other cleanups
 		delete s_data;
 	}
