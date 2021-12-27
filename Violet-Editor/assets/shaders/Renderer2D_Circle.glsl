@@ -30,7 +30,7 @@ void main(){
 #version 330 core
 
 layout(location = 0) out vec4 o_color;
-layout(location = 1) out int o_int;
+layout(location = 1) out int o_entityID;
 
 in vec4 v_localPosition;  //In range [-1.0f, 1.0f] on XY axes
 in vec4 v_color;
@@ -57,5 +57,5 @@ void main(){
 	o_color = v_color;    //Set circle color
 	o_color.a *= circle;  //Apply the fade to the circle
 
-	o_int = v_entityID;
+	o_entityID = v_entityID;
 }
