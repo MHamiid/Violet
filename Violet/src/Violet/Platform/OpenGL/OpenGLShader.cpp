@@ -16,21 +16,21 @@ namespace Violet {
 
 		//###IF WE ARE NOT USING filesystem(C++17)
 		/* 
-			//@example assets/shaders/Texture.glsl  ===> Texture
+			//@example assets/shaders/shader_name.glsl  ===> shader_name
 
 			//Find the last slash if exists
 			size_t lastSlashPos = filePath.find_last_of("/\\"); //meaning last of forward slash or back slash
 
-			if (lastSlashPos == std::string::npos) { lastSlashPos = 0; } //If the filePath doesn't contain slashes @example Texture.glsl, 
+			if (lastSlashPos == std::string::npos) { lastSlashPos = 0; } //If the filePath doesn't contain slashes @example shader_name.glsl, 
 																		 //We set the position to point at the first char of the file name
-																		 //@example Texture.glsl ===> indexOf(T)
+																		 //@example shader_name.glsl ===> indexOf(T)
 			else { lastSlashPos = lastSlashPos + 1; }  //Points to the first char of the file name
-													   //@example assets/shaders/Texture.glsl  ===> indexOf(T)
+													   //@example assets/shaders/shader_name.glsl  ===> indexOf(T)
 
 			//Find the last dot if exists
 			size_t lastDotPos = filePath.rfind('.'); //Find the last dot
 
-			size_t shaderNameCharCount = lastDotPos == std::string::npos ? filePath.size() - lastSlashPos : lastDotPos - lastSlashPos;	//[If] the filePath doesn't contain dots @example  assets/shaders/Texture, 
+			size_t shaderNameCharCount = lastDotPos == std::string::npos ? filePath.size() - lastSlashPos : lastDotPos - lastSlashPos;	//[If] the filePath doesn't contain dots @example  assets/shaders/shader_name, 
 																																		//We set the count to be the number of chars from lastSlashPos to the end
 																																		//[Else] we set the count to be the number of chars between the dot and the slash
 																		 
