@@ -473,7 +473,7 @@ namespace Violet {
 
 	std::string PropertiesPanel::openTextureDialog()
 	{
-		std::string textureFilePath = FileDialogs::OpenFile("Image files(*.jpg; *.png; *.bmp)\0 * .jpg; *.png; *.bmp\0All files\0*.*\0");
+		std::string textureFilePath = FileDialogs::OpenFile("Image files(*.jpg; *.png; *.bmp; *.jpeg)\0 * .jpg; *.png; *.bmp; *.jpeg\0All files\0*.*\0");
 
 		return textureFilePath;
 	}
