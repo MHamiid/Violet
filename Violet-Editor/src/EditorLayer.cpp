@@ -184,6 +184,7 @@ namespace Violet {
 				break;
 			}
 		}
+		onOverlayRender();
 
 		/*Entity Mouse Selection*/
 		if (m_updateMouseSelectedEntityID)
@@ -221,7 +222,67 @@ namespace Violet {
 		m_frameBuffer->unBind();  //NOTE: Must unBind the frame buffer to render on the window screen outside the frame buffer and for ImGui to work
 
 	}
-	
+
+	void EditorLayer::onOverlayRender()
+	{
+		/*Get The Active Scene And Setup The Correct Renderer2D Camera Configuration For the Scene Type*/
+		Ref<Scene> activeScene;   //TODO: Find a better way, instead of creating a new reference of the scene everytime the onOverlayRender() is called
+		if (m_sceneState == SceneState::Play)
+		{
+			activeScene = m_runtimeScene;
+			Entity cameraEntity = m_runtimeScene->getPrimaryCameraEntity();
+			Renderer2D::BeginScene(cameraEntity.getComponent<CameraComponent>().sceneCamera, cameraEntity.getComponent<TransformComponent>().getTransform());
+		}
+		else if (m_sceneState == SceneState::Edit)
+		{
+			activeScene = m_editorScene;
+			m_editorScene->getAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
+			Renderer2D::BeginScene(m_editorCamera);
+		}
+		else
+		{
+			VIO_WARN("Couldn't Select A Scene To Render Overlay");
+		}
+
+		/*Physics Collider Visualization*/
+
+		/*Visualize Circle Colliders*/
+		auto cc2dView = activeScene->getAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
+		for (auto enttEntity : cc2dView)
+		{
+			auto [transformComponent, cc2dComponent] = cc2dView.get<TransformComponent, CircleCollider2DComponent>(enttEntity);
+
+			/*Setting Up A Circle To Represent The Circle Collider*/
+			/*
+			* NOTE: Rotation is not setup, because it doesn't matter if the circle is rotated (Z-Axis) (we don't have the option to rotate a circle collider anyway), for a circle it is still the same.
+			*/
+			glm::vec3 ccTranslation = transformComponent.translation + glm::vec3(cc2dComponent.Offset, 0.001f);   //Get the positions of the circle, and add the collider's offset(X, Y), and Push the circle collider a little bit forward on the Z-Axis to make it visible when rendered 
+			glm::vec3 ccScale = transformComponent.scale * (cc2dComponent.Radius * 2.0f);   //Get the scale of the circle, and multiply with (the factor of the circle diameter multiplied by 2.0f to get the full diameter (size))
+
+			glm::mat4 ccTransfrom = glm::translate(glm::mat4(1.0f), ccTranslation)
+				* glm:: scale(glm::mat4(1.0f), ccScale);
+			Renderer2D::DrawCircle(ccTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.01f);
+		}
+
+		/*Visualize Box Colliders*/
+		auto bc2dView = activeScene->getAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
+		for (auto enttEntity : bc2dView)
+		{
+			auto [transformComponent, bc2dComponent] = bc2dView.get<TransformComponent, BoxCollider2DComponent>(enttEntity);
+
+			/*Setting Up A Quad To Represent The Box Collider*/
+			glm::vec3 bcTranslation = transformComponent.translation + glm::vec3(bc2dComponent.Offset, 0.001f);   //Get the positions of the quad, and add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered 
+			glm::vec3 bcScale = transformComponent.scale * glm::vec3(bc2dComponent.SizeFactor * 2.0f, 1.0f);   //Get the scale of the quad, and multiply with (the sizeFactor multiplied by 2.0f to get the full diameter (size))
+
+			glm::mat4 bcTransfrom = glm::translate(glm::mat4(1.0f), bcTranslation)
+				* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+				* glm::scale(glm::mat4(1.0f), bcScale);
+			Renderer2D::DrawRectangle(bcTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+		}
+
+		Renderer2D::EndScene();
+	}
+
 	void EditorLayer::onImGuiRender()
 	{
 		/*Begining ImGui DockSpace Code*/

@@ -21,6 +21,9 @@ namespace Violet {
 		bool onMouseButtonPressed(MouseButtonPressedEvent& event);
 		bool onItemsDropped(ItemsDroppedEvent& event);
 	private:
+		void onDuplicateEntity();
+		void onOverlayRender();
+	private:
 		void newScene(const std::string& sceneName);
 		void openSceneDialog();
 		void openScene(const std::string& filePath);
@@ -32,9 +35,7 @@ namespace Violet {
 
 		void onScenePlay();
 		void onSceneStop();
-
-		void onDuplicateEntity();
-
+	private:
 		/*Panels*/
 		void UIToolbar();
 	private:

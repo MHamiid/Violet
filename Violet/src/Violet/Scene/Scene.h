@@ -34,6 +34,12 @@ namespace Violet {
 		Entity getPrimaryCameraEntity();
 
 		const std::string& getSceneName() const { return m_sceneName; }
+
+		template <typename...Components>
+		auto getAllEntitiesWith()
+		{
+			return m_registry.view<Components...>();
+		}
 	private:
 		template<typename Component>
 		void copyComponent(entt::registry& src, const std::unordered_map<UUID, entt::entity>& dstEnttMap);
