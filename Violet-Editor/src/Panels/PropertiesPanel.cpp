@@ -395,8 +395,8 @@ namespace Violet {
 		/*BoxCollider2D Component*/
 		drawComponent<BoxCollider2DComponent>("BoxCollider2D", entity, [&](BoxCollider2DComponent& bc2dComponent)
 			{
-				ImGui::DragFloat2("Offset", glm::value_ptr(bc2dComponent.Offset));
-				ImGui::DragFloat2("Size Factor", glm::value_ptr(bc2dComponent.SizeFactor));
+				ImGui::DragFloat2("Offset", glm::value_ptr(bc2dComponent.Offset), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat2("Size Factor", glm::value_ptr(bc2dComponent.SizeFactor), 0.01f, 0.001f, 1.0f);   //Can't be zero, or will get area size assertion error
 				ImGui::DragFloat("Density", &bc2dComponent.Density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &bc2dComponent.Friction, 0.01f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);      //[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
 				ImGui::DragFloat("Restitution", &bc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
@@ -406,8 +406,8 @@ namespace Violet {
 		/*CircleCollider2D Component*/
 		drawComponent<CircleCollider2DComponent>("CircleCollider2D", entity, [&](CircleCollider2DComponent& cc2dComponent)
 			{
-				ImGui::DragFloat2("Offset", glm::value_ptr(cc2dComponent.Offset));
-				ImGui::DragFloat("Radius", &cc2dComponent.Radius);
+				ImGui::DragFloat2("Offset", glm::value_ptr(cc2dComponent.Offset), 0.01f, 0.0f, 1.0f);
+				ImGui::DragFloat("Radius", &cc2dComponent.Radius, 0.01f, 0.001f, 1.0f);   //Can't be zero, or will have no physics effects on the entity
 				ImGui::DragFloat("Density", &cc2dComponent.Density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &cc2dComponent.Friction, 0.01f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);      //[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
 				ImGui::DragFloat("Restitution", &cc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
