@@ -135,7 +135,8 @@ namespace Violet {
 				* Set the size
 				* NOTE: The translation and rotation are already set in the b2Body instance
 				*/
-				boxShape.SetAsBox(bc2dComponent.SizeFactor.x * transformComponent.scale.x, bc2dComponent.SizeFactor.y * transformComponent.scale.y);
+				boxShape.SetAsBox(bc2dComponent.SizeFactor.x * transformComponent.scale.x, bc2dComponent.SizeFactor.y * transformComponent.scale.y,
+					b2Vec2(bc2dComponent.Offset.x, bc2dComponent.Offset.y), 0.0f);
 
 				b2FixtureDef fixtureDef;
 				fixtureDef.shape = &boxShape;
