@@ -273,11 +273,14 @@ namespace Violet {
 			/*Setting Up A Quad To Represent The Box Collider*/
 			glm::vec3 bcScale = transformComponent.scale * glm::vec3(bc2dComponent.SizeFactor * 2.0f, 1.0f);   //Get the scale of the quad, and multiply with (the sizeFactor multiplied by 2.0f to get the full diameter (size))
 
-			glm::mat4 bcTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)
-				* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f))
+			glm::mat4 bcTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)  //Translate to the actual quad position
+				* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+			/*
+			* NOTE: The order where the collider offset is applied after the rotation around the quad original origin, and not the collider's origin with the offset applied.
+			*       The order where the scale is applied after the offset is applied.
+			*/
+			bcTransfrom = glm::translate(bcTransfrom, glm::vec3(bc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
 				* glm::scale(glm::mat4(1.0f), bcScale);
-			//NOTE: The order which the collider offset is added after the rotation around the quad original origin, and not the collider's origin with the offset applied
-			bcTransfrom = glm::translate(bcTransfrom, glm::vec3(bc2dComponent.Offset, 0.001f));  //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
 			Renderer2D::DrawRectangle(bcTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
 		}
 
