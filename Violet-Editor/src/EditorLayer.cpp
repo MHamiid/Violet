@@ -254,13 +254,18 @@ namespace Violet {
 
 			/*Setting Up A Circle To Represent The Circle Collider*/
 			/*
-			* NOTE: Rotation is not setup, because it doesn't matter if the circle is rotated (Z-Axis) (we don't have the option to rotate a circle collider anyway), for a circle it is still the same.
+			* NOTE: Applying rotation does matter even for circles, as it is ulimately the collider's rotation around the original circle origin, otherwise when offsetting the collider from the actual circle position, it would give incorrect results
 			*/
-			glm::vec3 ccTranslation = transformComponent.translation + glm::vec3(cc2dComponent.Offset, 0.001f);   //Get the positions of the circle, and add the collider's offset(X, Y), and Push the circle collider a little bit forward on the Z-Axis to make it visible when rendered 
 			glm::vec3 ccScale = transformComponent.scale * (cc2dComponent.Radius * 2.0f);   //Get the scale of the circle, and multiply with (the factor of the circle diameter multiplied by 2.0f to get the full diameter (size))
 
-			glm::mat4 ccTransfrom = glm::translate(glm::mat4(1.0f), ccTranslation)
-				* glm:: scale(glm::mat4(1.0f), ccScale);
+			glm::mat4 ccTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)  //Translate to the actual circle position
+				* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+			/*
+			* NOTE: The order where the collider offset is applied after the rotation around the circle original origin, and not the collider's origin with the offset applied.
+			*       The order where the scale is applied after the offset is applied.
+			*/
+			ccTransfrom = glm::translate(ccTransfrom, glm::vec3(cc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
+			* glm::scale(glm::mat4(1.0f), ccScale);
 			Renderer2D::DrawCircle(ccTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.01f);
 		}
 
