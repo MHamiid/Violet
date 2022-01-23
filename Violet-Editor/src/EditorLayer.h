@@ -76,6 +76,8 @@ namespace Violet {
 		bool m_updateMouseSelectedEntityID = false;
 		Entity m_editorSceneSelectedEntityCache;
 
+		bool m_showPhysicsColliders = true;
+
 		enum class SceneState
 		{
 			Edit = 0, Play = 1

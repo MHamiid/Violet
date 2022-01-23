@@ -245,48 +245,50 @@ namespace Violet {
 		}
 
 		/*Physics Collider Visualization*/
-
-		/*Visualize Circle Colliders*/
-		auto cc2dView = activeScene->getAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
-		for (auto enttEntity : cc2dView)
+		if (m_showPhysicsColliders)
 		{
-			auto [transformComponent, cc2dComponent] = cc2dView.get<TransformComponent, CircleCollider2DComponent>(enttEntity);
+			/*Visualize Circle Colliders*/
+			auto cc2dView = activeScene->getAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
+			for (auto enttEntity : cc2dView)
+			{
+				auto [transformComponent, cc2dComponent] = cc2dView.get<TransformComponent, CircleCollider2DComponent>(enttEntity);
 
-			/*Setting Up A Circle To Represent The Circle Collider*/
-			/*
-			* NOTE: Applying rotation does matter even for circles, as it is ulimately the collider's rotation around the original circle origin, otherwise when offsetting the collider from the actual circle position, it would give incorrect results
-			*/
-			glm::vec3 ccScale = transformComponent.scale * (cc2dComponent.Radius * 2.0f);   //Get the scale of the circle, and multiply with (the factor of the circle diameter multiplied by 2.0f to get the full diameter (size))
+				/*Setting Up A Circle To Represent The Circle Collider*/
+				/*
+				* NOTE: Applying rotation does matter even for circles, as it is ulimately the collider's rotation around the original circle origin, otherwise when offsetting the collider from the actual circle position, it would give incorrect results
+				*/
+				glm::vec3 ccScale = transformComponent.scale * (cc2dComponent.Radius * 2.0f);   //Get the scale of the circle, and multiply with (the factor of the circle diameter multiplied by 2.0f to get the full diameter (size))
 
-			glm::mat4 ccTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)  //Translate to the actual circle position
-				* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-			/*
-			* NOTE: The order where the collider offset is applied after the rotation around the circle original origin, and not the collider's origin with the offset applied.
-			*       The order where the scale is applied after the offset is applied.
-			*/
-			ccTransfrom = glm::translate(ccTransfrom, glm::vec3(cc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
-			* glm::scale(glm::mat4(1.0f), ccScale);
-			Renderer2D::DrawCircle(ccTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.01f);
-		}
+				glm::mat4 ccTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)  //Translate to the actual circle position
+					* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+				/*
+				* NOTE: The order where the collider offset is applied after the rotation around the circle original origin, and not the collider's origin with the offset applied.
+				*       The order where the scale is applied after the offset is applied.
+				*/
+				ccTransfrom = glm::translate(ccTransfrom, glm::vec3(cc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
+					* glm::scale(glm::mat4(1.0f), ccScale);
+				Renderer2D::DrawCircle(ccTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.01f);
+			}
 
-		/*Visualize Box Colliders*/
-		auto bc2dView = activeScene->getAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
-		for (auto enttEntity : bc2dView)
-		{
-			auto [transformComponent, bc2dComponent] = bc2dView.get<TransformComponent, BoxCollider2DComponent>(enttEntity);
+			/*Visualize Box Colliders*/
+			auto bc2dView = activeScene->getAllEntitiesWith<TransformComponent, BoxCollider2DComponent>();
+			for (auto enttEntity : bc2dView)
+			{
+				auto [transformComponent, bc2dComponent] = bc2dView.get<TransformComponent, BoxCollider2DComponent>(enttEntity);
 
-			/*Setting Up A Quad To Represent The Box Collider*/
-			glm::vec3 bcScale = transformComponent.scale * glm::vec3(bc2dComponent.SizeFactor * 2.0f, 1.0f);   //Get the scale of the quad, and multiply with (the sizeFactor multiplied by 2.0f to get the full diameter (size))
+				/*Setting Up A Quad To Represent The Box Collider*/
+				glm::vec3 bcScale = transformComponent.scale * glm::vec3(bc2dComponent.SizeFactor * 2.0f, 1.0f);   //Get the scale of the quad, and multiply with (the sizeFactor multiplied by 2.0f to get the full diameter (size))
 
-			glm::mat4 bcTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)  //Translate to the actual quad position
-				* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
-			/*
-			* NOTE: The order where the collider offset is applied after the rotation around the quad original origin, and not the collider's origin with the offset applied.
-			*       The order where the scale is applied after the offset is applied.
-			*/
-			bcTransfrom = glm::translate(bcTransfrom, glm::vec3(bc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
-				* glm::scale(glm::mat4(1.0f), bcScale);
-			Renderer2D::DrawRectangle(bcTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+				glm::mat4 bcTransfrom = glm::translate(glm::mat4(1.0f), transformComponent.translation)  //Translate to the actual quad position
+					* glm::rotate(glm::mat4(1.0f), transformComponent.rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
+				/*
+				* NOTE: The order where the collider offset is applied after the rotation around the quad original origin, and not the collider's origin with the offset applied.
+				*       The order where the scale is applied after the offset is applied.
+				*/
+				bcTransfrom = glm::translate(bcTransfrom, glm::vec3(bc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
+					* glm::scale(glm::mat4(1.0f), bcScale);
+				Renderer2D::DrawRectangle(bcTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f));
+			}
 		}
 
 		Renderer2D::EndScene();
@@ -408,8 +410,6 @@ namespace Violet {
 			ImGui::EndMenuBar();
 		}
 
-
-
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("Theme"))
@@ -423,7 +423,16 @@ namespace Violet {
 			ImGui::EndMenuBar();
 		}
 
-		
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("Settings"))
+			{
+				ImGui::Checkbox("Show Physics Colliders", &m_showPhysicsColliders);
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+		}
+
 		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
 		m_sceneHierarchyPanel.onImGuiRender(m_editorCamera.isUsing());
 		m_propertiesPanel.onImGuiRender();
