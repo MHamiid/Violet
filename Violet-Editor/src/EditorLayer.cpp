@@ -401,17 +401,6 @@ namespace Violet {
 
 		if (ImGui::BeginMenuBar())
 		{
-			if (ImGui::BeginMenu("Violet"))
-			{
-				if (ImGui::MenuItem("VSync On")) Application::GetApplicationInstance().getWindow().setVSync(true);
-				if (ImGui::MenuItem("VSync Off")) Application::GetApplicationInstance().getWindow().setVSync(false);
-				ImGui::EndMenu();
-			}
-			ImGui::EndMenuBar();
-		}
-
-		if (ImGui::BeginMenuBar())
-		{
 			if (ImGui::BeginMenu("Theme"))
 			{
 				if (ImGui::MenuItem("Violet")) Application::GetApplicationInstance().getImGuiLayer()->SetVioletThemeColors();
@@ -428,6 +417,12 @@ namespace Violet {
 			if (ImGui::BeginMenu("Settings"))
 			{
 				ImGui::Checkbox("Show Physics Colliders", &m_showPhysicsColliders);
+				if (ImGui::BeginMenu("VSync"))
+				{
+					if (ImGui::MenuItem("VSync On")) Application::GetApplicationInstance().getWindow().setVSync(true);
+					if (ImGui::MenuItem("VSync Off")) Application::GetApplicationInstance().getWindow().setVSync(false);
+					ImGui::EndMenu();
+				}
 				ImGui::EndMenu();
 			}
 			ImGui::EndMenuBar();
