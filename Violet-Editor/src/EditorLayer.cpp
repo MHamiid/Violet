@@ -419,8 +419,9 @@ namespace Violet {
 				ImGui::Checkbox("Show Physics Colliders", &m_showPhysicsColliders);
 				if (ImGui::BeginMenu("VSync"))
 				{
-					if (ImGui::MenuItem("VSync On")) Application::GetApplicationInstance().getWindow().setVSync(true);
-					if (ImGui::MenuItem("VSync Off")) Application::GetApplicationInstance().getWindow().setVSync(false);
+					Violet::Window& window = Application::GetApplicationInstance().getWindow();
+					if (ImGui::MenuItem("VSync On", NULL, window.isVSyncEnabled())) window.setVSync(true);
+					if (ImGui::MenuItem("VSync Off", NULL, !window.isVSyncEnabled())) window.setVSync(false);
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
