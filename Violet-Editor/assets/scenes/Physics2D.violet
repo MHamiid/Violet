@@ -82,7 +82,7 @@ Entities:
       Tag: Quad
     TransformComponent:
       Translation: [5.34222078, 9.68631554, 6.10350507e-05]
-      Rotation: [0, -0, -3.14159226]
+      Rotation: [0, -0, 0]
       Scale: [0.999983788, 0.999983788, 1]
     SpriteRendererComponent:
       Color: [1, 0.999989986, 0.999989986, 1]
