@@ -156,33 +156,33 @@ namespace Violet {
 		RenderCommand::Clear();
 
 		/*Clear the attachments*/
-	
+
 		/*Clear the entityID attachment to -1 ====> no entity*/
 		int clearValueInt = -1;
 		m_frameBuffer->clearColorAttachment(1, &clearValueInt);
 
 		/*Render/Update The Scene*/
 		//NOTE: Rendering must be here after the framebuffer is bound and cleared
-		switch (m_sceneState) 
+		switch (m_sceneState)
 		{
-			case SceneState::Edit:
+		case SceneState::Edit:
+		{
+			//Update the editor camera movement
+			if (m_viewPortFocused || m_viewPortHovered)
 			{
-				//Update the editor camera movement
-				if (m_viewPortFocused || m_viewPortHovered)
-				{
-					m_editorCamera.onUpdate(deltaTime);
-				}
+				m_editorCamera.onUpdate(deltaTime);
+			}
 
-				//Render the scene
-				m_editorScene->onUpdateEditor(deltaTime, m_editorCamera);
-				break;
-			}
-			case SceneState::Play:
-			{
-				//Render the scene
-				m_runtimeScene->onUpdateRuntime(deltaTime);
-				break;
-			}
+			//Render the scene
+			m_editorScene->onUpdateEditor(deltaTime, m_editorCamera);
+			break;
+		}
+		case SceneState::Play:
+		{
+			//Render the scene
+			m_runtimeScene->onUpdateRuntime(deltaTime);
+			break;
+		}
 		}
 		onOverlayRender();
 
@@ -205,12 +205,12 @@ namespace Violet {
 				int pixelValue;
 				//Must be called before m_frameBuffer->unBind()
 				m_frameBuffer->readColorAttachmentPixel(1, (int)mousePosition.x, (int)mousePosition.y, &pixelValue);
-	
+
 				if (pixelValue == -1)  //If not valid entity, no entities in that pixel
 				{
 					m_sceneHierarchyPanel.setSelectedEntity({}); //Set a non-valid entity
 				}
-				else 
+				else
 				{
 					m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_editorScene.get() });
 				}
@@ -354,8 +354,43 @@ namespace Violet {
 
 		/*Ending ImGui DockSpace Code*/
 
-
+		/*************************************/
 		/*Start ImGui Code*/
+		/*************************************/
+
+		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
+		m_sceneHierarchyPanel.onImGuiRender(m_editorCamera.isUsing());
+		m_propertiesPanel.onImGuiRender();
+		m_contentBrowserPanel.onImGuiRender();
+
+		/*Currently For Testing Purposes*/
+		ImGui::Begin("Renderer2D Scene Statistics");
+		ImGui::Text("Draw Calls: %d", Renderer2D::GetSceneStatistics().getTotalDrawCallsCount());
+		ImGui::Text("Quads: %d", Renderer2D::GetSceneStatistics().getTotalQuadCount());
+		ImGui::Text("Vertices: %d", Renderer2D::GetSceneStatistics().getTotalVertexCount());
+		ImGui::Text("Indices: %d", Renderer2D::GetSceneStatistics().getTotalIndexCount());
+		ImGui::End();
+
+		ImGui::Begin("FPS");
+		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::End();
+
+		/*UI & Panels*/
+		UIMenuBars();
+		/*New Scene Popup Modal Dialogue*/
+		UIToolbar();
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));  //Remove window padding for the viewport
+		if (m_showNewScenePopupModal) { UINewScenePopupModal(); }
+		UIViewport();
+		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
+
+		/*************************************/
+		/*End ImGui Code*/
+		/*************************************/
+		ImGui::End();  //DockSpace ImGui::End
+	}
+	void EditorLayer::UIMenuBars()
+	{
 		if (ImGui::BeginMenuBar())
 		{
 			if (ImGui::BeginMenu("File"))
@@ -363,7 +398,7 @@ namespace Violet {
 				// Disabling fullscreen would allow the window to be moved to the front of other windows, 
 				// which we can't undo at the moment without finer window depth/z control.
 				//ImGui::MenuItem("Fullscreen", NULL, &opt_fullscreen_persistant);
-				if (ImGui::MenuItem("New", "Ctrl+N")) 
+				if (ImGui::MenuItem("New", "Ctrl+N"))
 				{
 					m_showNewScenePopupModal = true;
 				}
@@ -429,24 +464,86 @@ namespace Violet {
 			ImGui::EndMenuBar();
 		}
 
-		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
-		m_sceneHierarchyPanel.onImGuiRender(m_editorCamera.isUsing());
-		m_propertiesPanel.onImGuiRender();
-		m_contentBrowserPanel.onImGuiRender();
+	}
 
-		ImGui::Begin("Renderer2D Scene Statistics");
-		ImGui::Text("Draw Calls: %d", Renderer2D::GetSceneStatistics().getTotalDrawCallsCount());
-		ImGui::Text("Quads: %d", Renderer2D::GetSceneStatistics().getTotalQuadCount());
-		ImGui::Text("Vertices: %d", Renderer2D::GetSceneStatistics().getTotalVertexCount());
-		ImGui::Text("Indices: %d", Renderer2D::GetSceneStatistics().getTotalIndexCount());
+	void EditorLayer::UINewScenePopupModal()
+	{
+		ImGuiIO& io = ImGui::GetIO();
+
+		ImGui::OpenPopup("New Scene"); //This name(ID) should be the same as BeginPopupModal
+
+			// Always center this window when appearing
+		ImVec2 center = ImGui::GetMainViewport()->GetCenter();
+		ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
+
+		if (ImGui::BeginPopupModal("New Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
+		{
+			/*Set the ImGui::InputText to be auto-focused when the New Scene Popup Modal Dialogue is created if there is no item active (@ex: the Button is pressed)
+			(we have the cursor in the inputText field by default, so that we can type upon opening the PopUpModal without the clicking the inputText field),
+			otherwise the focus is set every frame, so it will steal the focus from the Button every frame and we can't click a button*/
+			if (!ImGui::IsAnyItemActive())
+				ImGui::SetKeyboardFocusHere(0);
+			ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
+
+			ImGui::Separator();
+			Utils::ImGuiUtils::DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
+				{
+					//If the button is [Left-Clicked] or the [Enter] key is pressed while the button is not hidden
+					if (ImGui::Button("OK", ImVec2(120, 0)) || (!itemHidden && ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Enter])))
+					{
+						m_showNewScenePopupModal = false;
+						newScene(m_newSceneNameBuffer);
+						m_newSceneNameBuffer = ""; //Clear the buffer
+						ImGui::CloseCurrentPopup();
+					}
+				});
+			ImGui::SetItemDefaultFocus();
+			ImGui::SameLine();
+			//If the button is [Left-Clicked] or the [Escape] key is pressed
+			if (ImGui::Button("Cancel", ImVec2(120, 0)) || ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Escape]))
+			{
+				m_showNewScenePopupModal = false;
+				m_newSceneNameBuffer = ""; //Clear the buffer
+				ImGui::CloseCurrentPopup();
+			}
+			ImGui::EndPopup();
+		}
+	}
+
+	void EditorLayer::UIToolbar()
+	{
+		/*Set Styles/Colors For The Window/Button*/
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0)); //Spacing between items
+		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
+
+		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove);  //NOTE: Second parameter is set to nullptr, which means there is no close button for the window
+
+		/*Play/Stop Button*/
+		float buttonSize = ImGui::GetWindowHeight() - 4.0f;  //Gets the Toolbar height - Some padding value
+		Ref<Texture2D> icon = m_sceneState == SceneState::Edit ? m_iconPlay : m_iconStop;
+		uint64_t textureID = icon->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
+		//Centering the Button in middle of the Toolbar
+		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (buttonSize * 0.5f)); //NOTE: We can use ImGui::SameLine instead of ImGui::SetCursorPosX as a way to set a desired offset for the button (Propably would use it when we have more than one button in the toolbar)
+		if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID), ImVec2(buttonSize, buttonSize),
+			ImVec2(0, 0), ImVec2(1, 1), 0)) //Remove frame padding
+		{
+			if (m_sceneState == SceneState::Edit)
+			{
+				onScenePlay();
+			}
+			else if (m_sceneState == SceneState::Play)
+			{
+				onSceneStop();
+			}
+		}
+		ImGui::PopStyleVar(2);
+		ImGui::PopStyleColor();
 		ImGui::End();
+	}
 
-		ImGui::Begin("FPS");
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
-		ImGui::End();
-
-
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));  //Remove window padding for the viewport
+	void EditorLayer::UIViewport()
+	{
 		ImGui::Begin("ViewPort");
 
 		m_viewPortFocused = ImGui::IsWindowFocused();  //Get the ViewPort focus status from ImGui and update the status
@@ -464,13 +561,13 @@ namespace Violet {
 		//Get the size of the panel
 		ImVec2 viewPortPanelSize = ImGui::GetContentRegionAvail();
 		m_viewPortSize = { viewPortPanelSize.x, viewPortPanelSize.y };  //Update the size
-		
+
 		/*set the bounds of the view port panel*/
 		ImVec2 viewportOffset = ImGui::GetCursorScreenPos();
 		m_viewPortBounds[0] = { viewportOffset.x, viewportOffset.y };
 		m_viewPortBounds[1] = { viewPortPanelSize.x + viewportOffset.x, viewPortPanelSize.y + viewportOffset.y };
 
-		
+
 		uint64_t textureID = m_frameBuffer->getColorAttachmentID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer when casting
 		//Set the texture and flip it to it's original form, ImGui (0, 0) coordinates at top-left by default
 		ImGui::Image(reinterpret_cast<void*>(textureID), ImVec2(viewPortPanelSize.x, viewPortPanelSize.y), ImVec2(0, 1), ImVec2(1, 0));
@@ -568,86 +665,8 @@ namespace Violet {
 
 			}
 		}
-		ImGui::End();  //ViewPort
-	
-		/*New Scene Popup Modal Dialogue*/
-		if (m_showNewScenePopupModal) {
-			ImGui::OpenPopup("New Scene"); //This name(ID) should be the same as BeginPopupModal
-
-		    // Always center this window when appearing
-			ImVec2 center = ImGui::GetMainViewport()->GetCenter();
-			ImGui::SetNextWindowPos(center, ImGuiCond_Appearing, ImVec2(0.5f, 0.5f));
-
-			if (ImGui::BeginPopupModal("New Scene", NULL, ImGuiWindowFlags_AlwaysAutoResize))
-			{
-				/*Set the ImGui::InputText to be auto-focused when the New Scene Popup Modal Dialogue is created if there is no item active (@ex: the Button is pressed)
-				(we have the cursor in the inputText field by default, so that we can type upon opening the PopUpModal without the clicking the inputText field),
-				otherwise the focus is set every frame, so it will steal the focus from the Button every frame and we can't click a button*/
-				if (!ImGui::IsAnyItemActive())
-					ImGui::SetKeyboardFocusHere(0);
-				ImGui::InputText("##NewSceneName-ID", &m_newSceneNameBuffer);
-
-				ImGui::Separator();
-				Utils::ImGuiUtils::DrawWithHiddenStyle(m_newSceneNameBuffer.empty(), [&](bool itemHidden)
-					{
-						//If the button is [Left-Clicked] or the [Enter] key is pressed while the button is not hidden
-						if (ImGui::Button("OK", ImVec2(120, 0)) || (!itemHidden && ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Enter])))
-						{
-							m_showNewScenePopupModal = false;
-							newScene(m_newSceneNameBuffer);
-							m_newSceneNameBuffer = ""; //Clear the buffer
-							ImGui::CloseCurrentPopup();
-						}
-					});
-				ImGui::SetItemDefaultFocus();
-				ImGui::SameLine();
-				//If the button is [Left-Clicked] or the [Escape] key is pressed
-				if (ImGui::Button("Cancel", ImVec2(120, 0)) || ImGui::IsKeyPressed(io.KeyMap[ImGuiKey_Escape]))
-				{
-					m_showNewScenePopupModal = false;
-					m_newSceneNameBuffer = ""; //Clear the buffer
-					ImGui::CloseCurrentPopup();
-				}
-				ImGui::EndPopup();
-			}
-		}
-		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
-		/*End ImGui Code*/
-
-		UIToolbar();
-
-		ImGui::End();  //DockSpace ImGui::End
-	}
-	void EditorLayer::UIToolbar()
-	{
-		/*Set Styles/Colors For The Window/Button*/
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemInnerSpacing, ImVec2(0, 0)); //Spacing between items
-		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
-		
-		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove);  //NOTE: Second parameter is set to nullptr, which means there is no close button for the window
-
-		/*Play/Stop Button*/
-		float buttonSize = ImGui::GetWindowHeight() - 4.0f;  //Gets the Toolbar height - Some padding value
-		Ref<Texture2D> icon = m_sceneState == SceneState::Edit ? m_iconPlay : m_iconStop;
-		uint64_t textureID = icon->getTextureID();  //Change uint32_t to uint64_t to match with the 64 bit void pointer ( ImTextureID = void* ) when casting
-		//Centering the Button in middle of the Toolbar
-		ImGui::SetCursorPosX((ImGui::GetWindowContentRegionMax().x * 0.5f) - (buttonSize * 0.5f)); //NOTE: We can use ImGui::SameLine instead of ImGui::SetCursorPosX as a way to set a desired offset for the button (Propably would use it when we have more than one button in the toolbar)
-		if (ImGui::ImageButton(reinterpret_cast<ImTextureID>(textureID), ImVec2(buttonSize, buttonSize),
-			ImVec2(0, 0), ImVec2(1, 1), 0)) //Remove frame padding
-		{
-			if (m_sceneState == SceneState::Edit)
-			{
-				onScenePlay();
-			}
-			else if (m_sceneState == SceneState::Play)
-			{
-				onSceneStop();
-			}
-		}
-		ImGui::PopStyleVar(2);
-		ImGui::PopStyleColor();
 		ImGui::End();
+
 	}
 
 	void EditorLayer::onEvent(Event& e)
@@ -664,7 +683,7 @@ namespace Violet {
 	{
 		/*Shortcuts*/
 		/*Note Currently ImGui Is Set To Block The Events Unless IF The ViewPort Is Fucosed Or Hovered*/
-		if (event.getRepeatCount() > 0) 
+		if (event.getRepeatCount() > 0)
 		{
 			return false;
 		}
@@ -674,10 +693,10 @@ namespace Violet {
 
 		switch (event.getKeyCode())
 		{
-		/*File Menu*/
+			/*File Menu*/
 		case Key::N:
 		{
-			if (controlKeyIsPressed) 
+			if (controlKeyIsPressed)
 			{
 				m_showNewScenePopupModal = true;
 			}
@@ -685,7 +704,7 @@ namespace Violet {
 		}
 		case Key::O:
 		{
-			if (controlKeyIsPressed) 
+			if (controlKeyIsPressed)
 			{
 				openSceneDialog();
 			}
@@ -693,7 +712,7 @@ namespace Violet {
 		}
 		case Key::S:
 		{
-			if (controlKeyIsPressed && shiftKeyIsPressed) 
+			if (controlKeyIsPressed && shiftKeyIsPressed)
 			{
 				saveSceneAsDialog();
 				return true;
@@ -752,7 +771,7 @@ namespace Violet {
 	/*Dropping Items From Outside The Editor*/
 	bool EditorLayer::onItemsDropped(ItemsDroppedEvent& event)
 	{
-		if (event.getItemsCount() > 1) 
+		if (event.getItemsCount() > 1)
 		{
 			VIO_CORE_ERROR("More Than One Scene Dropped!");
 		}
@@ -815,8 +834,8 @@ namespace Violet {
 		{
 			VIO_CORE_ERROR("Attempting To Open An Invalid Scene File Type '{0}', try '.violet' File Type", filePath);
 		}
-		
-		
+
+
 	}
 	void EditorLayer::saveScene()
 	{
@@ -825,7 +844,7 @@ namespace Violet {
 		{
 			serializeScene(m_editorScene, m_editorScenePath);
 		}
-		else 
+		else
 		{
 			VIO_CORE_ERROR("Attempting To Save With An Empty Scene Name!");
 		}
@@ -887,13 +906,13 @@ namespace Violet {
 		//Make sure we are in edit mode
 		if (m_sceneState != SceneState::Edit)
 			return;
-		
+
 		Entity selectedEntity = m_sceneHierarchyPanel.getSelectedEntity();
 		//Check if there is an entity selected
 		if (selectedEntity)  //NOTE: Entity has an overload for the bool operator
 		{
 			m_editorScene->duplicateEntity(selectedEntity);
 		}
-		
+
 	}
 }

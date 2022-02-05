@@ -36,8 +36,11 @@ namespace Violet {
 		void onScenePlay();
 		void onSceneStop();
 	private:
-		/*Panels*/
+		/*UI & Panels*/
+		void UIMenuBars();
+		void UINewScenePopupModal();
 		void UIToolbar();
+		void UIViewport();
 	private:
 		/*Editor Resources*/
 		/*Toolbar Textures*/
