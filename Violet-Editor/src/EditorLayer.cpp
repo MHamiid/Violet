@@ -379,10 +379,8 @@ namespace Violet {
 		UIMenuBars();
 		/*New Scene Popup Modal Dialogue*/
 		UIToolbar();
-		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));  //Remove window padding for the viewport
 		if (m_showNewScenePopupModal) { UINewScenePopupModal(); }
 		UIViewport();
-		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 
 		/*************************************/
 		/*End ImGui Code*/
@@ -544,6 +542,8 @@ namespace Violet {
 
 	void EditorLayer::UIViewport()
 	{
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));  //Remove window padding
+
 		ImGui::Begin("ViewPort");
 
 		m_viewPortFocused = ImGui::IsWindowFocused();  //Get the ViewPort focus status from ImGui and update the status
@@ -666,7 +666,7 @@ namespace Violet {
 			}
 		}
 		ImGui::End();
-
+		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 	}
 
 	void EditorLayer::onEvent(Event& e)
