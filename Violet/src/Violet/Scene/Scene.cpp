@@ -233,8 +233,7 @@ namespace Violet {
 
 
 		/*Render 2D*/
-		//Check if the camera entity is valid and has been assigned to a scene and the entity has a CameraComponent attached, Note the sequence of the checking of the conditions
-		if (m_primaryCameraEntity != nullptr && (*m_primaryCameraEntity) && m_primaryCameraEntity->hasComponent<TransformComponent>() && m_primaryCameraEntity->hasComponent<CameraComponent>())
+		if (hasValidPrimaryCamera())
 		{
 			CameraComponent& primaryCameraComponent = m_primaryCameraEntity->getComponent<CameraComponent>();
 			//Render only if there is a valid camera in the primaryCameraEntity
@@ -367,6 +366,20 @@ namespace Violet {
 		CopyComponentIfExists<RidgidBody2DComponent>(newEntity, entity);
 		CopyComponentIfExists<BoxCollider2DComponent>(newEntity, entity);
 		CopyComponentIfExists<CircleCollider2DComponent>(newEntity, entity);
+	}
+
+	bool Scene::hasValidPrimaryCamera()
+	{
+		/*
+		 * Check if the scene has a primary camera entity and it is a valid entity
+		 * , and the entity has TransfromComponent and CameraComponent attached
+		 * , note the sequence of the checking of the conditions.
+		 */
+		if (m_primaryCameraEntity != nullptr && (*m_primaryCameraEntity) && m_primaryCameraEntity->hasComponent<TransformComponent>() && m_primaryCameraEntity->hasComponent<CameraComponent>())
+		{
+			return true;
+		}
+		return false;
 	}
 
 	void Scene::setPrimaryCameraEntity(Entity cameraEntity)

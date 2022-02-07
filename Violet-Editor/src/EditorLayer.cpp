@@ -230,6 +230,11 @@ namespace Violet {
 		if (m_sceneState == SceneState::Play)
 		{
 			activeScene = m_runtimeScene;
+			if (!m_runtimeScene->hasValidPrimaryCamera())
+			{
+				//VIO_WARN("Failed To Render Overlays. Runtime Scene Doesn't Have A Vaild Primary Camera Entity!");
+				return;
+			}
 			Entity cameraEntity = m_runtimeScene->getPrimaryCameraEntity();
 			Renderer2D::BeginScene(cameraEntity.getComponent<CameraComponent>().sceneCamera, cameraEntity.getComponent<TransformComponent>().getTransform());
 		}

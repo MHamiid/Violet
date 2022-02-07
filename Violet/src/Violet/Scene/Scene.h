@@ -30,6 +30,7 @@ namespace Violet {
 
 		void duplicateEntity(Entity entity);
 
+		bool hasValidPrimaryCamera();
 		void setPrimaryCameraEntity(Entity cameraEntity);
 		Entity getPrimaryCameraEntity();
 
