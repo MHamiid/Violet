@@ -272,7 +272,7 @@ namespace Violet {
 				*/
 				ccTransfrom = glm::translate(ccTransfrom, glm::vec3(cc2dComponent.Offset, 0.001f))   //Add the collider's offset(X, Y), and Push the box collider a little bit forward on the Z-Axis to make it visible when rendered
 					* glm::scale(glm::mat4(1.0f), ccScale);
-				Renderer2D::DrawCircle(ccTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.01f);
+				Renderer2D::DrawCircle(ccTransfrom, glm::vec4(0.0f, 1.0f, 0.0f, 1.0f), 0.03f);
 			}
 
 			/*Visualize Box Colliders*/
