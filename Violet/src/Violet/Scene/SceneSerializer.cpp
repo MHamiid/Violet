@@ -334,7 +334,7 @@ namespace Violet {
 		std::ofstream fileOut(filePath);  //Assumes that the directory in the filePath exists
 		fileOut << out.c_str();
 
-		VIO_CORE_TRACE("Serialized Scene {0} ===> {1}", m_scene->getSceneName().c_str(), filePath.c_str());
+		VIO_CORE_TRACE("Serialized Scene: '{0}' ===> '{1}'", m_scene->getSceneName().c_str(), filePath.c_str());
 	}
 
 	void SceneSerializer::serializeToBinary(const std::string& filePath)
@@ -491,7 +491,7 @@ namespace Violet {
 			}
 		}
 
-		VIO_CORE_TRACE("Deserialized Scene {0} ===> {1}", filePath.c_str(), sceneData["Scene"].as<std::string>().c_str());
+		VIO_CORE_TRACE("Deserialized Scene: '{0}' ===> '{1}'", filePath.c_str(), sceneData["Scene"].as<std::string>().c_str());
 		return true;
 	}
 
