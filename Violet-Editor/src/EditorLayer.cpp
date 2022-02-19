@@ -870,6 +870,7 @@ namespace Violet {
 	{
 		SceneSerializer sceneSerializer(scene);
 		sceneSerializer.serializeToText(filePath);
+		VIO_CORE_INFO("Scene Saved To '{0}'", filePath.c_str());
 	}
 	bool EditorLayer::deserializeScene(Ref<Scene> dstScene, const std::string& filePath)
 	{
