@@ -250,8 +250,8 @@ namespace Violet {
 		}
 
 		/*Physics Collider Visualization*/
-		if (m_enableScenePhysicsVisualization == SceneType::ALL || (m_enableScenePhysicsVisualization == SceneType::EDITOR_SCENE && activeScene == m_editorScene) ||
-			(m_enableScenePhysicsVisualization == SceneType::RUNTIME_SCENE && activeScene == m_runtimeScene))
+		if ((m_enableEditorScenePhysicsVisualization && activeScene == m_editorScene) ||
+			(m_enableRuntimeScenePhysicsVisualization && activeScene == m_runtimeScene))
 		{
 			/*Visualize Circle Colliders*/
 			auto cc2dView = activeScene->getAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
@@ -457,9 +457,8 @@ namespace Violet {
 			{
 				if (ImGui::BeginMenu("Show Physics Colliders"))
 				{
-					if (ImGui::MenuItem("All", NULL, (m_enableScenePhysicsVisualization == SceneType::ALL)))                      m_enableScenePhysicsVisualization = SceneType::ALL;
-					if (ImGui::MenuItem("Editor Scene", NULL, (m_enableScenePhysicsVisualization == SceneType::EDITOR_SCENE)))    m_enableScenePhysicsVisualization = SceneType::EDITOR_SCENE;
-					if (ImGui::MenuItem("Runtime Scene", NULL, (m_enableScenePhysicsVisualization == SceneType::RUNTIME_SCENE)))  m_enableScenePhysicsVisualization = SceneType::RUNTIME_SCENE;
+					ImGui::MenuItem("Editor Scene", NULL, &m_enableEditorScenePhysicsVisualization);
+					ImGui::MenuItem("Runtime Scene", NULL, &m_enableRuntimeScenePhysicsVisualization);
 					ImGui::EndMenu();
 				}
 				if (ImGui::BeginMenu("VSync"))

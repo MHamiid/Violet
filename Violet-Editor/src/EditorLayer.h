@@ -79,17 +79,13 @@ namespace Violet {
 		bool m_updateMouseSelectedEntityID = false;
 		Entity m_editorSceneSelectedEntityCache;
 
-		enum class SceneType
-		{
-			ALL = 0, EDITOR_SCENE, RUNTIME_SCENE 
-		};
-
 		enum class SceneState
 		{
 			Edit = 0, Play = 1
 		};
 
-		SceneType m_enableScenePhysicsVisualization = SceneType::ALL;
+		bool m_enableEditorScenePhysicsVisualization = true;
+		bool m_enableRuntimeScenePhysicsVisualization = true;;
 		SceneState m_sceneState = SceneState::Edit;
 	};
 
