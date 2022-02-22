@@ -464,8 +464,8 @@ namespace Violet {
 				if (ImGui::BeginMenu("VSync"))
 				{
 					Violet::Window& window = Application::GetApplicationInstance().getWindow();
-					if (ImGui::MenuItem("VSync On", NULL, window.isVSyncEnabled()))    window.setVSync(true);
-					if (ImGui::MenuItem("VSync Off", NULL, !window.isVSyncEnabled()))  window.setVSync(false);
+					if (ImGui::MenuItem("On", NULL, window.isVSyncEnabled()))    window.setVSync(true);
+					if (ImGui::MenuItem("Off", NULL, !window.isVSyncEnabled()))  window.setVSync(false);
 					ImGui::EndMenu();
 				}
 				ImGui::EndMenu();
