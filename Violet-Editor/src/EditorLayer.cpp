@@ -236,13 +236,13 @@ namespace Violet {
 				return;
 			}
 			Entity cameraEntity = m_runtimeScene->getPrimaryCameraEntity();
-			Renderer2D::BeginScene(cameraEntity.getComponent<CameraComponent>().sceneCamera, cameraEntity.getComponent<TransformComponent>().getTransform());
+			Renderer2D::BeginScene(cameraEntity.getComponent<CameraComponent>().sceneCamera, cameraEntity.getComponent<TransformComponent>().getTransform(), false);
 		}
 		else if (m_sceneState == SceneState::Edit)
 		{
 			activeScene = m_editorScene;
 			m_editorScene->getAllEntitiesWith<TransformComponent, CircleCollider2DComponent>();
-			Renderer2D::BeginScene(m_editorCamera);
+			Renderer2D::BeginScene(m_editorCamera, false);
 		}
 		else
 		{

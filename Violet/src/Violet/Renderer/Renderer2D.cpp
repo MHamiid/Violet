@@ -208,7 +208,7 @@ namespace Violet {
 		s_data->lineVertexBuffer = VertexBuffer::Create(s_data->MaxVerticesPerBatch * sizeof(LineVertex));
 
 		s_data->lineVertexBuffer->setLayout({
-									  {VertexAttributeDataType::Float3, "Position" },
+									  {VertexAttributeDataType::Float3, "Position"      },
 									  {VertexAttributeDataType::Float4, "Color"         },
 									  {VertexAttributeDataType::Int,    "EntityID"      }
 			});
@@ -259,14 +259,15 @@ namespace Violet {
 		delete s_data;
 	}
 
-	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
+	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform, bool resetStatistics)
 	{
 		SetupShader(s_data->quadShader, camera.getProjectionMatrix() * glm::inverse(transform));
 		SetupShader(s_data->circleShader, camera.getProjectionMatrix() * glm::inverse(transform));
 		SetupShader(s_data->lineShader, camera.getProjectionMatrix() * glm::inverse(transform));
 
 		/*Reset Scene Statistics*/
-		ResetSceneStatistics();
+		if(resetStatistics)
+			ResetSceneStatistics();
 
 		/*Reset Scene*/
 		StartNewQuadsBatch();
@@ -274,30 +275,30 @@ namespace Violet {
 		StartNewLinesBatch();
 	}
 
-	void Renderer2D::BeginScene(const EditorCamera& editorCamera)
+	void Renderer2D::BeginScene(const EditorCamera& editorCamera, bool resetStatistics)
 	{
 		SetupShader(s_data->quadShader, editorCamera.getViewProjection());
 		SetupShader(s_data->circleShader, editorCamera.getViewProjection());
 		SetupShader(s_data->lineShader, editorCamera.getViewProjection());
 
 		/*Reset Scene Statistics*/
-		ResetSceneStatistics();
-
+		if (resetStatistics)
+			ResetSceneStatistics();
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
 		StartNewLinesBatch();
 	}
 
-	void Renderer2D::BeginScene(const OrthographicCamera& camera)
+	void Renderer2D::BeginScene(const OrthographicCamera& camera, bool resetStatistics)
 	{
 		SetupShader(s_data->quadShader, camera.getViewProjectionMatrix());
 		SetupShader(s_data->circleShader, camera.getViewProjectionMatrix());
 		SetupShader(s_data->lineShader, camera.getViewProjectionMatrix());
 
 		/*Reset Scene Statistics*/
-		ResetSceneStatistics();
-
+		if (resetStatistics)
+			ResetSceneStatistics();
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
