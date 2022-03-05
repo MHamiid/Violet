@@ -375,6 +375,7 @@ namespace Violet {
 		ImGui::Text("Quads: %d", Renderer2D::GetSceneStatistics().getTotalQuadCount());
 		ImGui::Text("Vertices: %d", Renderer2D::GetSceneStatistics().getTotalVertexCount());
 		ImGui::Text("Indices: %d", Renderer2D::GetSceneStatistics().getTotalIndexCount());
+		ImGui::Text("Lines: %d", Renderer2D::GetSceneStatistics().getTotalLineCount());
 		ImGui::End();
 
 		ImGui::Begin("FPS");

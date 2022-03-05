@@ -72,11 +72,13 @@ namespace Violet {
 		struct SceneStatistics {
 			uint32_t drawCallsCount = 0;
 			uint32_t quadCount = 0;
+			uint32_t lineCount = 0;
 
 			uint32_t getTotalDrawCallsCount() const { return drawCallsCount; }
 			uint32_t getTotalQuadCount() const { return quadCount; }
 			uint32_t getTotalVertexCount() const { return quadCount * 4; }  //Each quad contains 4 vertices
 			uint32_t getTotalIndexCount() const { return quadCount * 6; }   //Each quad contains 6 indices
+			uint32_t getTotalLineCount() const { return lineCount; }
 		};
 
 		static SceneStatistics GetSceneStatistics();  //Return statistics for the last scene after calling BeginScene()

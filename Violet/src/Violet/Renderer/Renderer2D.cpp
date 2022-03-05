@@ -284,6 +284,7 @@ namespace Violet {
 		/*Reset Scene Statistics*/
 		if (resetStatistics)
 			ResetSceneStatistics();
+
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
@@ -299,6 +300,7 @@ namespace Violet {
 		/*Reset Scene Statistics*/
 		if (resetStatistics)
 			ResetSceneStatistics();
+
 		/*Reset Scene*/
 		StartNewQuadsBatch();
 		StartNewCirclesBatch();
@@ -602,7 +604,7 @@ namespace Violet {
 
 		/*STATISTICS*/
 		//Keep track of line count for scene statistics
-		//s_data->sceneStatistics.lineCount++;    ===> TODO, not implemented yet
+		s_data->sceneStatistics.lineCount++;
 	}
 
 	void Renderer2D::DrawRectangle(const glm::vec3& position, const glm::vec2& size, const glm::vec4& color, int entityID)
@@ -760,5 +762,6 @@ namespace Violet {
 	{
 		Renderer2DData::sceneStatistics.drawCallsCount = 0;
 		Renderer2DData::sceneStatistics.quadCount = 0;
+		Renderer2DData::sceneStatistics.lineCount = 0;
 	}
 }
