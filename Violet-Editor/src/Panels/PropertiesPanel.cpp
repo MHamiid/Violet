@@ -407,7 +407,7 @@ namespace Violet {
 		drawComponent<CircleCollider2DComponent>("CircleCollider2D", entity, [&](CircleCollider2DComponent& cc2dComponent)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(cc2dComponent.Offset), 0.01f, -1.0f, 1.0f);
-				ImGui::DragFloat("Radius", &cc2dComponent.Radius, 0.01f, 0.001f, 1.0f);   //Can't be zero, or will have no physics effects on the entity
+				ImGui::DragFloat("Radius", &cc2dComponent.Radius, 0.01f, 0.001f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);   //Can't be zero or less, or will have no physics effects on the entity
 				ImGui::DragFloat("Density", &cc2dComponent.Density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &cc2dComponent.Friction, 0.01f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);      //[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
 				ImGui::DragFloat("Restitution", &cc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
