@@ -396,7 +396,7 @@ namespace Violet {
 		drawComponent<BoxCollider2DComponent>("BoxCollider2D", entity, [&](BoxCollider2DComponent& bc2dComponent)
 			{
 				ImGui::DragFloat2("Offset", glm::value_ptr(bc2dComponent.Offset), 0.01f, -1.0f, 1.0f);
-				ImGui::DragFloat2("Size Factor", glm::value_ptr(bc2dComponent.SizeFactor), 0.01f, 0.001f, 1.0f);   //Can't be zero, or will get area size assertion error
+				ImGui::DragFloat2("Size Factor", glm::value_ptr(bc2dComponent.SizeFactor), 0.01f, 0.001f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);   //Can't be zero or less, or will get area size assertion error when equals zero, or will have no physics effects on the entity when less than zero
 				ImGui::DragFloat("Density", &bc2dComponent.Density, 0.01f, 0.0f, 1.0f);
 				ImGui::DragFloat("Friction", &bc2dComponent.Friction, 0.01f, 0.0f, 1.0f, "%.3f", ImGuiSliderFlags_AlwaysClamp);      //[From b2Fixture.h] /// The friction coefficient, usually in the range [0,1].
 				ImGui::DragFloat("Restitution", &bc2dComponent.Restitution, 0.01f, 0.0f, 1.0f); 	//[From b2Fixture.h] /// The restitution (elasticity) usually in the range [0,1].
