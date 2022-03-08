@@ -47,6 +47,9 @@ namespace Violet {
 		template<typename T>
 		void onComponentAdded(Entity entity, T& component);
 	private:
+		void renderSprites();
+		void renderCircles();
+	private:
 		entt::registry m_registry; //A container for all the components and entities
 		Scoped<Entity> m_primaryCameraEntity; //Using a pointer cause of forward declaration (Can't include Entity header here)
 		uint32_t m_viewPortWidth = 0, m_viewPortHeight = 0;
