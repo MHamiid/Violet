@@ -5,23 +5,25 @@
 #include <filesystem>
 namespace Violet {
 	OpenGLShader::OpenGLShader(const std::string& filePath) : m_programID(0) //initialize with 0
-	{	
+	{
 		//Parse the file content
-		std::unordered_map<GLenum, std::string> shaderSources= parseShadersFile(filePath);
-		createProgram(shaderSources);
+		std::unordered_map<GLenum, std::string> shaderSources = parseShadersFile(filePath);
 
 		//Extract the shaderName from the filePath
 		std::filesystem::path path = filePath;
 		m_shaderName = path.stem().string();
 
+		createProgram(shaderSources);
+
+
 		//###IF WE ARE NOT USING filesystem(C++17)
-		/* 
+		/*
 			//@example assets/shaders/shader_name.glsl  ===> shader_name
 
 			//Find the last slash if exists
 			size_t lastSlashPos = filePath.find_last_of("/\\"); //meaning last of forward slash or back slash
 
-			if (lastSlashPos == std::string::npos) { lastSlashPos = 0; } //If the filePath doesn't contain slashes @example shader_name.glsl, 
+			if (lastSlashPos == std::string::npos) { lastSlashPos = 0; } //If the filePath doesn't contain slashes @example shader_name.glsl,
 																		 //We set the position to point at the first char of the file name
 																		 //@example shader_name.glsl ===> indexOf(T)
 			else { lastSlashPos = lastSlashPos + 1; }  //Points to the first char of the file name
@@ -30,10 +32,10 @@ namespace Violet {
 			//Find the last dot if exists
 			size_t lastDotPos = filePath.rfind('.'); //Find the last dot
 
-			size_t shaderNameCharCount = lastDotPos == std::string::npos ? filePath.size() - lastSlashPos : lastDotPos - lastSlashPos;	//[If] the filePath doesn't contain dots @example  assets/shaders/shader_name, 
+			size_t shaderNameCharCount = lastDotPos == std::string::npos ? filePath.size() - lastSlashPos : lastDotPos - lastSlashPos;	//[If] the filePath doesn't contain dots @example  assets/shaders/shader_name,
 																																		//We set the count to be the number of chars from lastSlashPos to the end
 																																		//[Else] we set the count to be the number of chars between the dot and the slash
-																		 
+
 			m_shaderName = filePath.substr(lastSlashPos, shaderNameCharCount); //Note: lastSlashPos points to the first char of the file name
 		*/
 		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From File", m_shaderName);
@@ -60,7 +62,7 @@ namespace Violet {
 	}
 
 	OpenGLShader::~OpenGLShader()
-	{	
+	{
 		glDeleteProgram(m_programID);
 	}
 
@@ -123,7 +125,7 @@ namespace Violet {
 						shaderSourceCodes[(GLenum)type] = buffer;
 						buffer.clear();
 					}
-					if (line.find("vertex") != std::string::npos) {	
+					if (line.find("vertex") != std::string::npos) {
 						type = ShaderType::VERTEX;
 					}
 					else if (line.find("fragment") != std::string::npos) {
@@ -135,11 +137,11 @@ namespace Violet {
 				}
 			}
 
-			VIO_CORE_ASSERT(!(type == ShaderType::NONE) , "[OpenGL]Couldn't Read Shaders!");
+			VIO_CORE_ASSERT(!(type == ShaderType::NONE), "[OpenGL] Couldn't Read Shaders!");
 			shaderSourceCodes[(GLenum)type] = buffer;
 		}
-		
-		
+
+
 		return shaderSourceCodes;
 	}
 
@@ -152,7 +154,7 @@ namespace Violet {
 		std::array<GLenum, maxNumberOfShadersAllowed> glShaderIDs;
 		int indexOfLastFreeStorage = 0; //Points to the next free space
 		for (auto&& [shaderType, shaderSourceCode] : shaderSources) {
-		
+
 			GLuint shader = glCreateShader(shaderType);
 			// Note that std::string's .c_str is NULL character terminated.
 			const GLchar* source = (const GLchar*)shaderSourceCode.c_str();
@@ -174,7 +176,7 @@ namespace Violet {
 				glDeleteShader(shader);
 
 				// Use the infoLog as you see fit.
-				VIO_CORE_ERROR("[OpenGL] shader compilation error!");
+				VIO_CORE_ERROR("[OpenGL] Shader Compilation Error In '{0}'!", m_shaderName);
 				VIO_CORE_ERROR("{0}", infoLog.data());
 				//Break the program
 				VIO_CORE_ASSERT(false, "");
@@ -185,7 +187,7 @@ namespace Violet {
 			// Attach our shaders to our program
 			glAttachShader(program, shader);
 			glShaderIDs[indexOfLastFreeStorage++] = (shader);
-		 }
+		}
 
 		// Link our program
 		glLinkProgram(program);
@@ -210,7 +212,7 @@ namespace Violet {
 			}
 
 			// Use the infoLog as you see fit.
-			VIO_CORE_ERROR("[OpenGL] Shaders' program linking error!");
+			VIO_CORE_ERROR("[OpenGL] Shaders' Program Linking Error In '{0}'!", m_shaderName);
 			VIO_CORE_ERROR("{0}", infoLog.data());
 			//Break the program
 			VIO_CORE_ASSERT(false, "");
