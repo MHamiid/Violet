@@ -122,7 +122,7 @@ namespace Violet {
 				//Split the shader source code into Vertex Shader and Fragment Shader
 				if (line.find("#type") != std::string::npos) {
 					if (!buffer.empty()) {
-						shaderSourceCodes[(GLenum)type] = buffer;
+						shaderSourceCodes[static_cast<GLenum>(type)] = buffer;
 						buffer.clear();
 					}
 					if (line.find("vertex") != std::string::npos) {
@@ -138,7 +138,7 @@ namespace Violet {
 			}
 
 			VIO_CORE_ASSERT(!(type == ShaderType::NONE), "[OpenGL] Couldn't Read Shaders!");
-			shaderSourceCodes[(GLenum)type] = buffer;
+			shaderSourceCodes[static_cast<GLenum>(type)] = buffer;
 		}
 
 
