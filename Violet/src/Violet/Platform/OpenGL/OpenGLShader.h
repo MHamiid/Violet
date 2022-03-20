@@ -26,7 +26,8 @@ namespace Violet {
 		void uploadUniformFloat(const std::string& name, float value);
 		void uploadUniformFloat4(const std::string& name, const glm::vec4& values);
 		void uploadUniformMat4(const std::string& name, const glm::mat4& matrix);
-		
+	private:
+		std::string shaderTypeToString(GLenum shaderType);
 	private:
 		uint32_t m_programID;
 		std::string m_shaderName;

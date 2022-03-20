@@ -176,7 +176,7 @@ namespace Violet {
 				glDeleteShader(shader);
 
 				// Use the infoLog as you see fit.
-				VIO_CORE_ERROR("[OpenGL] Shader Compilation Error In '{0}'!", m_shaderName);
+				VIO_CORE_ERROR("[OpenGL] {0} Shader Compilation Error In '{1}'!", shaderTypeToString(shaderType), m_shaderName);
 				VIO_CORE_ERROR("{0}", infoLog.data());
 				//Break the program
 				VIO_CORE_ASSERT(false, "");
@@ -270,6 +270,17 @@ namespace Violet {
 		glUniformMatrix4fv(location, 1, GL_FALSE, glm::value_ptr(matrix));
 	}
 
+	std::string OpenGLShader::shaderTypeToString(GLenum shaderType)
+	{
+		std::string shaderTypeString = "Undefined";
+		switch (shaderType)
+		{
+			case GL_VERTEX_SHADER:     shaderTypeString = "Vertex";     break;
+			case GL_FRAGMENT_SHADER:   shaderTypeString = "Fragment";   break;
+		}
+
+		return shaderTypeString;
+	}
 
 
 }
