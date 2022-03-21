@@ -157,7 +157,7 @@ namespace Violet {
 
 			GLuint shader = glCreateShader(shaderType);
 			// Note that std::string's .c_str is NULL character terminated.
-			const GLchar* source = (const GLchar*)shaderSourceCode.c_str();
+			const GLchar* source = reinterpret_cast<const GLchar*>(shaderSourceCode.c_str());
 			glShaderSource(shader, 1, &source, 0);
 			// Compile the shader
 			glCompileShader(shader);
