@@ -38,7 +38,7 @@ namespace Violet {
 
 			m_shaderName = filePath.substr(lastSlashPos, shaderNameCharCount); //Note: lastSlashPos points to the first char of the file name
 		*/
-		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From File", m_shaderName);
+		VIO_CORE_DEBUG("[OpenGL Shader] Loaded Shader '{0}' From File", m_shaderName);
 
 
 	}
@@ -48,7 +48,7 @@ namespace Violet {
 		std::unordered_map<GLenum, std::string> shaderSources = parseShadersFile(filePath);
 		createProgram(shaderSources);
 
-		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From File With It's Provided Name", m_shaderName);
+		VIO_CORE_DEBUG("[OpenGL Shader] Loaded Shader '{0}' From File With It's Provided Name", m_shaderName);
 	}
 	OpenGLShader::OpenGLShader(const std::string& shaderName, const std::string& vertexSrc, const std::string& fragmentSrc) : m_programID(0) //initialize with 0
 		, m_shaderName(shaderName)
@@ -58,7 +58,7 @@ namespace Violet {
 		shaderSources[GL_FRAGMENT_SHADER] = fragmentSrc;
 		createProgram(shaderSources);
 
-		VIO_CORE_DEBUG("[OpenGL] Loaded Shader '{0}' From Strings With It's Provided Name", m_shaderName);
+		VIO_CORE_DEBUG("[OpenGL Shader] Loaded Shader '{0}' From Strings With It's Provided Name", m_shaderName);
 	}
 
 	OpenGLShader::~OpenGLShader()
@@ -115,7 +115,7 @@ namespace Violet {
 
 		//Read the content of the file
 		std::ifstream stream(filePath, std::ios::in | std::ios::binary);
-		VIO_CORE_ASSERT(stream, "[OpenGL]Couldn't Open Shaders File!");
+		VIO_CORE_ASSERT(stream, "[OpenGL Shader]Couldn't Open Shaders File!");
 		if (stream) {
 			std::string line;
 			while (getline(stream, line)) {
@@ -137,7 +137,7 @@ namespace Violet {
 				}
 			}
 
-			VIO_CORE_ASSERT(!(type == ShaderType::NONE), "[OpenGL] Couldn't Read Shaders!");
+			VIO_CORE_ASSERT(!(type == ShaderType::NONE), "[OpenGL Shader] Couldn't Read Shaders!");
 			shaderSourceCodes[static_cast<GLenum>(type)] = buffer;
 		}
 
@@ -150,7 +150,7 @@ namespace Violet {
 		// Get a program object.
 		GLuint program = glCreateProgram();
 		constexpr size_t maxNumberOfShadersAllowed = 10;  //Defines the storage to allocate
-		VIO_CORE_ASSERT((shaderSources.size() <= maxNumberOfShadersAllowed), "glShaderIDs Array Doesn't Have Enough Storage!");
+		VIO_CORE_ASSERT((shaderSources.size() <= maxNumberOfShadersAllowed), "[OpenGL Shader] glShaderIDs Array Doesn't Have Enough Storage!");
 		std::array<GLenum, maxNumberOfShadersAllowed> glShaderIDs;
 		int indexOfLastFreeStorage = 0; //Points to the next free space
 		for (auto&& [shaderType, shaderSourceCode] : shaderSources) {
@@ -176,7 +176,7 @@ namespace Violet {
 				glDeleteShader(shader);
 
 				// Use the infoLog as you see fit.
-				VIO_CORE_ERROR("[OpenGL] {0} Shader Compilation Error In '{1}'!", shaderTypeToString(shaderType), m_shaderName);
+				VIO_CORE_ERROR("[OpenGL Shader] {0} Shader Compilation Error In '{1}'!", shaderTypeToString(shaderType), m_shaderName);
 				VIO_CORE_ERROR("{0}", infoLog.data());
 				//Break the program
 				VIO_CORE_ASSERT(false, "");
@@ -212,7 +212,7 @@ namespace Violet {
 			}
 
 			// Use the infoLog as you see fit.
-			VIO_CORE_ERROR("[OpenGL] Shaders' Program Linking Error In '{0}'!", m_shaderName);
+			VIO_CORE_ERROR("[OpenGL Shader] Shaders' Program Linking Error In '{0}'!", m_shaderName);
 			VIO_CORE_ERROR("{0}", infoLog.data());
 			//Break the program
 			VIO_CORE_ASSERT(false, "");
