@@ -364,8 +364,13 @@ namespace Violet {
 		/*Start ImGui Code*/
 		/*************************************/
 
-		//If the editor camera is in use, disable interaction to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
-		m_sceneHierarchyPanel.onImGuiRender(m_editorCamera.isUsing());
+		/*
+		* [Disable Mouse R-Click Interaction]
+		* If the editor camera is in use, to avoid pop-ups opening when the mouse is released inside the sceneHierarchyPanel
+		* (Or)
+		* If the active scene is the runtime scene, to avoid creating and deleting entities in rumtime, which results in crashing or undefined behavior
+		*/
+		m_sceneHierarchyPanel.onImGuiRender((m_editorCamera.isUsing() || m_sceneState == SceneState::Play));
 		m_propertiesPanel.onImGuiRender();
 		m_contentBrowserPanel.onImGuiRender();
 
