@@ -300,6 +300,74 @@ namespace Violet {
 		Renderer2D::EndScene();
 	}
 
+	void EditorLayer::onImGuizmoRender(Entity selectedEntity)
+	{
+		ImGuizmo::SetDrawlist();  //Draw to the current window
+
+		ImGuizmo::SetRect(m_viewPortBounds[0].x, m_viewPortBounds[0].y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port bounds
+
+		/*Runtime Camera Gizmos*/
+		///*Get Camera Info From The Primary Camera*/
+		//Entity primaryCameraEntity = m_runtimeScene->getPrimaryCameraEntity();
+		//const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
+
+		//const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
+		//glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
+
+		/*Editor Camera Gizmos*/
+		const glm::mat4& editorCameraProjectionMatrix = m_editorCamera.getProjectionMatrix();
+		glm::mat4 editorCameraViewMatrix = m_editorCamera.getViewMatrix();
+
+
+
+		/*Get The Selected Entity Info*/
+		TransformComponent& selectedEntityTransformComponent = selectedEntity.getComponent<TransformComponent>();
+		glm::mat4 selectedEntityGizmosTransform = selectedEntityTransformComponent.getTransform();
+
+		/*Get The Correct Snapping Value*/
+		float snapValue = 0.0f;
+		bool snapEnabled = Input::IsKeyPressed(Key::LEFT_CONTROL);
+		//TODO: Create A UI For Setting m_snapValue
+		if (snapEnabled)
+		{
+			if (m_gizmoType == ImGuizmo::OPERATION::TRANSLATE)
+			{
+				snapValue = m_snapValues[0];
+			}
+			else if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
+			{
+				snapValue = m_snapValues[1];
+			}
+			else if (m_gizmoType == ImGuizmo::OPERATION::SCALE)
+			{
+				snapValue = m_snapValues[2];
+			}
+		}
+		float snapValuesAxes[3] = { snapValue, snapValue, snapValue };
+
+
+		//Pass the parameters to ImGuizmo to draw the gizmos and write the new transformation to the selectedEntityGizmosTransform matrix
+		ImGuizmo::Manipulate(glm::value_ptr(editorCameraViewMatrix), glm::value_ptr(editorCameraProjectionMatrix)
+			, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
+			, nullptr, snapEnabled ? snapValuesAxes : nullptr);
+
+		if (ImGuizmo::IsUsing() && !m_editorCamera.isUsing()) //If mouse IsOver or if the gizmo is in moving state and the editor camera is not in use
+		{
+			/*Apply the gizmo transformation changes to the selected entity*/
+
+			glm::vec3 selectedEntityTranslation, selectedEntityRotation, selectedEntityScale;  //Note that these are not initialized
+
+			//Get the translation, rotation, scale from the transformation matrix
+			Math::decomposeTransformationMatrix(selectedEntityGizmosTransform, selectedEntityTranslation, selectedEntityRotation, selectedEntityScale);
+
+			//Set the transformations
+			selectedEntityTransformComponent.translation = selectedEntityTranslation;
+			selectedEntityTransformComponent.rotation = selectedEntityRotation;
+			selectedEntityTransformComponent.scale = selectedEntityScale;
+
+		}
+	}
+
 	void EditorLayer::onImGuiRender()
 	{
 		/*Begining ImGui DockSpace Code*/
@@ -607,7 +675,7 @@ namespace Violet {
 
 
 		//TODO: Set UI buttons for selecting the gizmo type
-		//Rendering ImGizmos
+		//Rendering ImGuizmo
 		if (m_sceneState == SceneState::Edit)
 		{
 			Entity selectedEntity = m_sceneHierarchyPanel.getSelectedEntity();
@@ -615,73 +683,10 @@ namespace Violet {
 			, NOTE: check for  && m_runtimeScene->getPrimaryCameraEntity() if we are drawing gizmos with the runtime camera to check if the primary camera entity is valid*/
 			if (selectedEntity && selectedEntity.hasComponent<TransformComponent>() && m_gizmoType != -1)
 			{
-				ImGuizmo::SetDrawlist();  //Draw to the current window
-
-				ImGuizmo::SetRect(m_viewPortBounds[0].x, m_viewPortBounds[0].y, m_viewPortSize.x, m_viewPortSize.y);  //Set the view port bounds
-
-				/*Runtime Camera Gizmos*/
-				///*Get Camera Info From The Primary Camera*/
-				//Entity primaryCameraEntity = m_runtimeScene->getPrimaryCameraEntity();
-				//const SceneCamera& primaryCamera = primaryCameraEntity.getComponent<CameraComponent>().sceneCamera;
-
-				//const glm::mat4& primaryCameraProjectionMatrix = primaryCamera.getProjectionMatrix();
-				//glm::mat4 primaryCameraViewMatrix = glm::inverse(primaryCameraEntity.getComponent<TransformComponent>().getTransform());
-
-				/*Editor Camera Gizmos*/
-				const glm::mat4& editorCameraProjectionMatrix = m_editorCamera.getProjectionMatrix();
-				glm::mat4 editorCameraViewMatrix = m_editorCamera.getViewMatrix();
-
-
-
-				/*Get The Selected Entity Info*/
-				TransformComponent& selectedEntityTransformComponent = selectedEntity.getComponent<TransformComponent>();
-				glm::mat4 selectedEntityGizmosTransform = selectedEntityTransformComponent.getTransform();
-
-				/*Get The Correct Snapping Value*/
-				float snapValue = 0.0f;
-				bool snapEnabled = Input::IsKeyPressed(Key::LEFT_CONTROL);
-				//TODO: Create A UI For Setting m_snapValue
-				if (snapEnabled)
-				{
-					if (m_gizmoType == ImGuizmo::OPERATION::TRANSLATE)
-					{
-						snapValue = m_snapValues[0];
-					}
-					else if (m_gizmoType == ImGuizmo::OPERATION::ROTATE)
-					{
-						snapValue = m_snapValues[1];
-					}
-					else if (m_gizmoType == ImGuizmo::OPERATION::SCALE)
-					{
-						snapValue = m_snapValues[2];
-					}
-				}
-				float snapValuesAxes[3] = { snapValue, snapValue, snapValue };
-
-
-				//Pass the parameters to ImGuizmo to draw the gizmos and write the new transformation to the selectedEntityGizmosTransform matrix
-				ImGuizmo::Manipulate(glm::value_ptr(editorCameraViewMatrix), glm::value_ptr(editorCameraProjectionMatrix)
-					, (ImGuizmo::OPERATION)m_gizmoType, ImGuizmo::LOCAL, glm::value_ptr(selectedEntityGizmosTransform)
-					, nullptr, snapEnabled ? snapValuesAxes : nullptr);
-
-				if (ImGuizmo::IsUsing() && !m_editorCamera.isUsing()) //If mouse IsOver or if the gizmo is in moving state and the editor camera is not in use
-				{
-					/*Apply the gizmo transformation changes to the selected entity*/
-
-					glm::vec3 selectedEntityTranslation, selectedEntityRotation, selectedEntityScale;  //Note that these are not initialized
-
-					//Get the translation, rotation, scale from the transformation matrix
-					Math::decomposeTransformationMatrix(selectedEntityGizmosTransform, selectedEntityTranslation, selectedEntityRotation, selectedEntityScale);
-
-					//Set the transformations
-					selectedEntityTransformComponent.translation = selectedEntityTranslation;
-					selectedEntityTransformComponent.rotation = selectedEntityRotation;
-					selectedEntityTransformComponent.scale = selectedEntityScale;
-
-				}
-
+				onImGuizmoRender(selectedEntity);
 			}
 		}
+
 		ImGui::End();
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 	}

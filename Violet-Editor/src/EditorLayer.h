@@ -23,6 +23,7 @@ namespace Violet {
 	private:
 		void onDuplicateEntity();
 		void onOverlayRender();
+		void onImGuizmoRender(Entity selectedEntity);
 	private:
 		void newScene(const std::string& sceneName);
 		void openSceneDialog();
