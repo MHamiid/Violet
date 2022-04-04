@@ -784,7 +784,12 @@ namespace Violet {
 	bool EditorLayer::onMouseButtonPressed(MouseButtonPressedEvent& event)
 	{
 		/*Entity Mouse Selection*/
-		if (m_sceneState == SceneState::Edit && event.getMouseButton() == Mouse::BUTTON_LEFT && !m_editorCamera.isUsing() && m_viewPortHovered && !ImGuizmo::IsOver())
+		/*
+		* isOverVisibleGuizmo : If is over a guizmo, and the guizmo is visible (there is a selected entity) .
+		* NOTE: ImGuizmo::IsOver() may return true even if the guizmo is not visible. Over the last cached guizmo position when ImGuizmo::Manipulate is called .
+		*/
+		bool isOverVisibleGuizmo = (ImGuizmo::IsOver() && m_sceneHierarchyPanel.getSelectedEntity());
+		if (m_sceneState == SceneState::Edit && event.getMouseButton() == Mouse::BUTTON_LEFT && !m_editorCamera.isUsing() && m_viewPortHovered && !isOverVisibleGuizmo)
 		{
 			m_updateMouseSelectedEntityID = true;
 		}
