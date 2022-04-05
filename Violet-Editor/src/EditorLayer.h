@@ -24,6 +24,7 @@ namespace Violet {
 		void onDuplicateEntity();
 		void onOverlayRender();
 		void onImGuizmoRender(Entity selectedEntity);
+		void onMouseSelectingEntity();
 	private:
 		void newScene(const std::string& sceneName);
 		void openSceneDialog();

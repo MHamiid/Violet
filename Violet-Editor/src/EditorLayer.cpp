@@ -189,32 +189,8 @@ namespace Violet {
 		/*Entity Mouse Selection*/
 		if (m_updateMouseSelectedEntityID)
 		{
-			//Global mouse position
-			ImVec2 mousePosition = ImGui::GetMousePos();
-			/*Set the top left to (0, 0)*/
-			mousePosition.x -= m_viewPortBounds[0].x;  //  m_viewPortBounds[0].x ====> Min bound X
-			mousePosition.y -= m_viewPortBounds[0].y;  //  m_viewPortBounds[0].y ====> Min bound Y
-
-			//Flip the coordinates to match with ImGui texture layout, set the bottom left to be (0, 0)
-			mousePosition.y = m_viewPortSize.y - mousePosition.y;
-
-			/*If the mouse is in the view port bounds*/
-			if (mousePosition.x >= 0 && mousePosition.y >= 0 && mousePosition.x < m_viewPortSize.x && mousePosition.y < m_viewPortSize.y)
-			{
-				/*Read a pixel at the mouse coordinates from the FrameBuffer's color attachment (1) that has entity IDs stored at*/
-				int pixelValue;
-				//Must be called before m_frameBuffer->unBind()
-				m_frameBuffer->readColorAttachmentPixel(1, (int)mousePosition.x, (int)mousePosition.y, &pixelValue);
-
-				if (pixelValue == -1)  //If not valid entity, no entities in that pixel
-				{
-					m_sceneHierarchyPanel.setSelectedEntity({}); //Set a non-valid entity
-				}
-				else
-				{
-					m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_editorScene.get() });
-				}
-			}
+			//Must be called before m_frameBuffer->unBind()
+			onMouseSelectingEntity();
 			m_updateMouseSelectedEntityID = false;
 		}
 
@@ -365,6 +341,36 @@ namespace Violet {
 			selectedEntityTransformComponent.rotation = selectedEntityRotation;
 			selectedEntityTransformComponent.scale = selectedEntityScale;
 
+		}
+	}
+
+	void EditorLayer::onMouseSelectingEntity()
+	{
+		//Global mouse position
+		ImVec2 mousePosition = ImGui::GetMousePos();
+		/*Set the top left to (0, 0)*/
+		mousePosition.x -= m_viewPortBounds[0].x;  //  m_viewPortBounds[0].x ====> Min bound X
+		mousePosition.y -= m_viewPortBounds[0].y;  //  m_viewPortBounds[0].y ====> Min bound Y
+
+		//Flip the coordinates to match with ImGui texture layout, set the bottom left to be (0, 0)
+		mousePosition.y = m_viewPortSize.y - mousePosition.y;
+
+		/*If the mouse is in the view port bounds*/
+		if (mousePosition.x >= 0 && mousePosition.y >= 0 && mousePosition.x < m_viewPortSize.x && mousePosition.y < m_viewPortSize.y)
+		{
+			/*Read a pixel at the mouse coordinates from the FrameBuffer's color attachment (1) that has entity IDs stored at*/
+			int pixelValue;
+			//Must be called before m_frameBuffer->unBind()
+			m_frameBuffer->readColorAttachmentPixel(1, (int)mousePosition.x, (int)mousePosition.y, &pixelValue);
+
+			if (pixelValue == -1)  //If not valid entity, no entities in that pixel
+			{
+				m_sceneHierarchyPanel.setSelectedEntity({}); //Set a non-valid entity
+			}
+			else
+			{
+				m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_editorScene.get() });
+			}
 		}
 	}
 
