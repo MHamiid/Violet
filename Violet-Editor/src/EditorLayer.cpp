@@ -361,7 +361,7 @@ namespace Violet {
 			/*Read a pixel at the mouse coordinates from the FrameBuffer's color attachment (1) that has entity IDs stored at*/
 			int pixelValue;
 			//Must be called before m_frameBuffer->unBind()
-			m_frameBuffer->readColorAttachmentPixel(1, (int)mousePosition.x, (int)mousePosition.y, &pixelValue);
+			m_frameBuffer->readColorAttachmentPixel(1, static_cast<int>(mousePosition.x), static_cast<int>(mousePosition.y), &pixelValue);
 
 			if (pixelValue == -1)  //If not valid entity, no entities in that pixel
 			{
@@ -369,7 +369,7 @@ namespace Violet {
 			}
 			else
 			{
-				m_sceneHierarchyPanel.setSelectedEntity({ (entt::entity)pixelValue, m_editorScene.get() });
+				m_sceneHierarchyPanel.setSelectedEntity({ static_cast<entt::entity>(pixelValue), m_editorScene.get() });
 			}
 		}
 	}
