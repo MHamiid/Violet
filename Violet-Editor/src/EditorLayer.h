@@ -43,6 +43,7 @@ namespace Violet {
 		void UINewScenePopupModal();
 		void UIToolbar();
 		void UIViewport();
+		void UIOverlay();
 	private:
 		/*Editor Resources*/
 		/*Toolbar Textures*/

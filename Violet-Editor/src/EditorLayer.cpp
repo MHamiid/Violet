@@ -467,6 +467,7 @@ namespace Violet {
 		UIToolbar();
 		if (m_showNewScenePopupModal) { UINewScenePopupModal(); }
 		UIViewport();
+		UIOverlay();
 
 		/*************************************/
 		/*End ImGui Code*/
@@ -695,6 +696,58 @@ namespace Violet {
 
 		ImGui::End();
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
+	}
+
+	void EditorLayer::UIOverlay()
+	{
+		/*
+		* Overlay panel in the viewport
+		*/
+
+		/*
+		* Copied from imgui_demo.cpp ===> ShowExampleAppSimpleOverlay()
+		*/
+		constexpr float DISTANCE = 10.0f;
+		static int corner = 0;  // Set the position
+		ImGuiIO& io = ImGui::GetIO();
+		ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoDocking | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoSavedSettings | ImGuiWindowFlags_NoFocusOnAppearing | ImGuiWindowFlags_NoNav;
+		if (corner != -1)
+		{
+			window_flags |= ImGuiWindowFlags_NoMove;
+			ImGuiViewport* viewport = ImGui::GetMainViewport();
+			ImVec2 viewport_area_pos = ImVec2(m_viewPortBounds[0].x, m_viewPortBounds[0].y);
+			ImVec2 viewport_area_size = ImVec2(m_viewPortSize.x, m_viewPortSize.y);
+			ImVec2 window_pos = ImVec2((corner & 1) ? (viewport_area_pos.x + viewport_area_size.x - DISTANCE) : (viewport_area_pos.x + DISTANCE), (corner & 2) ? (viewport_area_pos.y + viewport_area_size.y - DISTANCE) : (viewport_area_pos.y + DISTANCE));
+			ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
+			ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
+			ImGui::SetNextWindowViewport(viewport->ID);
+		}
+		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
+		if (ImGui::Begin("Overlay", (bool*)true, window_flags))
+		{
+			// Change text color to green
+			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
+			ImGui::Text("FPS");
+			ImGui::PopStyleColor();
+
+			ImGui::Separator();
+
+			// Change text yellow to green
+			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 0, 255));
+			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+			ImGui::PopStyleColor();
+
+			if (ImGui::BeginPopupContextWindow())
+			{
+				if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
+				if (ImGui::MenuItem("Top-left", NULL, corner == 0)) corner = 0;
+				if (ImGui::MenuItem("Top-right", NULL, corner == 1)) corner = 1;
+				if (ImGui::MenuItem("Bottom-left", NULL, corner == 2)) corner = 2;
+				if (ImGui::MenuItem("Bottom-right", NULL, corner == 3)) corner = 3;
+				ImGui::EndPopup();
+			}
+		}
+		ImGui::End();
 	}
 
 	void EditorLayer::onEvent(Event& e)
