@@ -732,7 +732,7 @@ namespace Violet {
 
 			ImGui::Separator();
 
-			// Change text yellow to green
+			// Change text color to yellow
 			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 0, 255));
 			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
 			ImGui::PopStyleColor();
