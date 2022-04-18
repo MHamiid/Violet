@@ -43,7 +43,7 @@ namespace Violet {
 		void UINewScenePopupModal();
 		void UIToolbar();
 		void UIViewport();
-		void UIOverlay();
+		void UIOverlay(ImVec2 panelPosition, ImVec2 panelSize, std::function<void()> ImGuiUIFUNC);
 	private:
 		/*Editor Resources*/
 		/*Toolbar Textures*/

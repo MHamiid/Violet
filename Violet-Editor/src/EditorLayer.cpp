@@ -467,7 +467,21 @@ namespace Violet {
 		UIToolbar();
 		if (m_showNewScenePopupModal) { UINewScenePopupModal(); }
 		UIViewport();
-		UIOverlay();
+		// Overlay panel in the viewport
+		UIOverlay(ImVec2(m_viewPortBounds[0].x, m_viewPortBounds[0].y), ImVec2(m_viewPortSize.x, m_viewPortSize.y), [&io]() {
+			// Change text color to green
+			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
+			ImGui::Text("FPS");
+			ImGui::PopStyleColor();
+
+			ImGui::Separator();
+
+			// Change text color to yellow
+			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 0, 255));
+			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+			ImGui::PopStyleColor();
+
+			});
 
 		/*************************************/
 		/*End ImGui Code*/
@@ -698,12 +712,8 @@ namespace Violet {
 		ImGui::PopStyleVar();   //Restore the original padding for other ImGui panels
 	}
 
-	void EditorLayer::UIOverlay()
+	void EditorLayer::UIOverlay(ImVec2 panelPosition, ImVec2 panelSize, std::function<void()> ImGuiUIFUNC)
 	{
-		/*
-		* Overlay panel in the viewport
-		*/
-
 		/*
 		* Copied from imgui_demo.cpp ===> ShowExampleAppSimpleOverlay()
 		*/
@@ -715,9 +725,7 @@ namespace Violet {
 		{
 			window_flags |= ImGuiWindowFlags_NoMove;
 			ImGuiViewport* viewport = ImGui::GetMainViewport();
-			ImVec2 viewport_area_pos = ImVec2(m_viewPortBounds[0].x, m_viewPortBounds[0].y);
-			ImVec2 viewport_area_size = ImVec2(m_viewPortSize.x, m_viewPortSize.y);
-			ImVec2 window_pos = ImVec2((corner & 1) ? (viewport_area_pos.x + viewport_area_size.x - DISTANCE) : (viewport_area_pos.x + DISTANCE), (corner & 2) ? (viewport_area_pos.y + viewport_area_size.y - DISTANCE) : (viewport_area_pos.y + DISTANCE));
+			ImVec2 window_pos = ImVec2((corner & 1) ? (panelPosition.x + panelSize.x - DISTANCE) : (panelPosition.x + DISTANCE), (corner & 2) ? (panelPosition.y + panelSize.y - DISTANCE) : (panelPosition.y + DISTANCE));
 			ImVec2 window_pos_pivot = ImVec2((corner & 1) ? 1.0f : 0.0f, (corner & 2) ? 1.0f : 0.0f);
 			ImGui::SetNextWindowPos(window_pos, ImGuiCond_Always, window_pos_pivot);
 			ImGui::SetNextWindowViewport(viewport->ID);
@@ -725,18 +733,8 @@ namespace Violet {
 		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
 		if (ImGui::Begin("Overlay", (bool*)true, window_flags))
 		{
-			// Change text color to green
-			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(0, 255, 0, 255));
-			ImGui::Text("FPS");
-			ImGui::PopStyleColor();
-
-			ImGui::Separator();
-
-			// Change text color to yellow
-			ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(255, 255, 0, 255));
-			ImGui::Text("%.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-			ImGui::PopStyleColor();
-
+			ImGuiUIFUNC();   // Run ImGui overlay UI
+			
 			if (ImGui::BeginPopupContextWindow())
 			{
 				if (ImGui::MenuItem("Custom", NULL, corner == -1)) corner = -1;
