@@ -731,7 +731,7 @@ namespace Violet {
 			ImGui::SetNextWindowViewport(viewport->ID);
 		}
 		ImGui::SetNextWindowBgAlpha(0.35f); // Transparent background
-		if (ImGui::Begin("Overlay", (bool*)true, window_flags))
+		if (ImGui::Begin("Overlay", reinterpret_cast<bool*>(true), window_flags))
 		{
 			ImGuiUIFUNC();   // Run ImGui overlay UI
 			
