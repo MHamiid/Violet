@@ -420,7 +420,7 @@ namespace Violet {
 		/*Set Minimum Docked Window Size*/
 		ImGuiStyle& style = ImGui::GetStyle();
 		float originalMinWindowSizeX = style.WindowMinSize.x;
-		style.WindowMinSize.x = 300.0f;
+		style.WindowMinSize.x = 100.0f;
 
 
 		if (io.ConfigFlags & ImGuiConfigFlags_DockingEnable)
