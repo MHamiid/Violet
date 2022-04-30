@@ -39,7 +39,7 @@ namespace Violet {
 
 		float contentBrowserPanelWidth = ImGui::GetContentRegionAvail().x;
 
-		int columnCount = (int)(contentBrowserPanelWidth / cellSize);
+		int columnCount = static_cast<int>(contentBrowserPanelWidth / cellSize);
 
 		//Prevent crashing if the content browser panel has been resized to the minimum
 		if (columnCount < 1) columnCount = 1;
