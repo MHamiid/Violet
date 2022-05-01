@@ -60,7 +60,7 @@ namespace Violet {
 
 		/*Set Second Column Style*/
 		ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth()); //Set to have 3 items for the width of the second column
-		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 0.0f }); //Set spacing between the items to 0
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 3.0f, 3.0f }); //Set spacing between the items to 0
 
 		/*Button Size*/
 		float characterHeight = (GImGui->Font->FontSize) + (GImGui->Style.FramePadding.y * 2.0f);
