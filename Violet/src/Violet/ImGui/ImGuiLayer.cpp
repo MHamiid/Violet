@@ -55,7 +55,7 @@ namespace Violet {
 		style.ScrollbarSize = 10;
 
 		style.WindowRounding = 4;
-		style.FrameRounding = 4;
+		style.FrameRounding = 6;
 		style.PopupRounding = 4;
 		style.ScrollbarRounding = 6;
 		style.GrabRounding = 4;
