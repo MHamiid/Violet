@@ -152,9 +152,17 @@ namespace Violet {
 			ImGui::PopStyleVar();
 
 			ImGui::SameLine(fullContentRegionAvailable.x - characterHeight * 0.5f);
+
+			// Set the component setting button colors
+			ImVec4* colors = ImGui::GetStyle().Colors;
+			ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0.0f, 0.0f, 0.0f, 0.0f));  // Set the button color to be transparent, to make it blend with the TreeNode header
+			// Set the Button Active/Hovered color to be the same as the TreeNode ( Header* colors are used for TreeNode )
+			ImGui::PushStyleColor(ImGuiCol_ButtonActive, colors[ImGuiCol_HeaderActive]);
+			ImGui::PushStyleColor(ImGuiCol_ButtonHovered, colors[ImGuiCol_HeaderHovered]);
 			if (ImGui::Button("...", ImVec2{ characterHeight, characterHeight })) {
 				ImGui::OpenPopup("ComponentSetting-ID");
 			}
+			ImGui::PopStyleColor(3);
 
 			bool setComponentToBeRemoved = false;
 			if (ImGui::BeginPopup("ComponentSetting-ID")) {
