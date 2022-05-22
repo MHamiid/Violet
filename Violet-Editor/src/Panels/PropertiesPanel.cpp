@@ -151,7 +151,8 @@ namespace Violet {
 
 			ImGui::PopStyleVar();
 
-			ImGui::SameLine(fullContentRegionAvailable.x - characterHeight * 0.5f);
+			// Set the component setting button position to be at the end of the TreeNode header
+			ImGui::SameLine(fullContentRegionAvailable.x - ((characterHeight * 0.5f) - 0.3f)); 
 
 			// Set the component setting button colors
 			ImVec4* colors = ImGui::GetStyle().Colors;
