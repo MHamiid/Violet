@@ -482,7 +482,7 @@ namespace Violet {
 			ImGui::PopStyleColor();
 
 			});
-		
+
 		/*************************************/
 		/*End ImGui Code*/
 		/*************************************/
@@ -622,6 +622,10 @@ namespace Violet {
 		ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
 
 		ImGui::Begin("Toolbar", nullptr, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoMove);  //NOTE: Second parameter is set to nullptr, which means there is no close button for the window
+
+		/*Disable Toolbar Resizing*/
+		ImGuiDockNode* currentWindowDockNode = ImGui::GetWindowDockNode();  // Toolbar dock node
+		currentWindowDockNode->LocalFlags |= ImGuiDockNodeFlags_NoResize;   // Disable Toolbar dock node resizing
 
 		/*Play/Stop Button*/
 		float buttonSize = ImGui::GetWindowHeight() - 4.0f;  //Gets the Toolbar height - Some padding value
