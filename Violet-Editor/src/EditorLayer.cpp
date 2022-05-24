@@ -625,7 +625,7 @@ namespace Violet {
 
 		/*Disable Toolbar Resizing*/
 		ImGuiDockNode* currentWindowDockNode = ImGui::GetWindowDockNode();  // Toolbar dock node
-		currentWindowDockNode->LocalFlags |= ImGuiDockNodeFlags_NoResize;   // Disable Toolbar dock node resizing
+		currentWindowDockNode->LocalFlags |= ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_NoTabBar;   // Disable Toolbar dock node resizing, and remove the tab bar completely (no triangle in the corner to enable it back)
 
 		/*Play/Stop Button*/
 		float buttonSize = ImGui::GetWindowHeight() - 4.0f;  //Gets the Toolbar height - Some padding value
