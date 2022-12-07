@@ -35,7 +35,7 @@ namespace Violet {
 
 		/*Right-Click Pop-Up Menu*/
 		//If the interaction is not disabled and right-clicked in the Scene Hierarchy panel but not on an item (the entities) ====> clicking on a blank space in the panel, Note the checking sequence of the conditions (Pop-up will not render if the first condition failed) 
-		if (!disableInteraction && ImGui::BeginPopupContextWindow(0, 1, false))
+		if (!disableInteraction && ImGui::BeginPopupContextWindow(0, 1))
 		{
 			if (ImGui::MenuItem("Create Empty Entity")) //If pressed
 			{
