@@ -66,7 +66,7 @@ namespace Violet {
 
 		style.DisplaySafeAreaPadding = ImVec2(4, 4);
 
-		SetVioletThemeColors();
+		SetDarkThemeColors();
 
 		// Setup Platform/Renderer backends
 		ImGui_ImplOpenGL3_Init("#version 410");
